@@ -1,0 +1,14 @@
+#root {
+  padding: 2rem;
+  text-align: center;
+  max-width: 60%;
+  height: 60%;
+}
+
+#map {
+  min-width: 500px;
+  min-height: 800px;
+  height: 100%;
+  width: 100%;
+}
+
