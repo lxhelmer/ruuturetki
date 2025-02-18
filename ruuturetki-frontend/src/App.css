@@ -59,8 +59,8 @@
 
 #latlon-overlay {
   position: absolute;
-  right: 10%;
+  left: 3%;
   padding: 10px;
-  top: 90%;
+  top: 2%;
   z-index: 400;
 }
