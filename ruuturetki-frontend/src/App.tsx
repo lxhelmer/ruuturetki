@@ -1,51 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState, } from 'react'
 import { Button } from 'react-bootstrap'
-import { MapContainer, WMSTileLayer } from 'react-leaflet'
-import { getDistance } from 'geolib'
 import L from 'leaflet'
-import 'leaflet/dist/leaflet.css' 
 import './App.css'
+import MapComponent from './MapComponent.tsx'
 
-
-const start_pos = L.latLng(60.1718, 24.9395)
-
-
-function ViewPosition( {map, start_pos}: {map: L.Map, start_pos: L.LatLng} ) {
-  console.log("passed", start_pos)
-  const [pos, setPos] = useState(start_pos)
-  console.log("pos", pos)
-  const [maxDist, setDist] = useState(0)
-  console.log(pos)
-
-  function distUpdate (new_pos: L.LatLng) {
-    const distance = getDistance(
-      { latitude: start_pos.lat, longitude: start_pos.lng},
-      { latitude: pos.lat, longitude: pos.lng},
-    )
-    if (distance > maxDist) {
-        setDist(distance)
-    }
-    setPos(new_pos)
-  }
-
-  const onMove = () => {
-    distUpdate(map.getCenter())
-  }
-
-  useEffect(() => {
-    map.on('move', onMove)
-    return () => {
-      map.off('move', onMove)
-    }
-  }, [map, onMove])
-
-  return (
-    <p>
-      latitude: {pos.lat.toFixed(4)}, longitude: {pos.lng.toFixed(4)}{' '}
-      maximum distance: {maxDist}
-    </p>
-  )
-}
+//const start_pos = L.latLng(60.1718, 24.9395)
 
 function getRandomLatLng () {
   const southBoundLat: number = 60.13
@@ -62,55 +21,32 @@ function getRandomLatLng () {
 }
 
 
-function MapComponent () {
-  
+function App() {
+  const [map, setMap] = useState<L.Map | null>(null)
+  const [start_pos, setPos] = useState<L.LatLng>(() => getRandomLatLng())
+
   function refreshMap () {
+    const new_center: L.LatLng = getRandomLatLng()
+    setPos(new_center)
     if (map) {
-      map.setView(getRandomLatLng())
-      console.log("testin")
+      map.setView(new_center)
     }
   }
 
-	const wmsOptions: L.WMSOptions = {
-		version: '1.1.1.1',
-		layers: 'avoindata:Ortoilmakuva_2019_20cm',
-		format:'image/png',
-		transparent: false,
-	};
-
-  const [map, setMap] = useState<L.Map | null>(null)
-  const mapOptions: L.MapOptions = {
-    center: start_pos,
-    zoom: 17,
-    scrollWheelZoom: false,
-  };
-  return (
-      <>
-        <MapContainer id="map" {...mapOptions} ref={setMap}>
-          <WMSTileLayer
-            url="https://kartta.hel.fi/ws/geoserver/avoindata/wms?"
-            {...wmsOptions}
-          />
-        </MapContainer>
-        <Button 
-          id="play-button" 
-          variant="primary"
-          onClick={() => refreshMap}
-          >
-          Play
-        </Button>
-        <div id="latlon-overlay">
-          {map ? <ViewPosition map = {map} start_pos = {start_pos}/> : null}
-        </div>
-      </>
-  )
-}
-function App() {
-
-
   return (
     <>
-      <MapComponent/>
+      <MapComponent 
+        start_pos={start_pos}
+        map={map}
+        setMap={setMap}
+        />
+      <Button 
+        id="play-button" 
+        variant="primary"
+        onClick={() => refreshMap()}
+        >
+        Play
+      </Button>
     </>
   )
 }
