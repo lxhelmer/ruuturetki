@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from 'react-bootstrap'
 import { MapContainer, WMSTileLayer } from 'react-leaflet'
 import { getDistance } from 'geolib'
