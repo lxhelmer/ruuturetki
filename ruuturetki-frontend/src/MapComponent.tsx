@@ -38,10 +38,10 @@ function ViewPosition( {map, start_pos}: {map: L.Map, start_pos: L.LatLng} ) {
   }, [map, onMove])
 
   return (
-    <p>
+    <h2>
       latitude: {pos.lat.toFixed(4)}, longitude: {pos.lng.toFixed(4)}{' '}
       maximum distance: {maxDist}
-    </p>
+    </h2>
   )
 }
 
@@ -66,10 +66,10 @@ function MapComponent ({start_pos, map, setMap}: {start_pos: L.LatLng, map: L.Ma
             url="https://kartta.hel.fi/ws/geoserver/avoindata/wms?"
             {...wmsOptions}
           />
+          <div id="latlon-overlay">
+            {map ? <ViewPosition map = {map} start_pos = {start_pos}/> : null}
+          </div>
         </MapContainer>
-        <div id="latlon-overlay">
-          {map ? <ViewPosition map = {map} start_pos = {start_pos}/> : null}
-        </div>
       </>
   )
 }

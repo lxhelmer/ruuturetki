@@ -1,6 +1,8 @@
 import { useState, } from 'react'
+import { MapContainer, TileLayer, useMapEvents, Marker } from 'react-leaflet'
 import { Button } from 'react-bootstrap'
 import L from 'leaflet'
+import 'leaflet/dist/leaflet.css' 
 import './App.css'
 import MapComponent from './MapComponent.tsx'
 
@@ -20,6 +22,18 @@ function getRandomLatLng () {
   )
 }
 
+function LocationPicker() {
+  const [position, setPosition] = useState<L.LatLng | null>(null)
+  const map = useMapEvents({
+    click: (e) => {
+      setPosition(e.latlng)
+    },
+  })
+  return position === null ? null : (
+    <Marker position={position}/>
+  )
+}
+
 
 function App() {
   const [map, setMap] = useState<L.Map | null>(null)
@@ -32,9 +46,22 @@ function App() {
       map.setView(new_center)
     }
   }
+  const selectorOptions: L.MapOptions = {
+    center: L.latLng(60.18, 24.95),
+    zoom: 11,
+    scrollWheelZoom: true,
+  };
 
   return (
     <>
+      <MapContainer id ="selector-map" {...selectorOptions}>
+        <TileLayer
+          attribution='&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url='https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.{ext}'
+          ext='png'
+        />
+        <LocationPicker />
+      </MapContainer>
       <MapComponent 
         start_pos={start_pos}
         map={map}
