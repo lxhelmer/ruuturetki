@@ -67,6 +67,7 @@ function MapComponent () {
   function refreshMap () {
     if (map) {
       map.setView(getRandomLatLng())
+      console.log("testin")
     }
   }
 
