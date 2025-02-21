@@ -26,7 +26,7 @@ function MapComponent ({start_pos, pick_score, setPos, setScore, random_latlng}:
       <>
         <Button 
           id="reset-button" 
-          variant="primary"
+          variant="dark"
           onClick={() => resetMap()}
           >
           Go Back
@@ -50,7 +50,7 @@ function MapComponent ({start_pos, pick_score, setPos, setScore, random_latlng}:
       <>
         <Button 
           id="select-button" 
-          variant="primary"
+          variant="dark"
           onClick={() => refreshMap()}
           >
           Select
