@@ -60,7 +60,8 @@ function MapComponent ({start_pos, pick_score, setPos, setScore, random_latlng}:
   }
 	const wmsOptions: L.WMSOptions = {
 		version: '1.1.1.1',
-		layers: 'avoindata:Ortoilmakuva_2019_20cm',
+		//layers: 'avoindata:Ortoilmakuva_2019_20cm',
+    layers: 'avoindata:Ortoilmakuva',
 		format:'image/png',
 		transparent: false,
 	};
