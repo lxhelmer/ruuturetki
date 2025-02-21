@@ -67,6 +67,7 @@
   z-index: 500;
 }
 #dev-stat {
+  color: white;
   position: absolute;
   left: 140px;
   z-index: 500;
