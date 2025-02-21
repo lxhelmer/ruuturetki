@@ -49,25 +49,51 @@
   margin-right: auto;
 }
 
+#reset-button {
+  position: absolute;
+  left: 10px;
+  bottom: 300px;
+  z-index: 400;
+}
+#select-button {
+  position: absolute;
+  left: 140px;
+  bottom: 300px;
+  z-index: 400;
+}
 #play-button {
   position: absolute;
   bottom: 20%;
-  z-index: 400;
+  z-index: 500;
+}
+#dev-stat {
+  position: absolute;
+  left: 140px;
+  z-index: 500;
 }
 
 #latlon-overlay {
   position: absolute;
-  left: 50px;
-  z-index: 400;
+  left: 100px;
+  z-index: 500;
 }
 
 #selector-map {
   position: absolute;
   padding: 10px;
   left: 10px;
-  width: 20%;
-  height: 30%;
+  width: 250px;
+  height: 250px;
   bottom: 10px;
   z-index: 500;
 }
 
+#selector-map:hover {
+  position: absolute;
+  padding: 10px;
+  left: 10px;
+  width: 400px;
+  height: 400px;
+  bottom: 10px;
+  z-index: 500;
+}
