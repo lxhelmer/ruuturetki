@@ -15,7 +15,7 @@ function MapComponent ({start_pos, pick_score, setPos, setScore, random_latlng}:
                          random_latlng: Function
                         })
 {
-  function SelectButton () {
+  function ResButton () {
     const map = useMap()
     const resetMap = () => {
       if (map) {
@@ -35,7 +35,7 @@ function MapComponent ({start_pos, pick_score, setPos, setScore, random_latlng}:
     )
   }
 
-  function ResButton () {
+  function SelectButton () {
     const map = useMap()
     const refreshMap = () => {
       const new_center: L.LatLng = random_latlng()
@@ -78,8 +78,10 @@ function MapComponent ({start_pos, pick_score, setPos, setScore, random_latlng}:
             url="https://kartta.hel.fi/ws/geoserver/avoindata/wms?"
             {...wmsOptions}
           />
-          <SelectButton/>
-          <ResButton/>
+          <div id="controls">
+            <ResButton/>
+            <SelectButton/>
+          </div>
           <DevStats start_pos = {start_pos} pick_score = {pick_score}/>
         </MapContainer>
       </>
