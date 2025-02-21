@@ -7,6 +7,7 @@ import MapComponent from './MapComponent.tsx'
 import { getDistance } from 'geolib'
 
 //const start_pos = L.latLng(60.1718, 24.9395)
+const icon = L.icon({ iconUrl: "/images/marker-icon.png" });
 
 
 function getRandomLatLng () {
@@ -48,7 +49,7 @@ function LocationPicker({pickPosition, setPosition, start_pos, setScore}:
     }
   })
   return pickPosition === null ? null : (
-    <Marker position={pickPosition}/>
+    <Marker position={pickPosition} icon={icon}/>
   )
 }
 
