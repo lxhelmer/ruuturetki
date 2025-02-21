@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { MapContainer, TileLayer, useMapEvents, Marker, } from 'react-leaflet'
+import { MapContainer, TileLayer, useMapEvents, Marker} from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css' 
 import './App.css'
@@ -7,7 +7,18 @@ import MapComponent from './MapComponent.tsx'
 import { getDistance } from 'geolib'
 
 //const start_pos = L.latLng(60.1718, 24.9395)
-const icon = L.icon({ iconUrl: "/images/marker-icon.png" });
+import icon_img from 'leaflet/dist/images/marker-icon.png';
+import iconShadow_img from 'leaflet/dist/images/marker-shadow.png';
+
+const markerIcon = L.icon({
+    iconUrl : icon_img,
+    shadowUrl: iconShadow_img,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    tooltipAnchor: [16, -28],
+    shadowSize: [41, 41]
+})
 
 
 function getRandomLatLng () {
@@ -49,7 +60,7 @@ function LocationPicker({pickPosition, setPosition, start_pos, setScore}:
     }
   })
   return pickPosition === null ? null : (
-    <Marker position={pickPosition} icon={icon}/>
+    <Marker position={pickPosition} icon={markerIcon}/>
   )
 }
 
