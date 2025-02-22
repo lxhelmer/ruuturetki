@@ -1,4 +1,3 @@
-import { MapContainer, WMSTileLayer } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css' 
 import { Button } from 'react-bootstrap'
@@ -7,7 +6,7 @@ import DevStats from './DevStats.tsx'
 
 
 
-function MapComponent ({start_pos, pick_score, setPos, setScore, random_latlng}:
+function MapComponents ({start_pos, pick_score, setPos, setScore, random_latlng}:
                        { start_pos: L.LatLng,
                          pick_score: number,
                          setPos: Function, 
@@ -63,34 +62,15 @@ function MapComponent ({start_pos, pick_score, setPos, setScore, random_latlng}:
       </>
     )
   }
-	const wmsOptions: L.WMSOptions = {
-		version: '1.1.1.1',
-		//layers: 'avoindata:Ortoilmakuva_2019_20cm',
-    layers: 'avoindata:Ortoilmakuva',
-		format:'image/png',
-		transparent: false,
-	};
-
-  const mapOptions: L.MapOptions = {
-    center: start_pos,
-    zoom: 17,
-    scrollWheelZoom: false,
-  };
   return (
       <>
-        <MapContainer id="map" {...mapOptions}>
-          <WMSTileLayer
-            url="https://kartta.hel.fi/ws/geoserver/avoindata/wms?"
-            {...wmsOptions}
-          />
-          <div id="controls">
-            <ResButton/>
-            <SelectButton/>
-          </div>
-          <DevStats start_pos = {start_pos} pick_score = {pick_score}/>
-        </MapContainer>
+        <div id="controls">
+          <ResButton/>
+          <SelectButton/>
+        </div>
+        <DevStats start_pos = {start_pos} pick_score = {pick_score}/>
       </>
   )
 }
 
-export default MapComponent
+export default MapComponents

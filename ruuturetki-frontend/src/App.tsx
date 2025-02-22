@@ -1,24 +1,13 @@
 import { useState, useEffect } from 'react'
-import { MapContainer, TileLayer, useMapEvents, Marker} from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css' 
 import './App.css'
 import MapComponent from './MapComponent.tsx'
+import SelectionMap from './SelectionMap.tsx'
+import ViewMap from './ViewMap.tsx'
 import { getDistance } from 'geolib'
 
 //const start_pos = L.latLng(60.1718, 24.9395)
-import icon_img from 'leaflet/dist/images/marker-icon.png';
-import iconShadow_img from 'leaflet/dist/images/marker-shadow.png';
-
-const markerIcon = L.icon({
-    iconUrl : icon_img,
-    shadowUrl: iconShadow_img,
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    tooltipAnchor: [16, -28],
-    shadowSize: [41, 41]
-})
 
 
 function getRandomLatLng () {
@@ -32,35 +21,6 @@ function getRandomLatLng () {
   
   return (
     L.latLng(randomLat, randomLon)
-  )
-}
-
-function LocationPicker({pickPosition, setPosition, start_pos, setScore}:
-                        { pickPosition: L.LatLng | null,
-                          setPosition: Function, 
-                          start_pos: L.LatLng
-                          setScore: Function
-                        }) {
-  const map = useMapEvents({
-    click: (e) => {
-      setPosition(e.latlng)
-
-      if (pickPosition) {
-        setScore(getDistance(
-          { latitude: start_pos.lat, longitude: start_pos.lng},
-          { latitude: pickPosition.lat, longitude: pickPosition.lng},
-        ))
-      }
-    },
-    mouseover: () => {
-      map.invalidateSize();
-    },
-    mouseout: () => {
-      map.invalidateSize();
-    }
-  })
-  return pickPosition === null ? null : (
-    <Marker position={pickPosition} icon={markerIcon}/>
   )
 }
 
@@ -80,28 +40,17 @@ function App() {
     }
   }, [picker_pos])
 
-  const selectorOptions: L.MapOptions = {
-    center: L.latLng(60.18, 24.95),
-    zoom: 11,
-    scrollWheelZoom: true,
-  };
 
 
   return (
     <>
-      <MapContainer id ="selector-map" {...selectorOptions}>
-        <TileLayer
-          attribution={'&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}
-          url='https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png'
-        />
-        <LocationPicker 
-          pickPosition = {picker_pos}
+      <SelectionMap 
+          picker_pos = {picker_pos}
           setPosition = {setPosition}
           start_pos = {start_pos}
           setScore = {setScore}
-        />
-      </MapContainer>
-      <MapComponent start_pos={start_pos} pick_score={pick_score} setPos={setPos} setScore={setScore} random_latlng={getRandomLatLng}/>
+         /> 
+      <ViewMap start_pos={start_pos} pick_score={pick_score} setPos={setPos} setScore={setScore} random_latlng={getRandomLatLng}/>
     </>
   )
 }
