@@ -25,18 +25,24 @@ function OrtoLayer ({start_pos, renderKey}: {start_pos: L.LatLng, renderKey: num
 
 
 function ViewMap({
-      start_pos,
-      pick_score,
-      setPos,
-      setPickScore,
-      random_latlng,
-        }:
-       { start_pos: L.LatLng,
-         pick_score: number,
-         setPos: Function, 
-         setPickScore: Function,
-         random_latlng: Function,
-        })
+  start_pos,
+  pick_score,
+  setPos,
+  setPickScore,
+  random_latlng,
+  setRoundScore,
+  maxDist,
+  setDist,
+    }:
+      { start_pos: L.LatLng,
+        pick_score: number,
+        setPos: Function, 
+        setPickScore: Function,
+        random_latlng: Function,
+        setRoundScore: Function,
+        maxDist: number,
+        setDist: Function,
+      })
 
 {
   const move_bounds: L.LatLngBounds = start_pos.toBounds(3800)
@@ -66,6 +72,9 @@ function ViewMap({
             setPos={setPos}
             setPickScore={setPickScore}
             random_latlng={random_latlng}
+            setRoundScore={setRoundScore}
+            maxDist={maxDist}
+            setDist={setDist}
           />
         </MapContainer>
       </>

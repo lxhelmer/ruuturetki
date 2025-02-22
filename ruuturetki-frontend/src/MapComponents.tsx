@@ -12,13 +12,19 @@ function MapComponents (
     pick_score,
     setPos,
     setPickScore,
-    random_latlng
+    random_latlng,
+    setRoundScore,
+    maxDist,
+    setDist
   }:
    { start_pos: L.LatLng,
      pick_score: number,
      setPos: Function, 
      setPickScore: Function,
-     random_latlng: Function
+     random_latlng: Function,
+     setRoundScore: Function,
+     maxDist: number,
+     setDist: Function,
     })
   {
 
@@ -42,6 +48,22 @@ function MapComponents (
   }
 
   function SelectButton () {
+    const endRound = () => {
+
+    }
+    return (
+      <>
+        <Button 
+          id="select-button" 
+          variant="dark"
+          onClick={() => endRound()}
+          >
+          Select
+        </Button>
+      </>
+    )
+  }
+  function SkipButton () {
     const refreshMap = () => {
       const new_center: L.LatLng = random_latlng()
       setPos(new_center)
@@ -55,7 +77,7 @@ function MapComponents (
           variant="dark"
           onClick={() => refreshMap()}
           >
-          Select
+          Skip
         </Button>
       </>
     )
@@ -65,8 +87,14 @@ function MapComponents (
         <div id="controls">
           <ResButton/>
           <SelectButton/>
+          <SkipButton/>
         </div>
-        <DevStats start_pos = {start_pos} pick_score = {pick_score}/>
+        <DevStats 
+          start_pos = {start_pos}
+          pick_score = {pick_score}
+          maxDist={maxDist}
+          setDist={setDist}
+        />
       </>
   )
 }

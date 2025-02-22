@@ -2,9 +2,20 @@ import { useState, useEffect} from 'react'
 import { getDistance } from 'geolib'
 import { useMap } from 'react-leaflet'
 
-function DevStats( {start_pos, pick_score}: {start_pos: L.LatLng, pick_score: number} ) {
+function DevStats(
+  { start_pos,
+    pick_score,
+    maxDist,
+    setDist,
+  }: 
+    { start_pos: L.LatLng, 
+      pick_score: number,
+      maxDist: number,
+      setDist: Function,
+    } 
+) 
+{
   const [pos, setPos] = useState(start_pos)
-  const [maxDist, setDist] = useState(0)
   const map = useMap()
   useEffect(() => {
     setPos(start_pos)

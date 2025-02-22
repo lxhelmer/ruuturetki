@@ -28,7 +28,8 @@ function App() {
   const [start_pos, setPos] = useState<L.LatLng>(() => getRandomLatLng())
   const [picker_pos, setPosition] = useState<L.LatLng | null>(null)
   const [pick_score, setPickScore] = useState(0)
-  //const [round_score, setRoundScore] = useState(0)
+  const [round_score, setRoundScore] = useState(0)
+  const [maxDist, setDist] = useState(0)
 
   useEffect(() => {
     if (picker_pos) {
@@ -56,6 +57,9 @@ function App() {
         setPos={setPos}
         setPickScore={setPickScore}
         random_latlng={getRandomLatLng}
+        setRoundScore={setRoundScore}
+        maxDist={maxDist}
+        setDist={setDist}
         />
     </>
   )
