@@ -27,7 +27,8 @@ function getRandomLatLng () {
 function App() {
   const [start_pos, setPos] = useState<L.LatLng>(() => getRandomLatLng())
   const [picker_pos, setPosition] = useState<L.LatLng | null>(null)
-  const [pick_score, setScore] = useState(0)
+  const [pick_score, setPickScore] = useState(0)
+  //const [round_score, setRoundScore] = useState(0)
 
   useEffect(() => {
     if (picker_pos) {
@@ -35,7 +36,7 @@ function App() {
         { latitude: start_pos.lat, longitude: start_pos.lng},
         { latitude: picker_pos.lat, longitude: picker_pos.lng},
       )
-      setScore(score)
+      setPickScore(score)
     }
   }, [picker_pos])
 
@@ -47,9 +48,15 @@ function App() {
           picker_pos = {picker_pos}
           setPosition = {setPosition}
           start_pos = {start_pos}
-          setScore = {setScore}
+          setPickScore = {setPickScore}
          /> 
-      <ViewMap start_pos={start_pos} pick_score={pick_score} setPos={setPos} setScore={setScore} random_latlng={getRandomLatLng}/>
+      <ViewMap 
+        start_pos={start_pos}
+        pick_score={pick_score}
+        setPos={setPos}
+        setPickScore={setPickScore}
+        random_latlng={getRandomLatLng}
+        />
     </>
   )
 }

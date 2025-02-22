@@ -6,26 +6,27 @@ import DevStats from './DevStats.tsx'
 
 
 
-function MapComponents ({start_pos, pick_score, setPos, setScore, random_latlng}:
-                       { start_pos: L.LatLng,
-                         pick_score: number,
-                         setPos: Function, 
-                         setScore: Function,
-                         random_latlng: Function
-                        })
-{
+function MapComponents (
+  {
+    start_pos,
+    pick_score,
+    setPos,
+    setPickScore,
+    random_latlng
+  }:
+   { start_pos: L.LatLng,
+     pick_score: number,
+     setPos: Function, 
+     setPickScore: Function,
+     random_latlng: Function
+    })
+  {
+
   const map = useMap()
-  const map_bounds: L.LatLngBounds = start_pos.toBounds(3500)
-  map.setMaxBounds(map_bounds)
-
-
-  
 
   function ResButton () {
     const resetMap = () => {
-      if (map) {
-        map.setView(start_pos)
-      }
+      map.setView(start_pos)
     }
     return (
       <>
@@ -43,12 +44,9 @@ function MapComponents ({start_pos, pick_score, setPos, setScore, random_latlng}
   function SelectButton () {
     const refreshMap = () => {
       const new_center: L.LatLng = random_latlng()
-      console.log(new_center)
       setPos(new_center)
-      setScore(0)
-      if (map) {
-        map.setView(new_center)
-      }
+      setPickScore(0)
+      map.setView(new_center)
     }
     return (
       <>

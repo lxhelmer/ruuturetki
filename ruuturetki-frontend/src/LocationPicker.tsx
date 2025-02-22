@@ -14,18 +14,18 @@ const markerIcon = L.icon({
     shadowSize: [41, 41]
 })
 
-function LocationPicker({pickPosition, setPosition, start_pos, setScore}:
+function LocationPicker({pickPosition, setPosition, start_pos, setPickScore}:
                         { pickPosition: L.LatLng | null,
                           setPosition: Function, 
                           start_pos: L.LatLng
-                          setScore: Function
+                          setPickScore: Function
                         }) {
   const map = useMapEvents({
     click: (e) => {
       setPosition(e.latlng)
 
       if (pickPosition) {
-        setScore(getDistance(
+        setPickScore(getDistance(
           { latitude: start_pos.lat, longitude: start_pos.lng},
           { latitude: pickPosition.lat, longitude: pickPosition.lng},
         ))

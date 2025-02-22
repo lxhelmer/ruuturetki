@@ -42,6 +42,7 @@
 }
 
 #map {
+  background-color: black;
   position: relative;
   width: 2500px;
   height: 1200px;
@@ -69,7 +70,7 @@
   color: white;
   position: absolute;
   left: 100px;
-  top: 15px;
+  top: 500px;
   z-index: 500;
 }
 
