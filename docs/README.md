@@ -9,5 +9,5 @@
 |20.2.| 6 | Refactored the use of map state because ref=setMap had problems with typescript. Alot of debugging new structure|
 |21.2.| 6 | Alot of refactoring because of the state handling, some graphic changes and added bounds to main map |
 |22.2.| 9 | Refactoring some state stuff, setting bounds for maps, adding score calculation and modal |
-|Total | 23 hrs|
+|Total | 44 hrs|
 
