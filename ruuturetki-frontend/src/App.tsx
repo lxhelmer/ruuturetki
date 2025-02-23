@@ -25,6 +25,8 @@ function getRandomLatLng () {
 
 
 function App() {
+  const htmlElement = document.querySelector('html')
+  htmlElement.setAttribute('data-bs-theme', 'dark')
   const [start_pos, setPos] = useState<L.LatLng>(() => getRandomLatLng())
   const [picker_pos, setPosition] = useState<L.LatLng | null>(null)
   const [pick_score, setPickScore] = useState(0)

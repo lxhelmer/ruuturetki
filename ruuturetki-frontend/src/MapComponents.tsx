@@ -2,7 +2,9 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css' 
 import { Button } from 'react-bootstrap'
 import { useMap } from 'react-leaflet'
+import { useState } from 'react'
 import DevStats from './DevStats.tsx'
+import RoundEndModal from './RoundEndModal.tsx'
 
 
 
@@ -29,6 +31,12 @@ function MapComponents (
   {
 
   const map = useMap()
+  const [showREM, setShowREM] = useState(false)
+
+  const handleCloseREM = () => setShowREM(false)
+  const handleShowREM = () => setShowREM(true)
+
+  const score = 10000 - pick_score*2 - maxDist*2.5
 
   function ResButton () {
     const resetMap = () => {
@@ -48,15 +56,12 @@ function MapComponents (
   }
 
   function SelectButton () {
-    const endRound = () => {
-
-    }
     return (
       <>
         <Button 
           id="select-button" 
           variant="dark"
-          onClick={() => endRound()}
+          onClick={() => handleShowREM()}
           >
           Select
         </Button>
@@ -84,6 +89,11 @@ function MapComponents (
   }
   return (
       <>
+        <RoundEndModal
+          score={score}
+          show={showREM}
+          handleCloseREM={handleCloseREM}
+        />
         <div id="controls">
           <ResButton/>
           <SelectButton/>
