@@ -1,7 +1,7 @@
 import { MapContainer, WMSTileLayer} from 'react-leaflet'
 import MapComponents  from './MapComponents.tsx'
 import { useState, useEffect } from 'react'
-import type { GameState } from './App.tsx'
+import type { GameState } from './Game.tsx'
 
 
 function OrtoLayer ({start_pos, renderKey}: {start_pos: L.LatLng, renderKey: number}) {

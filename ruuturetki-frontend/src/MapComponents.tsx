@@ -6,6 +6,7 @@ import { useState } from 'react'
 import DevStats from './DevStats.tsx'
 import RoundEndModal from './RoundEndModal.tsx'
 import type { GameState } from './Game.tsx'
+import { useNavigate } from 'react-router-dom'
 
 
 
@@ -38,8 +39,19 @@ function MapComponents (
   const [showREM, setShowREM] = useState(false)
   const [round, setRound] = useState(gameState.rounds)
   const [score, setScore] = useState(0)
+  const navigate = useNavigate()
 
-  const handleCloseREM = () => setShowREM(false)
+  const handleCloseREM = () => {
+    if (round < 5) {
+      setShowREM(false)
+      refreshMap()
+    }
+    else {
+      setShowREM(false)
+      navigate("/")
+    }
+  }
+
   const handleShowREM = () => setShowREM(true)
 
   function refreshMap () {
@@ -116,7 +128,6 @@ function MapComponents (
           round={round}
           show={showREM}
           handleCloseREM={handleCloseREM}
-          refreshMap={refreshMap}
         />
         <div id="controls">
           <ResButton/>

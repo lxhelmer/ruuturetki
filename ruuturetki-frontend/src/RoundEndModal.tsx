@@ -1,46 +1,29 @@
 import { Modal } from 'react-bootstrap'
 import { Button } from 'react-bootstrap'
 
-function NextRound (
-  { handleNext,
-    closeREM,
-    round,
-  }: 
-    { 
-      handleNext: () => void, 
-      closeREM: () => void,
-      round: number,
-  }) {
-
-  function next () {
-    closeREM()
-    handleNext()
-  }
-
-  if (round < 5) {
-    return (
-      <>
-        <Button variant="Primary" onClick={next}>
-          Next
-        </Button>
-      </>
-    )
-  }
-  return null
+function ModalButton (
+  { round, handleCloseREM }: { round: number, handleCloseREM: () => void}) 
+{
+  return (
+    <>
+      <Button variant="Primary" onClick={handleCloseREM}>
+      {(round < 5) ? 'Next' : 'End'}
+      </Button>
+    </>
+  )
 }
+
 
 function RoundEndModal (
   { score,
     round,
     show,
     handleCloseREM,
-    refreshMap,
   }:
     { score: number,
       round: number,
       show: boolean,
       handleCloseREM: () => void,
-      refreshMap: () => void,
   }) 
   {
   return (
@@ -58,7 +41,7 @@ function RoundEndModal (
           {score} points! 
         </Modal.Body>
         <Modal.Footer>
-          <NextRound handleNext={refreshMap} closeREM={handleCloseREM} round={round} />
+          <ModalButton round={round} handleCloseREM={handleCloseREM}  />
         </Modal.Footer>
       </Modal>
     </>

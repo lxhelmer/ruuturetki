@@ -1,7 +1,7 @@
 import { useState, useEffect} from 'react'
 import { getDistance } from 'geolib'
 import { useMap } from 'react-leaflet'
-import type { GameState } from './App.tsx'
+import type { GameState } from './Game.tsx'
 
 function DevStats(
   { start_pos,
