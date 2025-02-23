@@ -26,12 +26,15 @@ function getRandomLatLng () {
 
 function App() {
   const htmlElement = document.querySelector('html')
-  htmlElement.setAttribute('data-bs-theme', 'dark')
+  if (htmlElement) {
+    htmlElement.setAttribute('data-bs-theme', 'dark')
+  }
   const [start_pos, setPos] = useState<L.LatLng>(() => getRandomLatLng())
   const [picker_pos, setPosition] = useState<L.LatLng | null>(null)
   const [pick_score, setPickScore] = useState(0)
   const [round_score, setRoundScore] = useState(0)
   const [maxDist, setDist] = useState(0)
+  console.log(round_score)
 
   useEffect(() => {
     if (picker_pos) {

@@ -30,6 +30,7 @@ function MapComponents (
     })
   {
 
+
   const map = useMap()
   const [showREM, setShowREM] = useState(false)
 
@@ -37,6 +38,7 @@ function MapComponents (
   const handleShowREM = () => setShowREM(true)
 
   const score = 10000 - pick_score*2 - maxDist*2.5
+  setRoundScore(score)
 
   function ResButton () {
     const resetMap = () => {
