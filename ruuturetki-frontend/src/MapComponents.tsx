@@ -5,7 +5,7 @@ import { useMap } from 'react-leaflet'
 import { useState } from 'react'
 import DevStats from './DevStats.tsx'
 import RoundEndModal from './RoundEndModal.tsx'
-import type { GameState } from './App.tsx'
+import type { GameState } from './Game.tsx'
 
 
 

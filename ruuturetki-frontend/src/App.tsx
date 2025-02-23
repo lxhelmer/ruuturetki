@@ -1,89 +1,51 @@
-import { useState, useEffect } from 'react'
-import L from 'leaflet'
+import {
+  BrowserRouter as Router,
+  Routes, Route,
+  useNavigate,
+  useLocation,
+} from 'react-router-dom'
 import 'leaflet/dist/leaflet.css' 
+import { Button } from 'react-bootstrap'
 import './App.css'
-import SelectionMap from './SelectionMap.tsx'
-import ViewMap from './ViewMap.tsx'
-import { getDistance } from 'geolib'
+import Game from './Game.tsx'
 
 //const start_pos = L.latLng(60.1718, 24.9395)
 
 
-function getRandomLatLng () {
-  const southBoundLat: number = 60.13
-  const northBoundLat: number = 60.295
-  const eastBoundLon: number = 25.20
-  const westBoundLon: number = 24.82
-
-  const randomLat: number = Math.random() * (northBoundLat - southBoundLat) + southBoundLat
-  const randomLon: number = Math.random() * (eastBoundLon - westBoundLon) + westBoundLon
-  
-  return (
-    L.latLng(randomLat, randomLon)
-  )
+function GameButton() {
+  const navigate = useNavigate()
+  const location = useLocation()
+  if (location.pathname === "/"){
+    return (
+      <Button 
+        variant="dark"
+        onClick={() => navigate('/game')}
+        >
+        play
+      </Button>
+    )
+  }
+  return null
 }
 
-type GameState = {
-  rounds: number,
-  locations: L.LatLng[],
-  guesses: number[],
-  score: number,
-  picked: boolean,
-}
-
-const startState: GameState = {
-  rounds: 0,
-  locations: [],
-  guesses: [],
-  score: 0,
-  picked: false,
-}
 
 function App() {
   const htmlElement = document.querySelector('html')
   if (htmlElement) {
     htmlElement.setAttribute('data-bs-theme', 'dark')
   }
-  const [start_pos, setPos] = useState<L.LatLng>(() => getRandomLatLng())
-  const [picker_pos, setPosition] = useState<L.LatLng | null>(null)
-  const [pick_score, setPickScore] = useState(0)
-  const [gameState, setGameState] = useState<GameState>(startState)
-  const [maxDist, setDist] = useState(0)
-
-  useEffect(() => {
-    if (picker_pos) {
-      const score = getDistance(
-        { latitude: start_pos.lat, longitude: start_pos.lng},
-        { latitude: picker_pos.lat, longitude: picker_pos.lng},
-      )
-      setPickScore(score)
-    }
-  }, [picker_pos])
-
-
 
   return (
     <>
-      <SelectionMap 
-          picker_pos = {picker_pos}
-          setPosition = {setPosition}
-          start_pos = {start_pos}
-          setPickScore = {setPickScore}
-         /> 
-      <ViewMap 
-        start_pos={start_pos}
-        pick_score={pick_score}
-        setPos={setPos}
-        setPickScore={setPickScore}
-        random_latlng={getRandomLatLng}
-        gameState={gameState}
-        setGameState={setGameState}
-        maxDist={maxDist}
-        setDist={setDist}
-        />
+      <Router>
+        <GameButton/>
+        <Routes>
+          <Route path="/game" element={<Game />} />
+        </Routes>
+      </Router>
+      
     </>
   )
 }
 
 export default App
-export type { GameState }
