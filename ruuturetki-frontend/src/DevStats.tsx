@@ -1,17 +1,20 @@
 import { useState, useEffect} from 'react'
 import { getDistance } from 'geolib'
 import { useMap } from 'react-leaflet'
+import type { GameState } from './App.tsx'
 
 function DevStats(
   { start_pos,
     pick_score,
     maxDist,
     setDist,
+    gameState,
   }: 
     { start_pos: L.LatLng, 
       pick_score: number,
       maxDist: number,
       setDist: Function,
+      gameState: GameState,
     } 
 ) 
 {
@@ -46,11 +49,17 @@ function DevStats(
   }, [map, onMove])
 
   return (
-    <h2 id="dev-stat">
-      latitude: {pos.lat.toFixed(4)}, longitude: {pos.lng.toFixed(4)}{'  '}
-      maximum distance: {maxDist}{'  '}
-      picker score: {pick_score}{'  '}
-    </h2>
+    <div id="dev-stat">
+      <h2 >
+        latitude: {pos.lat.toFixed(4)}, longitude: {pos.lng.toFixed(4)}{'  '}
+        maximum distance: {maxDist}{'  '}
+        picker score: {pick_score}{'  '}
+      </h2>
+      <h1>
+        round: {gameState.rounds}{'  '}
+        score: {gameState.score}{'  '}
+      </h1>
+    </div>
   )
 }
 

@@ -23,6 +23,21 @@ function getRandomLatLng () {
   )
 }
 
+type GameState = {
+  rounds: number,
+  locations: L.LatLng[],
+  guesses: number[],
+  score: number,
+  picked: boolean,
+}
+
+const startState: GameState = {
+  rounds: 0,
+  locations: [],
+  guesses: [],
+  score: 0,
+  picked: false,
+}
 
 function App() {
   const htmlElement = document.querySelector('html')
@@ -32,9 +47,8 @@ function App() {
   const [start_pos, setPos] = useState<L.LatLng>(() => getRandomLatLng())
   const [picker_pos, setPosition] = useState<L.LatLng | null>(null)
   const [pick_score, setPickScore] = useState(0)
-  const [round_score, setRoundScore] = useState(0)
+  const [gameState, setGameState] = useState<GameState>(startState)
   const [maxDist, setDist] = useState(0)
-  console.log(round_score)
 
   useEffect(() => {
     if (picker_pos) {
@@ -62,7 +76,8 @@ function App() {
         setPos={setPos}
         setPickScore={setPickScore}
         random_latlng={getRandomLatLng}
-        setRoundScore={setRoundScore}
+        gameState={gameState}
+        setGameState={setGameState}
         maxDist={maxDist}
         setDist={setDist}
         />
@@ -71,3 +86,4 @@ function App() {
 }
 
 export default App
+export type { GameState }
