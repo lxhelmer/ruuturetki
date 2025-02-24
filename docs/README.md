@@ -10,5 +10,5 @@
 |21.2.| 6 | Alot of refactoring because of the state handling, some graphic changes and added bounds to main map |
 |22.2.| 9 | Refactoring some state stuff, setting bounds for maps, adding score calculation and modal |
 |23.2.| 6 | Added routing for the pages and start page. There is finally start to finish course of actions |
-|Total | 44 hrs|
+|Total | 50 hrs|
 
