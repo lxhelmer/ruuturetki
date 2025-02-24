@@ -54,7 +54,7 @@ function Game() {
     }
   }, [picker_pos])
 
-
+  
   return (
     <>
       <SelectionMap

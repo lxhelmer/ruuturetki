@@ -12,17 +12,19 @@ import Game from './Game.tsx'
 //const start_pos = L.latLng(60.1718, 24.9395)
 
 
-function GameButton() {
+function StartMenu() {
   const navigate = useNavigate()
   const location = useLocation()
   if (location.pathname === "/"){
     return (
-      <Button 
-        variant="dark"
-        onClick={() => navigate('/game')}
-        >
-        play
-      </Button>
+      <>
+        <Button 
+          variant="dark"
+          onClick={() => navigate('/game')}
+          >
+          play
+        </Button>
+      </>
     )
   }
   return null
@@ -38,9 +40,9 @@ function App() {
   return (
     <>
       <Router>
-        <GameButton/>
         <Routes>
           <Route path="/game" element={<Game />} />
+          <Route path="/" element={<StartMenu />} />
         </Routes>
       </Router>
     </>
