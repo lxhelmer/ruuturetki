@@ -43,6 +43,7 @@ function App() {
         <Routes>
           <Route path="/game" element={<Game />} />
           <Route path="/" element={<StartMenu />} />
+          <Route path="*" element={<StartMenu />} />
         </Routes>
       </Router>
     </>
