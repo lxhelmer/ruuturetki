@@ -43,11 +43,13 @@ function RoundEndModal (
         onHide={handleCloseREM}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
+        centered
         >
         <Modal.Header closeButton>
           <Modal.Title>Round {gameState.rounds}/5 score:</Modal.Title>
         </Modal.Header>
-        <Modal.Body> 
+        <Modal.Body>
+        <div id="modal-content">
           <h2>
           {round_score} points for the round!
           </h2>
@@ -66,6 +68,7 @@ function RoundEndModal (
           <h2>
           {gameState.score} / 50 000 total points
           </h2>
+          </div>
         </Modal.Body>
         <Modal.Footer>
           <ModalButton round={gameState.rounds} handleCloseREM={handleCloseREM}  />
