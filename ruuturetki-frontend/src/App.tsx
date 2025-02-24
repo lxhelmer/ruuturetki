@@ -2,7 +2,7 @@ import {
   BrowserRouter as Router,
   Routes, Route,
   useNavigate,
-  useLocation,
+  Navigate,
 } from 'react-router-dom'
 import 'leaflet/dist/leaflet.css' 
 import { Button } from 'react-bootstrap'
@@ -14,20 +14,16 @@ import Game from './Game.tsx'
 
 function StartMenu() {
   const navigate = useNavigate()
-  const location = useLocation()
-  if (location.pathname === "/"){
-    return (
-      <>
-        <Button 
-          variant="dark"
-          onClick={() => navigate('/game')}
-          >
-          play
-        </Button>
-      </>
-    )
-  }
-  return null
+  return (
+    <>
+      <Button 
+        variant="dark"
+        onClick={() => navigate('/game')}
+        >
+        play
+      </Button>
+    </>
+  )
 }
 
 
@@ -43,7 +39,7 @@ function App() {
         <Routes>
           <Route path="/game" element={<Game />} />
           <Route path="/" element={<StartMenu />} />
-          <Route path="*" element={<StartMenu />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>
     </>
