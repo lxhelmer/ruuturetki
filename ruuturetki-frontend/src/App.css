@@ -58,6 +58,14 @@ html {
   z-index: 500;
 }
 
+#results-map {
+  position: relative;
+  padding: 10px;
+  width: 400px;
+  height: 400px;
+  z-index: 500;
+}
+
 #selector-map:hover {
   position: absolute;
   padding: 10px;

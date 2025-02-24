@@ -20,7 +20,8 @@ function MapComponents (
     gameState,
     setGameState,
     maxDist,
-    setDist
+    setDist,
+    picker_pos,
   }:
    { start_pos: L.LatLng,
      pick_score: number,
@@ -31,18 +32,18 @@ function MapComponents (
      setGameState: Function,
      maxDist: number,
      setDist: Function,
+     picker_pos: L.LatLng | null,
     })
   {
 
 
   const map = useMap()
   const [showREM, setShowREM] = useState(false)
-  const [round, setRound] = useState(gameState.rounds)
-  const [score, setScore] = useState(0)
+  const [round_score, setScore] = useState(0)
   const navigate = useNavigate()
 
   const handleCloseREM = () => {
-    if (round < 5) {
+    if (gameState.rounds < 5) {
       setShowREM(false)
       refreshMap()
     }
@@ -57,8 +58,14 @@ function MapComponents (
   function refreshMap () {
     const new_center: L.LatLng = random_latlng()
     setPos(new_center)
+    setScore(0)
     setPickScore(0)
     map.setView(new_center)
+  }
+
+  function skipMap () {
+    setGameState({...gameState, rounds: gameState.rounds + 1, picked: false})
+    refreshMap ()
   }
 
   function ResButton () {
@@ -81,18 +88,18 @@ function MapComponents (
   function SelectButton () {
 
     const endRound = () => {
-      if (gameState.picked === false) {
-          const score = 10000 - pick_score*2 - maxDist*2.5
+      if (gameState.picked === true) {
+          const score = Math.max((10000 - pick_score*2 - maxDist*2.5), 0)
+
+          setScore(score)
           const new_state = {
             rounds: gameState.rounds + 1,
             locations: gameState.locations.concat(start_pos),
-            guesses: gameState.guesses.concat(pick_score),
+            guesses: gameState.guesses.concat((picker_pos) ? picker_pos : L.latLng(0,0)),
             score: gameState.score + score,
             picked: false
           }
           setGameState(new_state)
-          setRound(new_state.rounds)
-          setScore(score)
           handleShowREM()
       }
     }
@@ -114,7 +121,7 @@ function MapComponents (
         <Button 
           id="select-button" 
           variant="dark"
-          onClick={() => refreshMap()}
+          onClick={() => skipMap()}
           >
           Skip
         </Button>
@@ -124,10 +131,10 @@ function MapComponents (
   return (
       <>
         <RoundEndModal
-          score={score}
-          round={round}
+          gameState={gameState}
           show={showREM}
           handleCloseREM={handleCloseREM}
+          round_score = {round_score}
         />
         <div id="controls">
           <ResButton/>

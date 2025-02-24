@@ -12,7 +12,7 @@ function getRandomLatLng () {
 
   const randomLat: number = Math.random() * (northBoundLat - southBoundLat) + southBoundLat
   const randomLon: number = Math.random() * (eastBoundLon - westBoundLon) + westBoundLon
-  
+
   return (
     L.latLng(randomLat, randomLon)
   )
@@ -21,7 +21,7 @@ function getRandomLatLng () {
 type GameState = {
   rounds: number,
   locations: L.LatLng[],
-  guesses: number[],
+  guesses: L.LatLng[],
   score: number,
   picked: boolean,
 }
@@ -49,19 +49,21 @@ function Game() {
       )
       setPickScore(score)
     }
+    if (picker_pos && gameState.picked === false) {
+      setGameState({...gameState, picked: true})
+    }
   }, [picker_pos])
-
 
 
   return (
     <>
-      <SelectionMap 
+      <SelectionMap
           picker_pos = {picker_pos}
           setPosition = {setPosition}
           start_pos = {start_pos}
           setPickScore = {setPickScore}
-         /> 
-      <ViewMap 
+         />
+      <ViewMap
         start_pos={start_pos}
         pick_score={pick_score}
         setPos={setPos}
@@ -71,6 +73,7 @@ function Game() {
         setGameState={setGameState}
         maxDist={maxDist}
         setDist={setDist}
+        picker_pos = {picker_pos}
         />
     </>
   )

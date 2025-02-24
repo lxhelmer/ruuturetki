@@ -1,19 +1,8 @@
 import L from 'leaflet'
-import { useMapEvents, Marker } from 'react-leaflet'
-import icon_img from 'leaflet/dist/images/marker-icon.png';
-import iconShadow_img from 'leaflet/dist/images/marker-shadow.png';
+import { useMapEvents, useMap, Marker } from 'react-leaflet'
 import { getDistance } from 'geolib'
 import { useEffect } from 'react'
-
-const markerIcon = L.icon({
-    iconUrl : icon_img,
-    shadowUrl: iconShadow_img,
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    tooltipAnchor: [16, -28],
-    shadowSize: [41, 41]
-})
+import markerIcon from './MarkerIcon.tsx'
 
 function LocationPicker({pickPosition, setPosition, start_pos, setPickScore}:
                         { pickPosition: L.LatLng | null,
@@ -21,13 +10,17 @@ function LocationPicker({pickPosition, setPosition, start_pos, setPickScore}:
                           start_pos: L.LatLng
                           setPickScore: Function
                         }) {
+
+  const mapInstance = useMap()
   useEffect(() => {
     setPosition(null)
+    mapInstance.setView(L.latLng(60.18, 24.95), 11)
+    
   }, [start_pos])
+
   const map = useMapEvents({
     click: (e) => {
       setPosition(e.latlng)
-
       if (pickPosition) {
         setPickScore(getDistance(
           { latitude: start_pos.lat, longitude: start_pos.lng},

@@ -35,6 +35,7 @@ function ViewMap({
   setGameState,
   maxDist,
   setDist,
+  picker_pos,
     }:
       { start_pos: L.LatLng,
         pick_score: number,
@@ -45,6 +46,7 @@ function ViewMap({
         setGameState: Function,
         maxDist: number,
         setDist: Function,
+        picker_pos: L.LatLng | null,
       })
 
 {
@@ -78,6 +80,7 @@ function ViewMap({
             setGameState={setGameState}
             maxDist={maxDist}
             setDist={setDist}
+            picker_pos = {picker_pos}
           />
         </MapContainer>
       </>
