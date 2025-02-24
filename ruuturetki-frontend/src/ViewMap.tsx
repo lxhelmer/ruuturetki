@@ -5,7 +5,7 @@ import type { GameState } from './Game.tsx'
 
 
 function OrtoLayer ({start_pos, renderKey}: {start_pos: L.LatLng, renderKey: number}) {
-  const bounds = start_pos.toBounds(5500)
+  const bounds = start_pos.toBounds(4000)
 
 	const wmsOptions: L.WMSOptions = {
 		version: '1.1.1.1',
