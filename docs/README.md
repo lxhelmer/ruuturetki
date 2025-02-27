@@ -11,5 +11,6 @@
 |22.2.| 9 | Refactoring some state stuff, setting bounds for maps, adding score calculation and modal |
 |23.2.| 6 | Added routing for the pages and start page. There is finally start to finish course of actions |
 |24.2.| 5 | Wrapping things up with the ui |
+|26.2.| 6 | Starting with the nodejs backend, alot of ts specific annoyance |
 |Total | 55 hrs|
 
