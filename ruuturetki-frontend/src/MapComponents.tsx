@@ -43,7 +43,7 @@ function MapComponents (
   const navigate = useNavigate()
 
   const handleCloseREM = () => {
-    if (gameState.rounds < 5) {
+    if (gameState.rounds < 4) {
       setShowREM(false)
       refreshMap()
     }
@@ -63,10 +63,6 @@ function MapComponents (
     map.setView(new_center)
   }
 
-  function skipMap () {
-    setGameState({...gameState, rounds: gameState.rounds + 1, picked: false})
-    refreshMap ()
-  }
 
   function ResButton () {
     const resetMap = () => {
@@ -97,7 +93,7 @@ function MapComponents (
             locations: gameState.locations.concat(start_pos),
             guesses: gameState.guesses.concat((picker_pos) ? picker_pos : L.latLng(0,0)),
             score: gameState.score + score,
-            picked: false
+            picked: true,
           }
           setGameState(new_state)
           handleShowREM()
@@ -116,6 +112,21 @@ function MapComponents (
     )
   }
   function SkipButton () {
+    const skipMap =  () =>  {
+      if (gameState.rounds === 4) {
+        setShowREM(true)
+      } else {
+        const new_state = {
+          rounds: gameState.rounds + 1,
+          locations: gameState.locations.concat(start_pos),
+          guesses: gameState.guesses,
+          score: gameState.score,
+          picked: false,
+        }
+        setGameState(new_state)
+        refreshMap()
+      }
+    }
     return (
       <>
         <Button 

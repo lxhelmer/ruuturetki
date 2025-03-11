@@ -3,18 +3,20 @@ import mongoose from 'mongoose'
 mongoose.set('strictQuery', false)
 
 interface IGame {
-  rounds: Number;
-  score: Number;
-  user: String;
+  rounds: number;
+  score: number;
+  user: mongoose.Types.ObjectId;
 }
 
 const gameSchema = new mongoose.Schema<IGame>({
   rounds: Number,
   score: Number,
-  user: String,
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
 })
 
-const Game = mongoose.model<IGame>('Game', gameSchema);
 
 gameSchema.set('toJSON', {
   transform: (_document, returnedObject) => {
@@ -23,5 +25,7 @@ gameSchema.set('toJSON', {
     delete returnedObject.__v
   }
 })
+
+const Game = mongoose.model<IGame>('Game', gameSchema);
 
 export default Game;

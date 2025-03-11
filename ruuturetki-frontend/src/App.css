@@ -81,7 +81,6 @@ html, body {
 
 #results-map {
   position: relative;
-  padding: 10px;
   width: 400px;
   height: 400px;
   z-index: 500;
@@ -100,4 +99,8 @@ html, body {
   max-width: fit-content;
   margin-left: auto;
   margin-right: auto;
+}
+
+#modal-score {
+  padding-top: 10px;
 }

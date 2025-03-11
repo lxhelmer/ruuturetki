@@ -26,9 +26,10 @@ function RegisterModal (
     } catch (error){
       console.log(error)
       if (error instanceof AxiosError) {
-
-        if (error.response && error.response.data.errorMessage)
-        setProblem(error.response.data.errorMessage)
+        if (error.response && error.response.data.errorMessage) {
+          setProblem(error.response.data.errorMessage)
+        }
+        setProblem('Something went wrong')
       } else {
         setProblem('Something went wrong')
       }

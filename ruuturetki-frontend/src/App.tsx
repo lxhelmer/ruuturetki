@@ -62,6 +62,7 @@ function StartMenu() {
       <MapContainer id="map" {...mapOptions}>
         <WMSTileLayer
           url="https://kartta.hel.fi/ws/geoserver/avoindata/wms?"
+          attribution={'&copy; <a href=https://hri.fi/data/fi/dataset/helsingin-ortoilmakuvat target="_blank">Helsingin kaupunki, kaupunkimittauspalvelut 2025</a>'}
           {...wmsOptions}
         />
       </MapContainer>

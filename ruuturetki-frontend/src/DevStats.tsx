@@ -56,7 +56,7 @@ function DevStats(
         picker score: {pick_score}{'  '}
       </h2>
       <h1>
-        round: {gameState.rounds}{'  '}
+        round: {gameState.rounds+1}{'  '}
         score: {gameState.score}{'  '}
       </h1>
     </div>
