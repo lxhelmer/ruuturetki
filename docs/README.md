@@ -12,5 +12,6 @@
 |23.2.| 6 | Added routing for the pages and start page. There is finally start to finish course of actions |
 |24.2.| 5 | Wrapping things up with the ui |
 |26.2.| 6 | Starting with the nodejs backend, alot of ts specific annoyance |
-|Total | 61 hrs|
+|11.3.| 8 | Added routes for users and games to backend, started backend integration with registration |
+|Total | 69 hrs|
 
