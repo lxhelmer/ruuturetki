@@ -4,7 +4,7 @@ import SelectionMap from './SelectionMap.tsx'
 import ViewMap from './ViewMap.tsx'
 import { getDistance } from 'geolib'
 
-function getRandomLatLng () {
+export function getRandomLatLng () {
   const southBoundLat: number = 60.13
   const northBoundLat: number = 60.295
   const eastBoundLon: number = 25.20

@@ -57,6 +57,9 @@ function ViewMap({
     scrollWheelZoom: false,
     maxBounds: move_bounds,
     maxBoundsViscosity:0.9,
+    zoomControl: false,
+    boxZoom: false,
+    doubleClickZoom: false,
   };
 
   const [renderKey, setKey] = useState(1)
