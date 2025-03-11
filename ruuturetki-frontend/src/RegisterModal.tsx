@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap'
 import { Form } from 'react-bootstrap'
 import { useState } from 'react'
 import registerService from './register'
-import { AxiosError } from 'axios'
+import axios from 'axios'
  
 function RegisterModal (
   { show,
@@ -25,7 +25,7 @@ function RegisterModal (
       handleCloseReg()
     } catch (error){
       console.log(error)
-      if (error instanceof AxiosError) {
+      if (axios.isAxiosError(error)) {
         if (error.response && error.response.data.errorMessage) {
           setProblem(error.response.data.errorMessage)
         }
