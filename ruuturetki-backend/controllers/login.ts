@@ -1,7 +1,7 @@
 import express from 'express'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
-import User from '../models/User.ts'
+import User from '../models/User'
 import { z } from 'zod'
 import { env } from '../env'
 
@@ -30,7 +30,7 @@ loginRouter.post('/', async (req, res) =>  {
         id: user._id,
       }
 
-      const token = jwt.sign(userForToken, env.SECRET)
+      const token = jwt.sign(userForToken, env.JWT_SECRET)
       res.status(200).send({ token, username: user.username})
     }
 

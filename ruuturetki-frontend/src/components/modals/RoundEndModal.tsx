@@ -10,7 +10,7 @@ function ModalButton (
   return (
     <>
       <Button variant="secondary" onClick={handleCloseREM}>
-      {(round < 4) ? 'Next' : 'End'}
+      {(round < 5) ? 'Next' : 'End'}
       </Button>
     </>
   )
@@ -76,7 +76,7 @@ function RoundEndModal (
         centered
         >
         <Modal.Header closeButton>
-          <Modal.Title>Round {gameState.rounds+1}/5 score:</Modal.Title>
+          <Modal.Title>Round {gameState.rounds}/5 score:</Modal.Title>
         </Modal.Header>
         <Modal.Body>
         <div id="modal-content">

@@ -43,7 +43,7 @@ function MapComponents (
   const navigate = useNavigate()
 
   const handleCloseREM = () => {
-    if (gameState.rounds < 4) {
+    if (gameState.rounds == 5) {
       setShowREM(false)
       refreshMap()
     }

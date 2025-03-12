@@ -1,6 +1,6 @@
 import express from 'express'
 const gamesRouter = express.Router()
-import Game from '../models/Game.ts'
+import Game from '../models/Game'
 import { z } from 'zod'
 import mongoose from 'mongoose'
 
