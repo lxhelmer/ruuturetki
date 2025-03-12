@@ -1,7 +1,9 @@
 import express from 'express'
-//import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
+import bcrypt from 'bcrypt'
 import User from '../models/User.ts'
 import { z } from 'zod'
+import { env } from '../env'
 
 const loginRouter = express.Router()
 
@@ -18,7 +20,20 @@ loginRouter.post('/', async (req, res) =>  {
     const user = await User.findOne({ username: login_req.username })
     if (!user) {
       throw new Error('No such user')
+    } else {
+      const correct = await bcrypt.compare(login_req.password, user.pswd_hash)
+      if (!correct) {
+        throw new Error('wrong password')
+      }
+      const userForToken = {
+        username: user.username,
+        id: user._id,
+      }
+
+      const token = jwt.sign(userForToken, env.SECRET)
+      res.status(200).send({ token, username: user.username})
     }
+
   } catch (error) {
     res.status(400).send(error)
   }

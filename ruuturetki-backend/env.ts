@@ -6,7 +6,8 @@ export const env = createEnv({
     server: {
       MONGODB_URI: z.string().url(),
       PORT: z.string(),
-      DB_NAME: z.string()
+      DB_NAME: z.string(),
+      SECRET: z.string(),
     },
     runtimeEnv: process.env
 })
