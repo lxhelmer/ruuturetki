@@ -1,8 +1,8 @@
 import { Modal } from 'react-bootstrap'
 import { Button } from 'react-bootstrap'
-import type { GameState } from './Game.tsx'
+import type { GameState } from '../Game'
 import { MapContainer, TileLayer, Marker, Tooltip } from 'react-leaflet'
-import markerIcon from './MarkerIcon.tsx'
+import markerIcon from '../MarkerIcon.tsx'
 
 function ModalButton (
   { round, handleCloseREM }: { round: number, handleCloseREM: () => void}) 
@@ -10,7 +10,7 @@ function ModalButton (
   return (
     <>
       <Button variant="secondary" onClick={handleCloseREM}>
-      {(round < 5) ? 'Next' : 'End'}
+      {(round < 4) ? 'Next' : 'End'}
       </Button>
     </>
   )
@@ -24,7 +24,6 @@ const ModalMap = ({gameState}: {gameState: GameState}) => {
     zoom: 12,
     scrollWheelZoom: true,
   };
-  console.log(resultMapOptions)
   if (!gameState.picked) {
     return (
       <MapContainer id="results-map" {...resultMapOptions}>

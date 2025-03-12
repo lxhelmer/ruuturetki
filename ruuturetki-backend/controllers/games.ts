@@ -11,7 +11,7 @@ const newGameSchema = z.object({
 });
 
 gamesRouter.get('/',  (_req, res) => {
-  Game.find({}).then(games =>  {
+  Game.find({}).populate('user').then(games =>  {
     res.json(games)
   })
 })

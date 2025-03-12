@@ -2,7 +2,7 @@ import { Modal } from 'react-bootstrap'
 import { Button } from 'react-bootstrap'
 import { Form } from 'react-bootstrap'
 import { useState } from 'react'
-import registerService from './register'
+import registerService from '../../services/register'
 import axios from 'axios'
  
 function RegisterModal (

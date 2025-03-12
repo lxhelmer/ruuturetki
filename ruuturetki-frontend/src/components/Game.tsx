@@ -24,6 +24,7 @@ type GameState = {
   guesses: L.LatLng[],
   score: number,
   picked: boolean,
+  skipped: number
 }
 
 const startState: GameState = {
@@ -32,6 +33,7 @@ const startState: GameState = {
   guesses: [],
   score: 0,
   picked: false,
+  skipped: 0,
 }
 
 function Game() {

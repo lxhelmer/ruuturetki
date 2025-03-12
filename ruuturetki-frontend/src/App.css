@@ -45,6 +45,9 @@ html, body {
 #select-button {
   margin-left: 10px;
 }
+#home-button {
+  margin: 10px;
+}
 
 #controls {
   position: absolute;
@@ -103,4 +106,17 @@ html, body {
 
 #modal-score {
   padding-top: 10px;
+}
+
+#menu-title {
+  position: absolute;
+  font-size: 120px;
+  color: #b5b191;
+  padding: 20px;
+  top: 20%;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  z-index: 500;
 }

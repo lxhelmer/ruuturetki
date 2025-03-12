@@ -7,13 +7,17 @@ import {
 import 'leaflet/dist/leaflet.css' 
 import { MapContainer, WMSTileLayer} from 'react-leaflet'
 import { Button } from 'react-bootstrap'
-import { getRandomLatLng } from './Game'
+import { getRandomLatLng } from './components/Game'
 import { useState } from 'react'
 import './App.css'
-import Game from './Game.tsx'
+import Game from './components/Game'
+import { IGame } from './types'
+import gameService from './services/games'
 
-import RegisterModal from './RegisterModal'
-import LoginModal from './LoginModal'
+import RegisterModal from './components/modals/RegisterModal'
+import LoginModal from './components/modals/LoginModal'
+import HelpModal from './components/modals/HelpModal'
+import ScoreModal from './components/modals/ScoreModal'
 
 //const start_pos = L.latLng(60.1718, 24.9395)
 
@@ -21,15 +25,37 @@ function StartMenu() {
   const navigate = useNavigate()
   const [showRegModal, setRegModal] = useState(false)
   const [showLogModal, setLogModal] = useState(false)
+  const [showHelpModal, setHelpModal] = useState(false)
+  const [showScoreModal, setScoreModal] = useState(false)
   const bg_pos = getRandomLatLng()
-
-
 
   const handleCloseReg = () => setRegModal(false)
   const handleShowReg = () => setRegModal(true)
 
   const handleCloseLog = () => setLogModal(false)
   const handleShowLog = () => setLogModal(true)
+  
+  const handleCloseHelp = () => setHelpModal(false)
+  const handleShowHelp = () => setHelpModal(true)
+
+  const handleCloseScore = () => setScoreModal(false)
+  const handleShowScore = () => {
+    loadGames()
+    setScoreModal(true)
+  }
+
+  const [games, setGames] = useState<IGame[]>([])
+
+
+  const loadGames = async () => {
+    try {
+      const games = await gameService.getGames()
+      console.log(games)
+      setGames(games)
+    } catch (error) {
+
+    }
+  }
 
 	const wmsOptions: L.WMSOptions = {
 		version: '1.1.1.1',
@@ -59,6 +85,16 @@ function StartMenu() {
         handleCloseLog={handleCloseLog}
         />
 
+      <HelpModal
+        show={showHelpModal}
+        handleCloseHelp={handleCloseHelp}
+        />
+
+      <ScoreModal
+        show={showScoreModal}
+        handleCloseScore={handleCloseScore}
+        games={games}
+        />
       <MapContainer id="map" {...mapOptions}>
         <WMSTileLayer
           url="https://kartta.hel.fi/ws/geoserver/avoindata/wms?"
@@ -66,6 +102,10 @@ function StartMenu() {
           {...wmsOptions}
         />
       </MapContainer>
+      <div id="menu-title">
+          Ruuturetki
+      </div>
+
       <div id="start-menu" className="d-grid gap-2">
         <Button
           variant="dark"
@@ -77,6 +117,7 @@ function StartMenu() {
         <Button
           variant="dark"
           size="lg"
+          onClick={() => handleShowScore()}
           >
           scoreboard
         </Button>
@@ -94,8 +135,16 @@ function StartMenu() {
           >
           register
         </Button>
+        <Button
+          variant="dark"
+          size="lg"
+          onClick={() => handleShowHelp()}
+          >
+          help
+        </Button>
 
       </div>
+
     </>
   )
 }

@@ -4,7 +4,7 @@ import { Button } from 'react-bootstrap'
 import { useMap } from 'react-leaflet'
 import { useState } from 'react'
 import DevStats from './DevStats.tsx'
-import RoundEndModal from './RoundEndModal.tsx'
+import RoundEndModal from './modals/RoundEndModal.tsx'
 import type { GameState } from './Game.tsx'
 import { useNavigate } from 'react-router-dom'
 
@@ -75,7 +75,7 @@ function MapComponents (
           variant="dark"
           onClick={() => resetMap()}
           >
-          Go Back
+          Reset map
         </Button>
       </>
     )
@@ -94,6 +94,7 @@ function MapComponents (
             guesses: gameState.guesses.concat((picker_pos) ? picker_pos : L.latLng(0,0)),
             score: gameState.score + score,
             picked: true,
+            skipped: gameState.skipped,
           }
           setGameState(new_state)
           handleShowREM()
@@ -119,9 +120,10 @@ function MapComponents (
         const new_state = {
           rounds: gameState.rounds + 1,
           locations: gameState.locations.concat(start_pos),
-          guesses: gameState.guesses,
+          guesses: gameState.guesses.concat(L.latLng(0,0)),
           score: gameState.score,
           picked: false,
+          skipped: gameState.skipped + 1
         }
         setGameState(new_state)
         refreshMap()
@@ -151,6 +153,13 @@ function MapComponents (
           <ResButton/>
           <SelectButton/>
           <SkipButton/>
+          <Button 
+            id="home-button" 
+            variant="dark"
+            onClick={() => navigate('/')}
+            >
+            Exit
+          </Button>
         </div>
         <DevStats 
           start_pos = {start_pos}
