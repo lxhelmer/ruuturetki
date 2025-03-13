@@ -43,6 +43,7 @@ The app consists of vite - react - ts frontend and ts-node backend
 
 - Different gamemodes with older ortholayers and prepicked positions. 'Daily' mode and a admin picker tool for such would be nice.
 - General improvement of the codebase. Better implementation of the routers e.g. handlind the checking of authentication in separate middleware.
+- Addition of testing, for now there are only couple tests for the backend checking that duplicate users and bad requests are blocked properly.
 
 ## Worklog
 
