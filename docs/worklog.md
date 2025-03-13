@@ -15,5 +15,5 @@
 |10.3.| 8 | Added routes for users and games to backend, started backend integration with registration |
 |11.3.| 9 | Added modals for the start menu, worked on the scoreboard front-back communication, little work on login |
 |12.3.| 10| Finalizing the workings of backend, added token authentication for users and score creation |
-|Total | 88 | hrs|
-
+|13.3.| 8 | Finalizing the application with separation of admin mode and final touches to ui|
+|Total | 96 | hrs|
