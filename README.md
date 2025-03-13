@@ -8,7 +8,7 @@ Using the backend hosted on https://ruuturetki-backend.onrender.com
 
 This is a map game I made as the submission for University of Helsinki's Full Stack Open Course project.
 
-## Onface functionality
+## User facing functionality
 -  The game implements game where the player tries to guess the location of orthophotograph presented. The positions are random within the scope of the borders of the map.
 -  The user has the ability to move around slightly, but no zoom or any kind of maplegend on the orthophoto.
 -  The score is calculated based on the movement during guess and the final guess distance.
@@ -25,13 +25,14 @@ This is a map game I made as the submission for University of Helsinki's Full St
 ## Details of technical implementation
 
 The app consists of vite - react - ts frontend and ts-node backend
+As the application is hosted on the free tier of Render.com both take a secod to ramp up. The user is notified of this in the login and register modals, but at first even the start page will be unreachable.
 
 ### Frontend
 -  Frontend runs in a container with environment variables passed on Render as secret file
 -  The frontend uses multiple leaflet map instances.
 -  Orthoimaginery is loaded online from City of Helsinkis wms-server. More information of this service at [helsingin-ortoilmakuvat](https://hri.fi/data/fi/dataset/helsingin-ortoilmakuvat)
 -  The fronend communicates via token authenticated axios requests with the backend.
--  As interesting implementation details, the scoreboard is implemented as mui-datagrid which handles the sorting and rendering of data quite nicely.
+-  As interesting implementation details, the scoreboard is implemented as mui-datagrid which handles the sorting and rendering of data quite nicely but was finnicy to get working properly.
 
 ### Backend
 
@@ -43,6 +44,7 @@ The app consists of vite - react - ts frontend and ts-node backend
 
 - Different gamemodes with older ortholayers and prepicked positions. 'Daily' mode and a admin picker tool for such would be nice.
 - General improvement of the codebase. Better implementation of the routers e.g. handlind the checking of authentication in separate middleware.
+- Addition of testing, for now there are only couple tests for the backend checking that duplicate users and bad requests are blocked properly.
 
 ## Worklog
 
