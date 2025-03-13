@@ -4,7 +4,7 @@ import { z } from 'zod'
 
 export const env = createEnv({
     server: {
-      MONGODB_URI: z.string().url(),
+      MONGODB_URI: z.string(),
       PORT: z.string(),
       DB_NAME: z.string(),
       JWT_SECRET: z.string(),

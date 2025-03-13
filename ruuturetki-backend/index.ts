@@ -1,4 +1,4 @@
-import app from './app.ts';
+import app from './app';
 import { env } from './env'
 import { log_info } from './utils/logger'
 
