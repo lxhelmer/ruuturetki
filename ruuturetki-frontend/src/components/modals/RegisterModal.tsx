@@ -61,6 +61,9 @@ function RegisterModal (
               value={password} 
               onChange={({target}) => setPassword(target.value)}/>
           </Form>
+          <Form.Text className="text-muted">
+            This might take a while if the backend is asleep
+          </Form.Text>
         </Modal.Body>
         <Modal.Footer>
           <h2 id="reg-err">

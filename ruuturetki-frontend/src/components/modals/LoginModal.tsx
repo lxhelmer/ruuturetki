@@ -58,6 +58,10 @@ function LoginModal (
               placeholder="Enter password" 
               value={password} 
               onChange={({target}) => setPassword(target.value)}/>
+            <Form.Text className="text-muted">
+              This might take a while if the backend is asleep
+            </Form.Text>
+
           </Form>
         </Modal.Body>
         <Modal.Footer>
