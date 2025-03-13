@@ -14,5 +14,6 @@
 |26.2.| 6 | Starting with the nodejs backend, alot of ts specific annoyance |
 |10.3.| 8 | Added routes for users and games to backend, started backend integration with registration |
 |11.3.| 9 | Added modals for the start menu, worked on the scoreboard front-back communication, little work on login |
-|Total | 78 hrs|
+|12.3.| 10| Finalizing the workings of backend, added token authentication for users and score creation |
+|Total | 88 | hrs|
 
