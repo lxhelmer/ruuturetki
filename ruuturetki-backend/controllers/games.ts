@@ -17,27 +17,18 @@ gamesRouter.get('/',  (_req, res) => {
   })
 })
 
-
 // token implementation in ts got help from: https://dev.to/juliecherner/authentication-with-jwt-tokens-in-typescript-with-express-3gb1
 
 gamesRouter.post('/', async (req, res) => { 
   try {
     const new_game = newGameSchema.parse(req.body)
-    console.log(new_game)
-    console.log(req.header)
     const token = req.get('Authorization')?.replace('Bearer ', '')
-    console.log(token)
 
     if (!token) {
       throw new Error('Missing authorization token')
     }
     const decoded = jwt.verify(token, env.JWT_SECRET) as JwtPayload
-    if (!decoded.id || !decoded.username) {
-      console.log(decoded.username)
-    }
-    
     const user = await User.findById(decoded.id)
-    console.log(user)
 
     if (!user) {
       throw new Error("Token doesn't match any user")
@@ -55,12 +46,33 @@ gamesRouter.post('/', async (req, res) => {
   }
 })
 
-gamesRouter.delete('/:id', (req, res) => {
-  Game.findByIdAndDelete(req.params.id)
-    .then(_result => {
-      res.status(204).end()
-    })
-    .catch(error => res.send(error))
+gamesRouter.delete('/:id', async (req, res) => {
+  console.log('reached router')
+
+  try {
+    const token = req.get('Authorization')?.replace('Bearer ', '')
+
+    if (!token) {
+      throw new Error('Missing authorization token')
+    }
+    const decoded = jwt.verify(token, env.JWT_SECRET) as JwtPayload
+    const user = await User.findById(decoded.id)
+
+    if (!user) {
+      throw new Error("Token doesn't match any user")
+    }
+    if (user.admin) {
+      try {
+        await Game.findByIdAndDelete(req.params.id)
+        res.status(204).end()
+      } catch (error) {
+        res.send(error)
+      }
+    }
+  } catch (error){
+    console.log(error)
+    res.send(error)
+  }
 })
 
 export default gamesRouter

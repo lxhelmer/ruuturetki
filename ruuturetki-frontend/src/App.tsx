@@ -20,6 +20,7 @@ import LoginModal from './components/modals/LoginModal'
 import HelpModal from './components/modals/HelpModal'
 import ScoreModal from './components/modals/ScoreModal'
 import LogoutButton from './components/LogoutButton'
+import LoginButton from './components/LoginButton'
 
 
 //const start_pos = L.latLng(60.1718, 24.9395)
@@ -37,7 +38,7 @@ function StartMenu() {
 
   const handleCloseLog = () => setLogModal(false)
   const handleShowLog = () => setLogModal(true)
-  
+
   const handleCloseHelp = () => setHelpModal(false)
   const handleShowHelp = () => setHelpModal(true)
 
@@ -54,7 +55,6 @@ function StartMenu() {
     const gameUserJSON = window.localStorage.getItem('gameUser')
     if (gameUserJSON) {
       const user = JSON.parse(gameUserJSON)
-      console.log(user)
       setUser(user)
       gameService.setToken(user.token)
     } else {
@@ -66,7 +66,6 @@ function StartMenu() {
   const loadGames = async () => {
     try {
       const games = await gameService.getGames()
-      console.log(games)
       setGames(games)
     } catch (error) {
 
@@ -110,6 +109,8 @@ function StartMenu() {
         show={showScoreModal}
         handleCloseScore={handleCloseScore}
         games={games}
+        setGames={setGames}
+        user={user}
         />
       <MapContainer id="map" {...mapOptions}>
         <WMSTileLayer
@@ -137,13 +138,8 @@ function StartMenu() {
           >
           scoreboard
         </Button>
-                <Button
-          variant="dark"
-          size="lg"
-          onClick={() => handleShowLog()}
-          >
-          login
-        </Button>
+        <LogoutButton user={user} setUser={setUser}/>
+        <LoginButton user={user} handleShowLog={handleShowLog}/>
         <Button
           variant="dark"
           size="lg"
@@ -158,7 +154,6 @@ function StartMenu() {
           >
           help
         </Button>
-        <LogoutButton user={user} setUser={setUser}/>
       </div>
 
     </>

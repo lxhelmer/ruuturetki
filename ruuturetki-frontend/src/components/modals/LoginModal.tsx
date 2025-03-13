@@ -22,7 +22,6 @@ function LoginModal (
         username,
         password
       })
-      console.log(user)
       window.localStorage.setItem(
         'gameUser', JSON.stringify(user)
       )

@@ -44,16 +44,15 @@ function MapComponents (
   const [round_score, setScore] = useState(0)
   const navigate = useNavigate()
 
+
   const handleCloseREM = () => {
     if (gameState.rounds < 5) {
       setShowREM(false)
       refreshMap()
     }
     else {
-      console.log(gameState.user)
-      if(gameState.user) {
+      if(gameState.user && gameState.score > 0) {
         try {
-          console.log('trying')
           gameService.create({
             rounds: gameState.rounds-gameState.skipped,
             score: gameState.score
@@ -70,7 +69,6 @@ function MapComponents (
   const handleShowREM = () => setShowREM(true)
 
   function refreshMap () {
-    console.log(gameState)
     const new_center: L.LatLng = random_latlng()
     setPos(new_center)
     setScore(0)

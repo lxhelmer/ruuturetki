@@ -14,6 +14,7 @@ export interface IUser {
 }
 
 export interface LUser {
+  token: string,
   username: string,
-  id: string,
+  admin: boolean,
 }

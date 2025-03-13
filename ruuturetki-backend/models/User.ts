@@ -6,6 +6,7 @@ interface IUser {
   username: string;
   pswd_hash: string;
   games: Array<mongoose.Types.ObjectId>;
+  admin: boolean;
 }
 
 export type NewUserEntry = Omit<IUser, 'games'>;
@@ -21,7 +22,8 @@ const userSchema = new mongoose.Schema<IUser>({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Note'
     }
-  ]
+  ],
+  admin: Boolean,
 })
 
 userSchema.set('toJSON', {

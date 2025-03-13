@@ -26,7 +26,8 @@ usersRouter.post('/', async (req, res) => {
 
     const user = new User({
       username: new_user.username,
-      pswd_hash: pswd_hash
+      pswd_hash: pswd_hash,
+      admin: false
     })
 
     const saved = await user.save()

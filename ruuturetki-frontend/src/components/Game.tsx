@@ -65,7 +65,6 @@ function Game() {
     const gameUserJSON = window.localStorage.getItem('gameUser')
     if (gameUserJSON) {
       const user = JSON.parse(gameUserJSON)
-      console.log('user', user)
       setGameState({...gameState, user: user})
       gameService.setToken(user.token)
     } else {

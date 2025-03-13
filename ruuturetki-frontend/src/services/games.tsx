@@ -23,9 +23,18 @@ const create = async (newGame: {rounds: number, score: number}) => {
     headers: { Authorization: token}
   }
   const response = await axios.post(base_url, newGame, config)
-  console.log(response)
   return response.data
-
 }
 
-export default { getGames, create, setToken }
+const deleteGame = async (id: string) => {
+  const config = {
+    headers: { Authorization: token}
+  }
+  console.log(id)
+  console.log(config)
+  const response = await axios.delete(`${base_url}/${id}`, config)
+  return response.data
+  
+}
+
+export default { getGames, create, deleteGame, setToken }

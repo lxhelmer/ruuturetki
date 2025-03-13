@@ -19,7 +19,7 @@ function LogoutButton (
           onClick={logout}
           id="logout"
           >
-          log out
+          log out 
         </Button>
       </>
     )
