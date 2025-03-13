@@ -9,7 +9,11 @@ export interface IGame {
 
 export interface IUser {
   username: string,
-  is: string,
+  id: string,
   games: Array<IGame>
 }
 
+export interface LUser {
+  username: string,
+  id: string,
+}

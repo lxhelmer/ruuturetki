@@ -29,7 +29,6 @@ function RegisterModal (
         if (error.response && error.response.data.errorMessage) {
           setProblem(error.response.data.errorMessage)
         }
-        setProblem('Something went wrong')
       } else {
         setProblem('Something went wrong')
       }

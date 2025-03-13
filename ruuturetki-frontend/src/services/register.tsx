@@ -1,5 +1,10 @@
 import axios from 'axios'
-const base_url = "http://localhost:3001/api/users"
+import { BACKEND_URI } from '../config'
+
+let base_url = "/api/users"
+if (BACKEND_URI) {
+  base_url = BACKEND_URI.concat("/api/users")
+}
 
 const register = async (user:{username: string, password: String})  => {
   const response = await axios.post(base_url, user)

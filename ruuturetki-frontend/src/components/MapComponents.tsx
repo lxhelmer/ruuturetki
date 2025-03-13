@@ -7,6 +7,8 @@ import DevStats from './DevStats.tsx'
 import RoundEndModal from './modals/RoundEndModal.tsx'
 import type { GameState } from './Game.tsx'
 import { useNavigate } from 'react-router-dom'
+import gameService from '../services/games'
+import LoginBanner from './LoginBanner'
 
 
 
@@ -43,11 +45,23 @@ function MapComponents (
   const navigate = useNavigate()
 
   const handleCloseREM = () => {
-    if (gameState.rounds == 5) {
+    if (gameState.rounds < 5) {
       setShowREM(false)
       refreshMap()
     }
     else {
+      console.log(gameState.user)
+      if(gameState.user) {
+        try {
+          console.log('trying')
+          gameService.create({
+            rounds: gameState.rounds-gameState.skipped,
+            score: gameState.score
+          })
+        } catch (error) {
+          console.log("Something went wrong with adding game", error)
+        }
+      }
       setShowREM(false)
       navigate("/")
     }
@@ -56,6 +70,7 @@ function MapComponents (
   const handleShowREM = () => setShowREM(true)
 
   function refreshMap () {
+    console.log(gameState)
     const new_center: L.LatLng = random_latlng()
     setPos(new_center)
     setScore(0)
@@ -95,6 +110,7 @@ function MapComponents (
             score: gameState.score + score,
             picked: true,
             skipped: gameState.skipped,
+            user: gameState.user,
           }
           setGameState(new_state)
           handleShowREM()
@@ -115,6 +131,16 @@ function MapComponents (
   function SkipButton () {
     const skipMap =  () =>  {
       if (gameState.rounds === 4) {
+        const new_state = {
+          rounds: gameState.rounds + 1,
+          locations: gameState.locations.concat(start_pos),
+          guesses: gameState.guesses.concat(L.latLng(0,0)),
+          score: gameState.score,
+          picked: false,
+          skipped: gameState.skipped + 1,
+          user: gameState.user,
+        }
+        setGameState(new_state)
         setShowREM(true)
       } else {
         const new_state = {
@@ -123,7 +149,8 @@ function MapComponents (
           guesses: gameState.guesses.concat(L.latLng(0,0)),
           score: gameState.score,
           picked: false,
-          skipped: gameState.skipped + 1
+          skipped: gameState.skipped + 1,
+          user: gameState.user,
         }
         setGameState(new_state)
         refreshMap()
@@ -168,6 +195,9 @@ function MapComponents (
           setDist={setDist}
           gameState={gameState}
         />
+        <div id="log-banner">
+          <LoginBanner user={gameState.user}/>
+        </div>
       </>
   )
 }

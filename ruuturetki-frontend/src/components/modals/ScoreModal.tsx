@@ -37,6 +37,7 @@ function ScoreModal (
     return ( 
       <>
         <DataGrid
+          disableRowSelectionOnClick
           sx={{bgcolor: 'white'}}
           rows={rows}
           columns={columns}
@@ -46,6 +47,14 @@ function ScoreModal (
                 pageSize: 5,
               },
             },
+            sorting: {
+              sortModel: [
+                {
+                  field: 'score',
+                  sort: 'desc',
+                }
+              ]
+            }
           }}
           pageSizeOptions={[5]}
           />

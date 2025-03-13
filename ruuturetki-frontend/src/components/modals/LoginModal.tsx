@@ -2,6 +2,7 @@ import { Modal } from 'react-bootstrap'
 import { Button } from 'react-bootstrap'
 import { Form } from 'react-bootstrap'
 import { useState } from 'react'
+import loginService from '../../services/login'
  
 function LoginModal (
   { show,
@@ -14,10 +15,24 @@ function LoginModal (
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [problem, setProblem] = useState('')
+
   const handleLogSubmit = async () => {
-    setProblem('')
-    return null
+    try {
+      const user = await loginService.login({
+        username,
+        password
+      })
+      console.log(user)
+      window.localStorage.setItem(
+        'gameUser', JSON.stringify(user)
+      )
+      setProblem('')
+      handleCloseLog()
+    } catch (error) {
+      setProblem('Something went wrong')
+    }
   }
+
   return (
     <>
       <Modal 

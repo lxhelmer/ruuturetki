@@ -33,7 +33,6 @@ loginRouter.post('/', async (req, res) =>  {
       const token = jwt.sign(userForToken, env.JWT_SECRET)
       res.status(200).send({ token, username: user.username})
     }
-
   } catch (error) {
     res.status(400).send(error)
   }

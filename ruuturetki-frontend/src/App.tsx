@@ -8,16 +8,19 @@ import 'leaflet/dist/leaflet.css'
 import { MapContainer, WMSTileLayer} from 'react-leaflet'
 import { Button } from 'react-bootstrap'
 import { getRandomLatLng } from './components/Game'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import Game from './components/Game'
 import { IGame } from './types'
 import gameService from './services/games'
+import { LUser } from './types'
 
 import RegisterModal from './components/modals/RegisterModal'
 import LoginModal from './components/modals/LoginModal'
 import HelpModal from './components/modals/HelpModal'
 import ScoreModal from './components/modals/ScoreModal'
+import LogoutButton from './components/LogoutButton'
+
 
 //const start_pos = L.latLng(60.1718, 24.9395)
 
@@ -45,6 +48,19 @@ function StartMenu() {
   }
 
   const [games, setGames] = useState<IGame[]>([])
+  const [user, setUser] = useState<LUser | null>(null)
+
+  useEffect(() => {
+    const gameUserJSON = window.localStorage.getItem('gameUser')
+    if (gameUserJSON) {
+      const user = JSON.parse(gameUserJSON)
+      console.log(user)
+      setUser(user)
+      gameService.setToken(user.token)
+    } else {
+      setUser(null)
+    }
+  }, [showLogModal])
 
 
   const loadGames = async () => {
@@ -142,7 +158,7 @@ function StartMenu() {
           >
           help
         </Button>
-
+        <LogoutButton user={user} setUser={setUser}/>
       </div>
 
     </>

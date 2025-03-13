@@ -120,3 +120,11 @@ html, body {
   margin: auto;
   z-index: 500;
 }
+
+#log-banner {
+  position: absolute;
+  z-index: 500;
+  top: 0;
+  right: 0;
+  padding: 10px;
+}

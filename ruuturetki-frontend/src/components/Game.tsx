@@ -3,6 +3,8 @@ import L from 'leaflet'
 import SelectionMap from './SelectionMap.tsx'
 import ViewMap from './ViewMap.tsx'
 import { getDistance } from 'geolib'
+import gameService from '../services/games'
+import { LUser } from '../types'
 
 export function getRandomLatLng () {
   const southBoundLat: number = 60.13
@@ -24,7 +26,8 @@ type GameState = {
   guesses: L.LatLng[],
   score: number,
   picked: boolean,
-  skipped: number
+  skipped: number,
+  user: LUser | null
 }
 
 const startState: GameState = {
@@ -34,6 +37,7 @@ const startState: GameState = {
   score: 0,
   picked: false,
   skipped: 0,
+  user: null
 }
 
 function Game() {
@@ -55,6 +59,21 @@ function Game() {
       setGameState({...gameState, picked: true})
     }
   }, [picker_pos])
+
+
+  useEffect(() => {
+    const gameUserJSON = window.localStorage.getItem('gameUser')
+    if (gameUserJSON) {
+      const user = JSON.parse(gameUserJSON)
+      console.log('user', user)
+      setGameState({...gameState, user: user})
+      gameService.setToken(user.token)
+    } else {
+      gameService.setToken('')
+      setGameState({...gameState, user: null})
+    }
+
+  }, [])
 
   
   return (
