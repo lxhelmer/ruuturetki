@@ -168,6 +168,9 @@ function MapComponents (
   }
   return (
       <>
+        <Button variant="dark" disabled id="round-indicator">
+          {(gameState.rounds < 5) ? gameState.rounds+1 : 5}/5
+        </Button>
         <RoundEndModal
           gameState={gameState}
           show={showREM}
