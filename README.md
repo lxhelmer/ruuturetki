@@ -8,7 +8,7 @@ Using the backend hosted on https://ruuturetki-backend.onrender.com
 
 This is a map game I made as the submission for University of Helsinki's Full Stack Open Course project.
 
-## Onface functionality
+## User facing functionality
 -  The game implements game where the player tries to guess the location of orthophotograph presented. The positions are random within the scope of the borders of the map.
 -  The user has the ability to move around slightly, but no zoom or any kind of maplegend on the orthophoto.
 -  The score is calculated based on the movement during guess and the final guess distance.
