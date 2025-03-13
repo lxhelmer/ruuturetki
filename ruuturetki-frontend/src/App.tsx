@@ -21,6 +21,7 @@ import HelpModal from './components/modals/HelpModal'
 import ScoreModal from './components/modals/ScoreModal'
 import LogoutButton from './components/LogoutButton'
 import LoginButton from './components/LoginButton'
+import LoginBanner from './components/LoginBanner'
 
 
 //const start_pos = L.latLng(60.1718, 24.9395)
@@ -155,7 +156,9 @@ function StartMenu() {
           help
         </Button>
       </div>
-
+      <div id="log-banner">
+        <LoginBanner user={user}/>
+      </div>
     </>
   )
 }
