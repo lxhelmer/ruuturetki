@@ -43,3 +43,7 @@ The app consists of vite - react - ts frontend and ts-node backend
 
 - Different gamemodes with older ortholayers and prepicked positions. 'Daily' mode and a admin picker tool for such would be nice.
 - General improvement of the codebase. Better implementation of the routers e.g. handlind the checking of authentication in separate middleware.
+
+## Worklog
+
+The itemized backlog of workhours can be found at [worklog](docs/worklog.md)
