@@ -31,7 +31,7 @@ The app consists of vite - react - ts frontend and ts-node backend
 -  The frontend uses multiple leaflet map instances.
 -  Orthoimaginery is loaded online from City of Helsinkis wms-server. More information of this service at [helsingin-ortoilmakuvat](https://hri.fi/data/fi/dataset/helsingin-ortoilmakuvat)
 -  The fronend communicates via token authenticated axios requests with the backend.
--  As interesting implementation details, the scoreboard is implemented as mui-datagrid which handles the sorting and rendering of data quite nicely.
+-  As interesting implementation details, the scoreboard is implemented as mui-datagrid which handles the sorting and rendering of data quite nicely but was finnicy to get working properly.
 
 ### Backend
 
