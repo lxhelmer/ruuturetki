@@ -1,4 +1,5 @@
-require('dotenv').config()
+import dotenv from 'dotenv'
+dotenv.config()
 import { createEnv } from "@t3-oss/env-core";
 import { z } from 'zod'
 

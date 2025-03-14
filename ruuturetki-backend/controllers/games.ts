@@ -1,10 +1,10 @@
 import express from 'express'
 const gamesRouter = express.Router()
-import Game from '../models/Game'
+import Game from '../models/Game.js'
 import { z } from 'zod'
-import { env } from '../env'
-import jwt, { JwtPayload } from 'jsonwebtoken'
-import User from '../models/User'
+import { env } from '../env.js'
+import jwt from 'jsonwebtoken'
+import User from '../models/User.js'
 
 const newGameSchema = z.object({
   rounds: z.number(),
@@ -27,7 +27,7 @@ gamesRouter.post('/', async (req, res) => {
     if (!token) {
       throw new Error('Missing authorization token')
     }
-    const decoded = jwt.verify(token, env.JWT_SECRET) as JwtPayload
+    const decoded = jwt.verify(token, env.JWT_SECRET) as jwt.JwtPayload
     const user = await User.findById(decoded.id)
 
     if (!user) {
@@ -55,7 +55,7 @@ gamesRouter.delete('/:id', async (req, res) => {
     if (!token) {
       throw new Error('Missing authorization token')
     }
-    const decoded = jwt.verify(token, env.JWT_SECRET) as JwtPayload
+    const decoded = jwt.verify(token, env.JWT_SECRET) as jwt.JwtPayload
     const user = await User.findById(decoded.id)
 
     if (!user) {

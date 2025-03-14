@@ -1,10 +1,10 @@
 import express from 'express';
 import cors from 'cors'
-import gamesRouter from './controllers/games'
-import usersRouter from './controllers/users'
-import loginRouter from './controllers/login'
+import gamesRouter from './controllers/games.js'
+import usersRouter from './controllers/users.js'
+import loginRouter from './controllers/login.js'
 import mongoose from 'mongoose'
-import { env } from "./env";
+import { env } from "./env.js";
 
 
 const app = express()

@@ -1,9 +1,9 @@
 import express from 'express'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
-import User from '../models/User'
+import User from '../models/User.js'
 import { z } from 'zod'
-import { env } from '../env'
+import { env } from '../env.js'
 
 const loginRouter = express.Router()
 

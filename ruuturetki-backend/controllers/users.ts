@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt'
 import express from 'express'
 const usersRouter = express.Router()
-import User from '../models/User'
+import User from '../models/User.js'
 import { z } from 'zod'
 import { MongoServerError } from 'mongodb'
 
