@@ -34,7 +34,7 @@ loginRouter.post('/', async (req, res) =>  {
       res.status(200).send({ token, username: user.username, admin: user.admin})
     }
   } catch (error) {
-    res.status(400).send(error)
+    res.status(400).send({errorMessage: error})
   }
 })
 
