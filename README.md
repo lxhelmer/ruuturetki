@@ -45,6 +45,7 @@ As the application is hosted on the free tier of Render.com both take a secod to
 - Different gamemodes with older ortholayers and prepicked positions. 'Daily' mode and a admin picker tool for such would be nice.
 - General improvement of the codebase. Better implementation of the routers e.g. handlind the checking of authentication in separate middleware.
 - Bring back testing, during the development of backend vitest was used to make sure that the backend functioned correctly, but these tests later became deprecated because of transpiling conflicts
+- I would like to wrap the whole app in container implementation so that it would be easy to migrate anywhere.
 
 ## Worklog
 
