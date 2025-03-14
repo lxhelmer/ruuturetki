@@ -36,7 +36,7 @@ As the application is hosted on the free tier of Render.com both take a secod to
 
 ### Backend
 
-- Backend runs with ts-node, although the memory usage is higher than with transpiled js/node code, there were some major conflicts with transpiling which were outside the reach of the project for the moment.
+- Backend runs with node, and is built with tsc. This was quite finicky to get to work and I ended up using tsx because it works with ESM out the box which the project uses.
 - Backend works as a bridge to a MongoDB database validating request using zod and ts interfaces.
 - Interesting implementation detail is that environment variables are handled with [t3-env](https://github.com/t3-oss/t3-env) package which handles the zod validation for environment variables.
 
@@ -45,6 +45,7 @@ As the application is hosted on the free tier of Render.com both take a secod to
 - Different gamemodes with older ortholayers and prepicked positions. 'Daily' mode and a admin picker tool for such would be nice.
 - General improvement of the codebase. Better implementation of the routers e.g. handlind the checking of authentication in separate middleware.
 - Bring back testing, during the development of backend vitest was used to make sure that the backend functioned correctly, but these tests later became deprecated because of transpiling conflicts
+- I would like to wrap the whole app in container implementation so that it would be easy to migrate anywhere.
 
 ## Worklog
 
