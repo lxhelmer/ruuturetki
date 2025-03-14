@@ -26,29 +26,31 @@ function OrtoLayer ({start_pos, renderKey}: {start_pos: L.LatLng, renderKey: num
 }
 
 
-function ViewMap({
-  start_pos,
-  pick_score,
-  setPos,
-  setPickScore,
-  random_latlng,
-  gameState,
-  setGameState,
-  maxDist,
-  setDist,
-  picker_pos,
-    }:
-      { start_pos: L.LatLng,
-        pick_score: number,
-        setPos: Function,
-        setPickScore: Function,
-        random_latlng: Function,
-        gameState: GameState,
-        setGameState: Function,
-        maxDist: number,
-        setDist: Function,
-        picker_pos: L.LatLng | null,
-      })
+function ViewMap(
+  {
+    start_pos,
+    pick_score,
+    setPos,
+    setPickScore,
+    random_latlng,
+    gameState,
+    setGameState,
+    maxDist,
+    setDist,
+    picker_pos,
+  }:
+    {
+      start_pos: L.LatLng,
+      pick_score: number,
+      setPos: Function,
+      setPickScore: Function,
+      random_latlng: Function,
+      gameState: GameState,
+      setGameState: Function,
+      maxDist: number,
+      setDist: Function,
+      picker_pos: L.LatLng | null,
+    })
 
 {
   const move_bounds: L.LatLngBounds = start_pos.toBounds(3800)

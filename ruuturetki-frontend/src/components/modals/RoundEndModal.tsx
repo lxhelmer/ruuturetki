@@ -17,7 +17,6 @@ function ModalButton (
 }
 
 const ModalMap = ({gameState}: {gameState: GameState}) => {
-
   const resultCenter: L.LatLng = gameState.locations[gameState.rounds-1]
   const resultMapOptions: L.MapOptions = {
     center: resultCenter,

@@ -10,7 +10,47 @@ import { useNavigate } from 'react-router-dom'
 import gameService from '../services/games'
 import LoginBanner from './LoginBanner'
 
+function SelectButton ({handleEndRound}: {handleEndRound: Function}) {
+  return (
+    <>
+      <Button 
+        id="select-button" 
+        variant="dark"
+        onClick={() => handleEndRound()}
+        >
+        Select
+      </Button>
+    </>
+  )
+}
 
+function SkipButton ({handleSkipMap}: {handleSkipMap: Function}) {
+  return (
+    <>
+      <Button 
+        id="select-button" 
+        variant="dark"
+        onClick={() => handleSkipMap()}
+        >
+        Skip
+      </Button>
+    </>
+  )
+}
+
+function ResButton ({handleResetMap}: {handleResetMap: Function}) {
+  return (
+    <>
+      <Button 
+        id="reset-button" 
+        variant="dark"
+        onClick={() => handleResetMap()}
+        >
+        Reset map
+      </Button>
+    </>
+  )
+}
 
 function MapComponents (
   {
@@ -68,7 +108,57 @@ function MapComponents (
 
   const handleShowREM = () => setShowREM(true)
 
-  function refreshMap () {
+  const handleEndRound = () => {
+    if (gameState.picked === true) {
+        const score = Math.max((10000 - pick_score*2 - maxDist*2.5), 0)
+
+        setScore(score)
+        const new_state = {
+          rounds: gameState.rounds + 1,
+          locations: gameState.locations.concat(start_pos),
+          guesses: gameState.guesses.concat((picker_pos) ? picker_pos : L.latLng(0,0)),
+          score: gameState.score + score,
+          picked: true,
+          skipped: gameState.skipped,
+          user: gameState.user,
+        }
+        setGameState(new_state)
+        handleShowREM()
+    }
+  }
+
+  const handleSkipMap =  () =>  {
+    if (gameState.rounds === 4) {
+      const new_state = {
+        rounds: gameState.rounds + 1,
+        locations: gameState.locations.concat(start_pos),
+        guesses: gameState.guesses.concat(L.latLng(0,0)),
+        score: gameState.score,
+        picked: false,
+        skipped: gameState.skipped + 1,
+        user: gameState.user,
+      }
+      setGameState(new_state)
+      setShowREM(true)
+    } else {
+      const new_state = {
+        rounds: gameState.rounds + 1,
+        locations: gameState.locations.concat(start_pos),
+        guesses: gameState.guesses.concat(L.latLng(0,0)),
+        score: gameState.score,
+        picked: false,
+        skipped: gameState.skipped + 1,
+        user: gameState.user,
+      }
+      setGameState(new_state)
+      refreshMap()
+    }
+  }
+  const handleResetMap = () => {
+    map.setView(start_pos)
+  }
+
+  const refreshMap = () => {
     const new_center: L.LatLng = random_latlng()
     setPos(new_center)
     setScore(0)
@@ -76,96 +166,6 @@ function MapComponents (
     map.setView(new_center)
   }
 
-
-  function ResButton () {
-    const resetMap = () => {
-      map.setView(start_pos)
-    }
-    return (
-      <>
-        <Button 
-          id="reset-button" 
-          variant="dark"
-          onClick={() => resetMap()}
-          >
-          Reset map
-        </Button>
-      </>
-    )
-  }
-
-  function SelectButton () {
-
-    const endRound = () => {
-      if (gameState.picked === true) {
-          const score = Math.max((10000 - pick_score*2 - maxDist*2.5), 0)
-
-          setScore(score)
-          const new_state = {
-            rounds: gameState.rounds + 1,
-            locations: gameState.locations.concat(start_pos),
-            guesses: gameState.guesses.concat((picker_pos) ? picker_pos : L.latLng(0,0)),
-            score: gameState.score + score,
-            picked: true,
-            skipped: gameState.skipped,
-            user: gameState.user,
-          }
-          setGameState(new_state)
-          handleShowREM()
-      }
-    }
-    return (
-      <>
-        <Button 
-          id="select-button" 
-          variant="dark"
-          onClick={() => endRound()}
-          >
-          Select
-        </Button>
-      </>
-    )
-  }
-  function SkipButton () {
-    const skipMap =  () =>  {
-      if (gameState.rounds === 4) {
-        const new_state = {
-          rounds: gameState.rounds + 1,
-          locations: gameState.locations.concat(start_pos),
-          guesses: gameState.guesses.concat(L.latLng(0,0)),
-          score: gameState.score,
-          picked: false,
-          skipped: gameState.skipped + 1,
-          user: gameState.user,
-        }
-        setGameState(new_state)
-        setShowREM(true)
-      } else {
-        const new_state = {
-          rounds: gameState.rounds + 1,
-          locations: gameState.locations.concat(start_pos),
-          guesses: gameState.guesses.concat(L.latLng(0,0)),
-          score: gameState.score,
-          picked: false,
-          skipped: gameState.skipped + 1,
-          user: gameState.user,
-        }
-        setGameState(new_state)
-        refreshMap()
-      }
-    }
-    return (
-      <>
-        <Button 
-          id="select-button" 
-          variant="dark"
-          onClick={() => skipMap()}
-          >
-          Skip
-        </Button>
-      </>
-    )
-  }
   return (
       <>
         <Button variant="dark" disabled id="round-indicator">
@@ -178,9 +178,9 @@ function MapComponents (
           round_score = {round_score}
         />
         <div id="controls">
-          <ResButton/>
-          <SelectButton/>
-          <SkipButton/>
+          <ResButton handleResetMap={handleResetMap}/>
+          <SelectButton handleEndRound={handleEndRound}/>
+          <SkipButton handleSkipMap={handleSkipMap}/>
           <Button 
             id="home-button" 
             variant="dark"
