@@ -10,8 +10,8 @@
     "test": "DB_NAME=test vitest",
     "dev": "DB_NAME=ruuturetki tsx index.ts",
     "lint": "eslint .",
-    "start": "DB_NAME=ruuturetki ts-node index.ts",
-    "start-node": "npm run tsc && DB_NAME=ruuturetki node build/index.js",
+    "start-ts": "DB_NAME=ruuturetki ts-node index.ts",
+    "start": "npm run tsc && DB_NAME=ruuturetki node build/index.js",
     "tsc": "tsc"
   },
   "devDependencies": {
