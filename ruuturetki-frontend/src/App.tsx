@@ -121,7 +121,7 @@ function StartMenu() {
         />
       </MapContainer>
       <div id="menu-title">
-          Ruuturetki
+          Ruuturetki1
       </div>
 
       <div id="start-menu" className="d-grid gap-2">
