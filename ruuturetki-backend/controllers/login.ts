@@ -23,7 +23,7 @@ loginRouter.post('/', async (req, res) =>  {
     } else {
       const correct = await bcrypt.compare(login_req.password, user.pswd_hash)
       if (!correct) {
-        throw new Error('wrong password')
+        throw new Error('Wrong password')
       }
       const userForToken = {
         username: user.username,
@@ -34,7 +34,8 @@ loginRouter.post('/', async (req, res) =>  {
       res.status(200).send({ token, username: user.username, admin: user.admin})
     }
   } catch (error) {
-    res.status(400).send({errorMessage: error})
+    console.log(error.message)
+    res.status(400).send({error})
   }
 })
 

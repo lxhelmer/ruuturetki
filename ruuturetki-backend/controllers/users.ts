@@ -1,9 +1,9 @@
-import bcrypt from 'bcrypt'
 import express from 'express'
 const usersRouter = express.Router()
 import User from '../models/User.js'
 import { z } from 'zod'
 import { MongoServerError } from 'mongodb'
+import { hash_pswd } from '../utils/hasher.js'
 
 const newUserSchema = z.object({
   username: z.string(),
@@ -20,9 +20,8 @@ usersRouter.post('/', async (req, res) => {
 
   try {
     const new_user = newUserSchema.parse(req.body)
-    const saltRounds = 10
 
-    const pswd_hash = await bcrypt.hash(new_user.password, saltRounds) 
+    const pswd_hash = await hash_pswd(new_user.password)
 
     const user = new User({
       username: new_user.username,

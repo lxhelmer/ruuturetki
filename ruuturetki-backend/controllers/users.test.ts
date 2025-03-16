@@ -2,16 +2,26 @@ import app from "../app.js";
 import request from "supertest";
 import { describe, it, expect, beforeEach, afterEach, afterAll } from 'vitest'
 import User from '../models/User.js'
+import mongoose from 'mongoose'
+import { hash_pswd } from '../utils/hasher.js'
 
 beforeEach(async () => {
   await User.deleteMany({})
+  const default_pswd_hash = await hash_pswd("megaforce")
+  let defaultUser = new User({
+    username: "default-user",
+    pswd_hash: default_pswd_hash
+  })
+  await defaultUser.save()
+
 })
 
 afterEach(async () => {
+  await User.deleteMany({})
 })
 
 afterAll(async () => {
-  await User.deleteMany({})
+  await mongoose.connection.close()
 })
 
 
@@ -24,22 +34,23 @@ describe("POST /api/users", () => {
     expect(res.statusCode).toEqual(201)
     expect(res.body.username).toEqual("test-user")
   })
-  it("return 400 and validation error on bad data", async () => {
+  it("fail and return 400 with missing password", async() => {
     const res = await request(app)
       .post('/api/users')
-      .send({user: "test-user"})
+      .send({username: "test-user"})
     expect(res.statusCode).toEqual(400)
-    expect(res.body.name).toEqual('ZodError')
   })
-  it("return 201 + no dublicates", async () => {
-    const res1 = await request(app)
+  it("fail and return 400 with missing username", async() => {
+    const res = await request(app)
       .post('/api/users')
-      .send({username: "test-user", password: "megaforce"})
-    const res2 = await request(app)
+      .send({password: "megaforce"})
+    expect(res.statusCode).toEqual(400)
+  })
+  it("fail when creating duplicate username user, return proper errorMessage", async () => {
+    const res = await request(app)
       .post('/api/users')
-      .send({username: "test-user", password: "megaforce"})
-    expect(res1.statusCode).toEqual(201)
-    expect(res1.body.username).toEqual("test-user")
-    expect(res2.statusCode).toEqual(400)
+      .send({username: "default-user", password: "megaforce"})
+    expect(res.statusCode).toEqual(400)
+    expect(res.body.errorMessage).toEqual('Username already taken')
   })
 })
