@@ -18,9 +18,7 @@ function DevStats(
     } 
 ) 
 {
-  if (!gameState.user || (gameState.user && !gameState.user.admin)) {
-    return null
-  }
+
   const [pos, setPos] = useState(start_pos)
   const map = useMap()
   useEffect(() => {
@@ -50,6 +48,10 @@ function DevStats(
       map.off('move', onMove)
     }
   }, [map, onMove])
+
+  if (!gameState.user || (gameState.user && !gameState.user.admin)) {
+    return null
+  }
 
   return (
     <div id="dev-stat">
