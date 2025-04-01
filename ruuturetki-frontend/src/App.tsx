@@ -24,14 +24,16 @@ import LoginButton from './components/LoginButton'
 import LoginBanner from './components/LoginBanner'
 
 
-//const start_pos = L.latLng(60.1718, 24.9395)
-
 function StartMenu() {
   const navigate = useNavigate()
   const [showRegModal, setRegModal] = useState(false)
   const [showLogModal, setLogModal] = useState(false)
   const [showHelpModal, setHelpModal] = useState(false)
   const [showScoreModal, setScoreModal] = useState(false)
+  const [showPlayModal, setPlayModal] = useState(false)
+  const [gameSettings, setGameSetting] = 
+    useState({map: 'avoindata:Ortoilmakuva_2019_20cm'})
+
   const bg_pos = getRandomLatLng()
 
   const handleCloseReg = () => setRegModal(false)

@@ -4,7 +4,10 @@ import { useState, useEffect } from 'react'
 import type { GameState } from './Game.tsx'
 
 
-function OrtoLayer ({start_pos, renderKey}: {start_pos: L.LatLng, renderKey: number}) {
+function OrtoLayer ({start_pos, renderKey, gameSettings}:
+                    { start_pos: L.LatLng,
+                      renderKey: number,
+                      gameSettings: {}}) {
   const bounds = start_pos.toBounds(4000)
 
 	const wmsOptions: L.WMSOptions = {
