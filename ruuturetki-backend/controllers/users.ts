@@ -32,10 +32,11 @@ usersRouter.post('/', async (req, res) => {
     const saved = await user.save()
     res.status(201).json(saved)
   } catch (error) {
-    console.log(error)
     if (error instanceof MongoServerError) {
       if (error.code === 11000) {
-        res.status(400).send({errorMessage: "Username already taken"})
+        res
+          .status(400)
+          .send({errorMessage: "Username already taken"})
       }
     } else {
       res.status(400).send(error)

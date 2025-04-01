@@ -3,7 +3,22 @@ import { Button } from 'react-bootstrap'
 import { Form } from 'react-bootstrap'
 import { useState } from 'react'
 import loginService from '../../services/login'
- 
+import axios from 'axios'
+
+
+
+function ErrorBanner ({message}: {message: String}) {
+  if (message === '') {
+    return null
+  } else {
+    return (
+      <h2 id="reg-err">
+        {message}
+      </h2>
+    )
+  }
+}
+
 function LoginModal (
   { show,
     handleCloseLog,
@@ -14,7 +29,7 @@ function LoginModal (
   {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [problem, setProblem] = useState('')
+  const [problem, setProblem] = useState<String>('')
 
   const handleLogSubmit = async () => {
     try {
@@ -28,7 +43,13 @@ function LoginModal (
       setProblem('')
       handleCloseLog()
     } catch (error) {
-      setProblem('Something went wrong')
+      if (axios.isAxiosError(error)) {
+        if (error && error.response && error.response.data.errorMessage) {
+          setProblem(error.response.data.errorMessage)
+        }
+      } else {
+        setProblem('Something went wrong')
+      }
     }
   }
 
@@ -65,9 +86,7 @@ function LoginModal (
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <h2 id="reg-err">
-          {problem}
-          </h2>
+          <ErrorBanner message={problem} />
           <Button 
             onClick={() => handleLogSubmit()}
             variant="secondary">

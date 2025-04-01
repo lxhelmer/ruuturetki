@@ -19,11 +19,11 @@ loginRouter.post('/', async (req, res) =>  {
     const login_req = loginSchema.parse(req.body)
     const user = await User.findOne({ username: login_req.username })
     if (!user) {
-      throw new Error('No such user')
+      throw new ReferenceError('No such user')
     } else {
       const correct = await bcrypt.compare(login_req.password, user.pswd_hash)
       if (!correct) {
-        throw new Error('Wrong password')
+        throw new ReferenceError('Wrong password')
       }
       const userForToken = {
         username: user.username,
@@ -34,8 +34,9 @@ loginRouter.post('/', async (req, res) =>  {
       res.status(200).send({ token, username: user.username, admin: user.admin})
     }
   } catch (error) {
-    console.log(error.message)
-    res.status(400).send({error})
+    if (error instanceof ReferenceError) {
+      res.status(400).send({errorMessage: error.message})
+    }
   }
 })
 
