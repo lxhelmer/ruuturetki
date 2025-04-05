@@ -7,7 +7,7 @@ import gameService from '../services/games'
 import { GameState, GameSettings } from '../types'
 
 export function getRandomLatLng () {
-  const southBoundLat: number = 60.13
+  const southBoundLat: number = 60.17
   const northBoundLat: number = 60.295
   const eastBoundLon: number = 25.20
   const westBoundLon: number = 24.82
