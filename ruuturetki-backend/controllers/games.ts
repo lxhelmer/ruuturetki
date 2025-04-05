@@ -9,6 +9,7 @@ import User from '../models/User.js'
 const newGameSchema = z.object({
   rounds: z.number(),
   score: z.number(),
+  year: z.number(),
 });
 
 gamesRouter.get('/',  (_req, res) => {
@@ -36,6 +37,7 @@ gamesRouter.post('/', async (req, res) => {
     const game = new Game({
       rounds: new_game.rounds,
       score: new_game.score,
+      year: new_game.year,
       user: user._id,
     })
     game.save().then(saved => {

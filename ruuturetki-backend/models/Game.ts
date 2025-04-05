@@ -5,12 +5,14 @@ mongoose.set('strictQuery', false)
 interface IGame {
   rounds: number;
   score: number;
+  year: number;
   user: mongoose.Types.ObjectId;
 }
 
 const gameSchema = new mongoose.Schema<IGame>({
   rounds: Number,
   score: Number,
+  year: Number,
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
