@@ -65,6 +65,7 @@ function StartMenu({setGameSettings}:{setGameSettings: Function}) {
   }, [showLogModal])
 
   useEffect(() => {
+    loadGames()
     const fetch_id = setInterval(loadGames, 180000)
     return () => clearInterval(fetch_id)
   }, [])
