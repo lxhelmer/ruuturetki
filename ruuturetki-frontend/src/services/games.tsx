@@ -18,7 +18,7 @@ const getGames = async () => {
   return response.data
 }
 
-const create = async (newGame: {rounds: number, score: number}) => {
+const create = async (newGame: {rounds: number, score: number, year: number}) => {
   const config = {
     headers: { Authorization: token}
   }

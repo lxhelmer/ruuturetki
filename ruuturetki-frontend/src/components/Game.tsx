@@ -7,10 +7,10 @@ import gameService from '../services/games'
 import { GameState, GameSettings } from '../types'
 
 export function getRandomLatLng () {
-  const southBoundLat: number = 60.17
-  const northBoundLat: number = 60.295
+  const southBoundLat: number = 60.19
+  const northBoundLat: number = 60.29
   const eastBoundLon: number = 25.20
-  const westBoundLon: number = 24.82
+  const westBoundLon: number = 24.825
 
   const randomLat: number = Math.random() * (northBoundLat - southBoundLat) + southBoundLat
   const randomLon: number = Math.random() * (eastBoundLon - westBoundLon) + westBoundLon
@@ -86,7 +86,7 @@ function Game({gameSettings}:{ gameSettings: GameSettings}) {
         maxDist={maxDist}
         setDist={setDist}
         picker_pos = {picker_pos}
-        map = {gameSettings.map}
+        gameSettings = {gameSettings}
         />
     </>
   )

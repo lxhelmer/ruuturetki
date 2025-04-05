@@ -9,6 +9,7 @@ import type { GameState } from './Game.tsx'
 import { useNavigate } from 'react-router-dom'
 import gameService from '../services/games'
 import LoginBanner from './LoginBanner'
+import { GameSettings } from '../types.tsx'
 
 function SelectButton ({handleEndRound}: {handleEndRound: Function}) {
   return (
@@ -64,6 +65,7 @@ function MapComponents (
     maxDist,
     setDist,
     picker_pos,
+    gameSettings
   }:
    { start_pos: L.LatLng,
      pick_score: number,
@@ -75,6 +77,7 @@ function MapComponents (
      maxDist: number,
      setDist: Function,
      picker_pos: L.LatLng | null,
+     gameSettings: GameSettings
     })
   {
 
@@ -95,7 +98,8 @@ function MapComponents (
         try {
           gameService.create({
             rounds: gameState.rounds-gameState.skipped,
-            score: gameState.score
+            score: gameState.score,
+            year: gameSettings.year
           })
         } catch (error) {
           console.log("Something went wrong with adding game", error)

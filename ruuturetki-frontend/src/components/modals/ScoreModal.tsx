@@ -50,6 +50,14 @@ function ScoreModal (
         headerName: 'Score',
       },
       {
+        field: 'year',
+        headerName: 'Year'
+      },
+      {
+        field: 'rounds',
+        headerName: 'Rounds'
+      },
+      {
         field: 'delete',
         valueGetter: (_value, row) => {
           if (!row.id) {

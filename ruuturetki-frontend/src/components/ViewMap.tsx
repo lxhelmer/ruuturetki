@@ -2,6 +2,7 @@ import { MapContainer, WMSTileLayer } from 'react-leaflet'
 import MapComponents from './MapComponents.tsx'
 import { useState, useEffect } from 'react'
 import type { GameState } from './Game.tsx'
+import { GameSettings } from '../types.ts'
 
 
 function OrtoLayer({ map, start_pos, renderKey}:
@@ -41,7 +42,7 @@ function ViewMap(
     maxDist,
     setDist,
     picker_pos,
-    map
+    gameSettings
   }:
     {
       start_pos: L.LatLng,
@@ -54,7 +55,7 @@ function ViewMap(
       maxDist: number,
       setDist: Function,
       picker_pos: L.LatLng | null,
-      map: string
+      gameSettings: GameSettings
     }) {
   const move_bounds: L.LatLngBounds = start_pos.toBounds(3800)
   const mapOptions: L.MapOptions = {
@@ -78,7 +79,7 @@ function ViewMap(
   return (
     <>
       <MapContainer id="map" {...mapOptions} key={renderKey}>
-        <OrtoLayer map={map} start_pos={start_pos} renderKey={renderKey} />
+        <OrtoLayer map={gameSettings.map} start_pos={start_pos} renderKey={renderKey} />
         <MapComponents
           start_pos={start_pos}
           pick_score={pick_score}
@@ -90,6 +91,7 @@ function ViewMap(
           maxDist={maxDist}
           setDist={setDist}
           picker_pos={picker_pos}
+          gameSettings={gameSettings}
         />
       </MapContainer>
     </>

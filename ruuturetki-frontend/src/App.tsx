@@ -70,7 +70,7 @@ function StartMenu({setGameSettings}:{setGameSettings: Function}) {
       const games = await gameService.getGames()
       setGames(games)
     } catch (error) {
-
+      console.log('could not fetch games')
     }
   }
 
@@ -176,7 +176,10 @@ function App() {
     htmlElement.setAttribute('data-bs-theme', 'dark')
   }
   const [gameSettings, setGameSettings] = 
-    useState<GameSettings>({map: 'avoindata:Ortoilmakuva_2019_20cm'})
+    useState<GameSettings>({
+      map: 'avoindata:Ortoilmakuva_2019_20cm',
+      year: 2019
+  })
 
   return (
     <>
