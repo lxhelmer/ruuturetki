@@ -167,6 +167,7 @@ function MapComponents (
     setPos(new_center)
     setScore(0)
     setPickScore(0)
+    setGameState({...gameState, picked:false})
     map.setView(new_center)
   }
 

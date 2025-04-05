@@ -1,8 +1,9 @@
-import { MapContainer, WMSTileLayer } from 'react-leaflet'
+import { MapContainer, WMSTileLayer, Marker, Popup } from 'react-leaflet'
 import MapComponents from './MapComponents.tsx'
 import { useState, useEffect } from 'react'
 import type { GameState } from './Game.tsx'
 import { GameSettings } from '../types.ts'
+import markerIcon from './MarkerIcon.tsx'
 
 
 function OrtoLayer({ map, start_pos, renderKey}:
@@ -80,6 +81,12 @@ function ViewMap(
     <>
       <MapContainer id="map" {...mapOptions} key={renderKey}>
         <OrtoLayer map={gameSettings.map} start_pos={start_pos} renderKey={renderKey} />
+        <Marker position={start_pos} icon={markerIcon}>
+          <Popup>
+            Try to match this position!
+          </Popup>
+        </Marker>
+
         <MapComponents
           start_pos={start_pos}
           pick_score={pick_score}
