@@ -18,3 +18,18 @@ export interface LUser {
   username: string,
   admin: boolean,
 }
+
+export interface GameSettings {
+  map: string,
+  year: number
+}
+
+export type GameState = {
+  rounds: number,
+  locations: L.LatLng[],
+  guesses: L.LatLng[],
+  score: number,
+  picked: boolean,
+  skipped: number,
+  user: LUser | null
+}

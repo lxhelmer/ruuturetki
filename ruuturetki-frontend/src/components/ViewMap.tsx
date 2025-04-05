@@ -1,33 +1,33 @@
-import { MapContainer, WMSTileLayer} from 'react-leaflet'
-import MapComponents  from './MapComponents.tsx'
+import { MapContainer, WMSTileLayer } from 'react-leaflet'
+import MapComponents from './MapComponents.tsx'
 import { useState, useEffect } from 'react'
 import type { GameState } from './Game.tsx'
 
 
-function OrtoLayer ({start_pos, renderKey, gameSettings}:
-                    { start_pos: L.LatLng,
-                      renderKey: number,
-                      gameSettings: {}}) {
+function OrtoLayer({ map, start_pos, renderKey}:
+  {
+    map: string,
+    start_pos: L.LatLng,
+    renderKey: number,
+  }) {
   const bounds = start_pos.toBounds(4000)
 
-	const wmsOptions: L.WMSOptions = {
-		version: '1.1.1.1',
-		layers: 'avoindata:Ortoilmakuva_2019_20cm',
-    //layers: 'avoindata:Ortoilmakuva',
-		format:'image/png',
-		transparent: false,
+  const wmsOptions: L.WMSOptions = {
+    version: '1.1.1.1',
+    layers: map,
+    format: 'image/png',
+    transparent: false,
     bounds: bounds,
-	};
+  };
   return (
-      <WMSTileLayer
-        key={renderKey}
-        url="https://kartta.hel.fi/ws/geoserver/avoindata/wms?"
-        attribution= {'&copy; <a href=https://hri.fi/data/fi/dataset/helsingin-ortoilmakuvat target="_blank">Helsingin kaupunki, kaupunkimittauspalvelut 2025</a>'}
-        {...wmsOptions}
-      />
+    <WMSTileLayer
+      key={renderKey}
+      url="https://kartta.hel.fi/ws/geoserver/avoindata/wms?"
+      attribution={'&copy; <a href=https://hri.fi/data/fi/dataset/helsingin-ortoilmakuvat target="_blank">Helsingin kaupunki, kaupunkimittauspalvelut 2025</a>'}
+      {...wmsOptions}
+    />
   )
 }
-
 
 function ViewMap(
   {
@@ -41,6 +41,7 @@ function ViewMap(
     maxDist,
     setDist,
     picker_pos,
+    map
   }:
     {
       start_pos: L.LatLng,
@@ -53,16 +54,15 @@ function ViewMap(
       maxDist: number,
       setDist: Function,
       picker_pos: L.LatLng | null,
-    })
-
-{
+      map: string
+    }) {
   const move_bounds: L.LatLngBounds = start_pos.toBounds(3800)
   const mapOptions: L.MapOptions = {
     center: start_pos,
     zoom: 17,
     scrollWheelZoom: false,
     maxBounds: move_bounds,
-    maxBoundsViscosity:0.9,
+    maxBoundsViscosity: 0.9,
     zoomControl: false,
     boxZoom: false,
     doubleClickZoom: false,
@@ -72,27 +72,27 @@ function ViewMap(
 
   //key trick for forcing rerender on the WMS layer
   useEffect(() => {
-    setKey(prevKey => prevKey +1)
+    setKey(prevKey => prevKey + 1)
   }, [start_pos])
 
   return (
-      <>
-        <MapContainer id="map" {...mapOptions} key={renderKey}>
-          <OrtoLayer start_pos={start_pos} renderKey={renderKey} />
-          <MapComponents
-            start_pos={start_pos}
-            pick_score={pick_score}
-            setPos={setPos}
-            setPickScore={setPickScore}
-            random_latlng={random_latlng}
-            gameState={gameState}
-            setGameState={setGameState}
-            maxDist={maxDist}
-            setDist={setDist}
-            picker_pos = {picker_pos}
-          />
-        </MapContainer>
-      </>
+    <>
+      <MapContainer id="map" {...mapOptions} key={renderKey}>
+        <OrtoLayer map={map} start_pos={start_pos} renderKey={renderKey} />
+        <MapComponents
+          start_pos={start_pos}
+          pick_score={pick_score}
+          setPos={setPos}
+          setPickScore={setPickScore}
+          random_latlng={random_latlng}
+          gameState={gameState}
+          setGameState={setGameState}
+          maxDist={maxDist}
+          setDist={setDist}
+          picker_pos={picker_pos}
+        />
+      </MapContainer>
+    </>
   )
 }
 

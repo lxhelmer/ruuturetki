@@ -1,7 +1,6 @@
 import {
   BrowserRouter as Router,
   Routes, Route,
-  useNavigate,
   Navigate,
 } from 'react-router-dom'
 import 'leaflet/dist/leaflet.css' 
@@ -11,28 +10,25 @@ import { getRandomLatLng } from './components/Game'
 import { useState, useEffect } from 'react'
 import './App.css'
 import Game from './components/Game'
-import { IGame } from './types'
 import gameService from './services/games'
-import { LUser } from './types'
+import { LUser, IGame, GameSettings } from './types'
 
 import RegisterModal from './components/modals/RegisterModal'
 import LoginModal from './components/modals/LoginModal'
 import HelpModal from './components/modals/HelpModal'
 import ScoreModal from './components/modals/ScoreModal'
+import PlayModal from './components/modals/PlayModal'
 import LogoutButton from './components/LogoutButton'
 import LoginButton from './components/LoginButton'
 import LoginBanner from './components/LoginBanner'
 
 
-function StartMenu() {
-  const navigate = useNavigate()
+function StartMenu({setGameSettings}:{setGameSettings: Function}) {
   const [showRegModal, setRegModal] = useState(false)
   const [showLogModal, setLogModal] = useState(false)
   const [showHelpModal, setHelpModal] = useState(false)
   const [showScoreModal, setScoreModal] = useState(false)
   const [showPlayModal, setPlayModal] = useState(false)
-  const [gameSettings, setGameSetting] = 
-    useState({map: 'avoindata:Ortoilmakuva_2019_20cm'})
 
   const bg_pos = getRandomLatLng()
 
@@ -50,6 +46,9 @@ function StartMenu() {
     loadGames()
     setScoreModal(true)
   }
+
+  const handleClosePlay = () => setPlayModal(false)
+  const handleShowPlay = () => setPlayModal(true)
 
   const [games, setGames] = useState<IGame[]>([])
   const [user, setUser] = useState<LUser | null>(null)
@@ -115,6 +114,11 @@ function StartMenu() {
         setGames={setGames}
         user={user}
         />
+      <PlayModal
+        show={showPlayModal}
+        handleClosePlay={handleClosePlay}
+        setGameSettings={setGameSettings}
+        />
       <MapContainer id="map" {...mapOptions}>
         <WMSTileLayer
           url="https://kartta.hel.fi/ws/geoserver/avoindata/wms?"
@@ -130,7 +134,7 @@ function StartMenu() {
         <Button
           variant="dark"
           size="lg"
-          onClick={() => navigate('/game')}
+          onClick={() => handleShowPlay()}
           >
           play
         </Button>
@@ -171,13 +175,15 @@ function App() {
   if (htmlElement) {
     htmlElement.setAttribute('data-bs-theme', 'dark')
   }
+  const [gameSettings, setGameSettings] = 
+    useState<GameSettings>({map: 'avoindata:Ortoilmakuva_2019_20cm'})
 
   return (
     <>
       <Router>
         <Routes>
-          <Route path="/game" element={<Game />} />
-          <Route path="/" element={<StartMenu />} />
+          <Route path="/game" element={<Game gameSettings={gameSettings}/>} />
+          <Route path="/" element={<StartMenu setGameSettings={setGameSettings}/>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>

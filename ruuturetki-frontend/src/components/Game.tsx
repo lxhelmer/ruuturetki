@@ -4,7 +4,7 @@ import SelectionMap from './SelectionMap.tsx'
 import ViewMap from './ViewMap.tsx'
 import { getDistance } from 'geolib'
 import gameService from '../services/games'
-import { LUser } from '../types'
+import { GameState, GameSettings } from '../types'
 
 export function getRandomLatLng () {
   const southBoundLat: number = 60.13
@@ -20,16 +20,6 @@ export function getRandomLatLng () {
   )
 }
 
-type GameState = {
-  rounds: number,
-  locations: L.LatLng[],
-  guesses: L.LatLng[],
-  score: number,
-  picked: boolean,
-  skipped: number,
-  user: LUser | null
-}
-
 const startState: GameState = {
   rounds: 0,
   locations: [],
@@ -40,12 +30,14 @@ const startState: GameState = {
   user: null
 }
 
-function Game() {
+function Game({gameSettings}:{ gameSettings: GameSettings}) {
   const [start_pos, setPos] = useState<L.LatLng>(() => getRandomLatLng())
   const [picker_pos, setPosition] = useState<L.LatLng | null>(null)
   const [pick_score, setPickScore] = useState(0)
   const [gameState, setGameState] = useState<GameState>(startState)
   const [maxDist, setDist] = useState(0)
+
+
 
   useEffect(() => {
     if (picker_pos) {
@@ -94,6 +86,7 @@ function Game() {
         maxDist={maxDist}
         setDist={setDist}
         picker_pos = {picker_pos}
+        map = {gameSettings.map}
         />
     </>
   )

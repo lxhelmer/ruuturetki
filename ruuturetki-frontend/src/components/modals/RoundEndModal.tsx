@@ -84,7 +84,7 @@ function RoundEndModal (
           </h2>
             <ModalMap gameState={gameState}/>
             <h2 id="modal-score">
-            {gameState.score} / 50 000 total points
+            {gameState.score} / {gameState.rounds}0 000 total points
             </h2>
           </div>
         </Modal.Body>
