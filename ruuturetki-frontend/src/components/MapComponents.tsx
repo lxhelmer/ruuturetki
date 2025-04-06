@@ -91,6 +91,7 @@ function MapComponents (
   const handleCloseREM = () => {
     if (gameState.rounds < 5) {
       setShowREM(false)
+      setGameState({...gameState, picked:false})
       refreshMap()
     }
     else {
@@ -131,7 +132,8 @@ function MapComponents (
     }
   }
 
-  const handleSkipMap =  () =>  {
+  const handleSkipMap = async () =>  {
+    console.log(gameState.rounds)
     if (gameState.rounds === 4) {
       const new_state = {
         rounds: gameState.rounds + 1,
@@ -142,7 +144,7 @@ function MapComponents (
         skipped: gameState.skipped + 1,
         user: gameState.user,
       }
-      setGameState(new_state)
+      await setGameState(new_state)
       setShowREM(true)
     } else {
       const new_state = {
@@ -167,7 +169,6 @@ function MapComponents (
     setPos(new_center)
     setScore(0)
     setPickScore(0)
-    setGameState({...gameState, picked:false})
     map.setView(new_center)
   }
 
