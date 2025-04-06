@@ -24,8 +24,8 @@ This is a map game I made as the submission for University of Helsinki's Full St
 
 ## Details of technical implementation
 
-The app consists of vite - react - ts frontend and ts-node backend
-As the application is hosted on the free tier of Render.com both take a secod to ramp up. The user is notified of this in the login and register modals, but at first even the start page will be unreachable.
+The app consists of ```vite - react - ts``` frontend and ts-node backend.
+As the application is hosted on the free tier of Render.com both 'ends take a secod to ramp up. The user is notified of this in the login and register modals, but at first even the start page will be unreachable.
 
 ### Frontend
 -  Frontend runs in a container with environment variables passed on Render as secret file
