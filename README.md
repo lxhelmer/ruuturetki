@@ -33,6 +33,7 @@ As the application is hosted on the free tier of Render.com both take a secod to
 -  Orthoimaginery is loaded online from City of Helsinkis wms-server. More information of this service at [helsingin-ortoilmakuvat](https://hri.fi/data/fi/dataset/helsingin-ortoilmakuvat)
 -  The fronend communicates via token authenticated axios requests with the backend.
 -  As interesting implementation details, the scoreboard is implemented as mui-datagrid which handles the sorting and rendering of data quite nicely but was finnicy to get working properly.
+-  In production the backend is pinged periodically to keep it up while playing.
 
 ### Backend
 
