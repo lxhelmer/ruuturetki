@@ -16,7 +16,7 @@ This is a map game I made as the submission for University of Helsinki's Full St
 -  Guess is done by selecting a position on a secondary map.
 -  There are five rounds per game and the user has the ability to skip a round forfiting any potential points from that round.
 -  Maximum score for the round is 9998 with maximal game score 4990 but these limits are presented in the game as 10000 and 50 000.
--  Game can be played in either guest mode or with a useraccount.
+-  Game can be played in either guest mode or with a usera ccount.
 -  New account can be registered in the interface.
 -  When playing with useraccount games with non-zero final score are stored to the scoreboard.
 -  There are two kinds of users, reqular and admin. Admin has the added ability of removing score entries from the scoreboard and access to development statistics during gameplay
