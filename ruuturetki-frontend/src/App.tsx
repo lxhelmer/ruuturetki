@@ -2,6 +2,7 @@ import {
   BrowserRouter as Router,
   Routes, Route,
   Navigate,
+  useNavigate,
 } from 'react-router-dom'
 import 'leaflet/dist/leaflet.css' 
 import { MapContainer, WMSTileLayer} from 'react-leaflet'
@@ -21,7 +22,7 @@ import PlayModal from './components/modals/PlayModal'
 import LogoutButton from './components/LogoutButton'
 import LoginButton from './components/LoginButton'
 import LoginBanner from './components/LoginBanner'
-
+import Practice from './components/Practice'
 
 function StartMenu({setGameSettings}:{setGameSettings: Function}) {
   const [showRegModal, setRegModal] = useState(false)
@@ -52,6 +53,8 @@ function StartMenu({setGameSettings}:{setGameSettings: Function}) {
 
   const [games, setGames] = useState<IGame[]>([])
   const [user, setUser] = useState<LUser | null>(null)
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     const gameUserJSON = window.localStorage.getItem('gameUser')
@@ -162,10 +165,18 @@ function StartMenu({setGameSettings}:{setGameSettings: Function}) {
         <Button
           variant="dark"
           size="lg"
+          onClick={() => navigate("/practice")}
+          >
+          practice
+        </Button>
+        <Button
+          variant="dark"
+          size="lg"
           onClick={() => handleShowHelp()}
           >
           help
         </Button>
+
       </div>
       <div id="log-banner">
         <LoginBanner user={user}/>
@@ -191,6 +202,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/game" element={<Game gameSettings={gameSettings}/>} />
+          <Route path="/practice" element={<Practice/>} />
           <Route path="/" element={<StartMenu setGameSettings={setGameSettings}/>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
