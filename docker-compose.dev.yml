@@ -1,0 +1,28 @@
+services:
+  app:
+    image: ruuturetki-front-dev 
+    build:
+      context: ./ruuturetki-frontend
+      dockerfile: dev.Dockerfile
+      args:
+        - VITE_BACKEND_URI=http://localhost:8080
+    volumes:
+      - ./ruuturetki-frontend/:/usr/src/app
+    container_name: ruuturetki-front-dev
+  server:
+    image: ruuturetki-back-dev
+    build:
+      context: ./ruuturetki-backend
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./ruuturetki-backend/:/usr/src/app
+  nginx:
+    image: nginx:1.20.1
+    volumes:
+      - ./nginx.dev.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 8080:80 # this is needed
+    container_name: reverse-proxy
+    depends_on:
+      - app
+      - server
