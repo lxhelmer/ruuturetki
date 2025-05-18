@@ -71,7 +71,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - name: commit messages
+      - name: skip status
         env:
           SKIP: ${{ contains(join(github.event.commits.*.message, ', '), '#skip' ) }}
         run: echo "$SKIP"
