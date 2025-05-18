@@ -1,0 +1,85 @@
+name: Deployment pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches: [main]    
+    types: [opened, synchronize]
+env:
+  SKIP: ${{ contains(join(github.event.commits.*.message, ', '), '#skip' ) }}
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '23'
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Test build frontend
+        uses: docker/build-push-action@v6
+        with:
+          context: "{{defaultContext}}:ruuturetki-frontend"
+          push: false
+      - name: Test build backend
+        uses: docker/build-push-action@v6
+        with:
+          context: "{{defaultContext}}:ruuturetki-backend"
+          push: false
+#      - name: Notification Failure
+#       if: failure()
+#       uses: hunghg255/action-notifications@master
+#        with:
+#          discord_webhook: ${{ secrets.DISCORD_WEBHOOK }}
+#          title: "Latest build failed :( ❌"
+#          description: "Build failed, check the commit for more info!"
+  deploy:
+    name: Deploy to Render
+    runs-on: ubuntu-22.04
+    needs: [checks]
+    if: ${{ needs.checks.result == 'success' && github.event_name == 'push'}}
+    steps:
+    - name: Trigger deployment
+      if: ${{ env.SKIP == false }}
+      run: curl https://api.render.com/deploy/srv-${{ secrets.SRV_ID }}?key=${{ secrets.API_KEY }}
+#    - name: Notification Success
+#      uses: hunghg255/action-notifications@master
+#      if: success()
+#      with:
+#        discord_webhook: ${{ secrets.DISCORD_WEBHOOK }}
+#        title: "New deployment live! ✅"
+#        description: "All systems go!"
+  tag_release:
+    needs: [deploy]
+    if: ${{ github.event_name == 'push'}}
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: '0'
+    - name: Bump version and push tag
+      if: ${{ env.SKIP == 'false' }}
+      uses: anothrNick/github-tag-action@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  pr-info:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: commit messages
+        env:
+          SKIP: ${{ contains(join(github.event.commits.*.message, ', '), '#skip' ) }}
+        run: echo "$SKIP"
+      - name: commits
+        env:
+          COMMITS: ${{ toJson(github.event.commits) }}
+        run: echo "$COMMITS"
+      - name: commit messages
+        env:
+          COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.url) }}
+        run: echo "$COMMIT_MESSAGES"
