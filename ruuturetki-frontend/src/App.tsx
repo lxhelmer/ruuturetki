@@ -23,6 +23,7 @@ import LogoutButton from './components/LogoutButton'
 import LoginButton from './components/LoginButton'
 import LoginBanner from './components/LoginBanner'
 import Practice from './components/Practice'
+import L from 'leaflet'
 
 function StartMenu({setGameSettings}:{setGameSettings: Function}) {
   const [showRegModal, setRegModal] = useState(false)
@@ -202,7 +203,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/game" element={<Game gameSettings={gameSettings}/>} />
-          <Route path="/practice" element={<Practice/>} />
+          <Route path="/practice" element={<Practice />} />
           <Route path="/" element={<StartMenu setGameSettings={setGameSettings}/>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

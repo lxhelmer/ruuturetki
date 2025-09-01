@@ -1,7 +1,7 @@
 import { MapContainer, WMSTileLayer } from 'react-leaflet'
 import { useState, useEffect } from 'react'
-import { getRandomLatLng } from './Game'
 import PracticeComponents from './PracticeComponents'
+import L from 'leaflet'
 
 function OrtoLayer({ map }:
   {
@@ -21,19 +21,21 @@ function OrtoLayer({ map }:
     />
   )
 }
-function Practice () {
 
+function Practice() {
   const [renderKey, setKey] = useState(1)
-  const [map, setMap] = useState('avoindata:Ortoilmakuva_2024_5cm')
+  const [mapLayer, setMapLayer] = useState('avoindata:Ortoilmakuva_2024_5cm')
+  const [practicePos, setPracticePos] = useState(L.latLng(60.170678, 24.941543))  // Default location Helsinki Central Station
+  const [practiceZoom, setPracticeZoom] = useState(15)  // Default zoom level 15
 
   //key trick for forcing rerender on the map
   useEffect(() => {
     setKey(prevKey => prevKey + 1)
-  }, [map])
+  }, [mapLayer])
 
   const mapOptions: L.MapOptions = {
-    center: getRandomLatLng(),
-    zoom: 17,
+    center: practicePos,
+    zoom: practiceZoom,
     scrollWheelZoom: true,
     maxBoundsViscosity: 0.9,
     zoomControl: true,
@@ -43,16 +45,18 @@ function Practice () {
 
   return (
     <>
-      <MapContainer 
+      <MapContainer
         id="map" {...mapOptions}
         key={renderKey}
-        >
-        <OrtoLayer 
-          map={map}
+      >
+        <OrtoLayer
+          map={mapLayer}
         />
         <PracticeComponents
-          map = {map}
-          setMap = {setMap}
+          mapLayer={mapLayer}
+          setMapLayer={setMapLayer}
+          setPracticePos={setPracticePos}
+          setPracticeZoom={setPracticeZoom}
         />
       </MapContainer>
     </>
