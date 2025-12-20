@@ -21,9 +21,9 @@ mongoose.connect(env.MONGODB_URI, {dbName: env.DB_NAME})
 
 app.use(cors())
 app.use(express.json())
-app.use('/api/games', gamesRouter)
-app.use('/api/users', usersRouter)
-app.use('/api/login', loginRouter)
+//app.use('/api/games', gamesRouter)
+//app.use('/api/users', usersRouter)
+//app.use('/api/login', loginRouter)
 
 
 export default app
