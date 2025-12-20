@@ -1,8 +1,5 @@
 import express from 'express';
 import cors from 'cors'
-import gamesRouter from './controllers/games.js'
-import usersRouter from './controllers/users.js'
-import loginRouter from './controllers/login.js'
 import mongoose from 'mongoose'
 import { env } from "./env.js";
 
