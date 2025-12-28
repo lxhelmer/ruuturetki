@@ -31,7 +31,6 @@ function StartMenu({
   const handleShowPlay = () => setPlayModal(true)
 
   const bg_pos = getRandomLatLng()
-  const navigate = useNavigate()
 
   useEffect(() => {
     // Reset default game settings when play modal is opened.
