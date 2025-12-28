@@ -4,11 +4,11 @@ import {
   Navigate,
   useNavigate,
 } from 'react-router-dom'
-import 'leaflet/dist/leaflet.css' 
-import { MapContainer, WMSTileLayer} from 'react-leaflet'
+import 'leaflet/dist/leaflet.css'
+import { MapContainer, WMSTileLayer } from 'react-leaflet'
 import { Button } from 'react-bootstrap'
 import { getRandomLatLng } from './components/Game'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import Game from './components/Game'
 import { GameSettings } from './types'
@@ -24,37 +24,14 @@ function StartMenu({
   setGameSettings: Function
   gameSettings: GameSettings
 }) {
-  const [showRegModal, setRegModal] = useState(false)
-  const [showLogModal, setLogModal] = useState(false)
-  const [showHelpModal, setHelpModal] = useState(false)
-  const [showScoreModal, setScoreModal] = useState(false)
   const [showPlayModal, setPlayModal] = useState(false)
-  const bg_pos = getRandomLatLng()
-
-
+  const navigate = useNavigate()
 
   const handleClosePlay = () => setPlayModal(false)
   const handleShowPlay = () => setPlayModal(true)
 
-
+  const bg_pos = getRandomLatLng()
   const navigate = useNavigate()
-
-  useEffect(() => {
-    const gameUserJSON = window.localStorage.getItem('gameUser')
-    if (gameUserJSON) {
-      const user = JSON.parse(gameUserJSON)
-      setUser(user)
-      gameService.setToken(user.token)
-    } else {
-      setUser(null)
-    }
-  }, [showLogModal])
-
-  useEffect(() => {
-    loadGames()
-    const fetch_id = setInterval(loadGames, 180000)
-    return () => clearInterval(fetch_id)
-  }, [])
 
   useEffect(() => {
     // Reset default game settings when play modal is opened.
@@ -65,25 +42,15 @@ function StartMenu({
         dragging: true
       })
     }
-    
+
   }, [showPlayModal])
 
-  const loadGames = async () => {
-    try {
-      const games = await gameService.getGames()
-      setGames(games)
-    } catch (error) {
-      console.log('could not fetch games')
-    }
-  }
-
-	const wmsOptions: L.WMSOptions = {
-		version: '1.1.1.1',
-		layers: 'avoindata:Ortoilmakuva_2019_20cm',
-    //layers: 'avoindata:Ortoilmakuva',
-		format:'image/png',
-		transparent: false,
-	};
+  const wmsOptions: L.WMSOptions = {
+    version: '1.1.1.1',
+    layers: 'avoindata:Ortoilmakuva_2019_20cm',
+    format: 'image/png',
+    transparent: false,
+  };
   const mapOptions: L.MapOptions = {
     center: bg_pos,
     zoom: 17,
@@ -92,7 +59,8 @@ function StartMenu({
     boxZoom: false,
     doubleClickZoom: false,
     dragging: false,
-  };
+  }
+
   return (
     <>
       <PlayModal
@@ -100,7 +68,7 @@ function StartMenu({
         handleClosePlay={handleClosePlay}
         setGameSettings={setGameSettings}
         gameSettings={gameSettings}
-        />
+      />
       <MapContainer id="map" {...mapOptions}>
         <WMSTileLayer
           url="https://kartta.hel.fi/ws/geoserver/avoindata/wms?"
@@ -108,50 +76,50 @@ function StartMenu({
           {...wmsOptions}
         />
       </MapContainer>
+
       <div id="menu-title">
-          Ruuturetki
+        Ruuturetki
       </div>
+
       <div id="start-menu" className="d-grid gap-2">
         <Button
           variant="dark"
           size="lg"
           onClick={() => handleShowPlay()}
-          >
+        >
           play
         </Button>
         <Button
           variant="dark"
           size="lg"
           onClick={() => navigate("/practice")}
-          >
+        >
           practice
         </Button>
-
       </div>
     </>
   )
 }
-
 
 function App() {
   const htmlElement = document.querySelector('html')
   if (htmlElement) {
     htmlElement.setAttribute('data-bs-theme', 'dark')
   }
-  const [gameSettings, setGameSettings] = 
+  const [gameSettings, setGameSettings] =
     useState<GameSettings>({
       map: 'avoindata:Ortoilmakuva_2019_20cm',
       year: 2019,
       dragging: true
-  })
+    })
 
   return (
     <>
       <Router>
         <Routes>
-          <Route path="/game" element={<Game gameSettings={gameSettings}/>} />
+          <Route path="/game" element={<Game gameSettings={gameSettings} />} />
           <Route path="/practice" element={<Practice />} />
-          <Route path="/" element={<StartMenu setGameSettings={setGameSettings} gameSettings={gameSettings}/>} />
+          <Route path="/" element={<StartMenu setGameSettings={setGameSettings} gameSettings={gameSettings} />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>

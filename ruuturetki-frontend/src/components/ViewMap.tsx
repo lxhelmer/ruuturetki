@@ -5,22 +5,21 @@ import type { GameState } from './Game.tsx'
 import { GameSettings } from '../types.ts'
 import markerIcon from './MarkerIcon.tsx'
 
-
-function OrtoLayer({ map, start_pos, renderKey}:
+function OrtoLayer({ map, start_pos, renderKey }:
   {
     map: string,
     start_pos: L.LatLng,
     renderKey: number,
   }) {
   const bounds = start_pos.toBounds(4000)
-
   const wmsOptions: L.WMSOptions = {
     version: '1.1.1.1',
     layers: map,
     format: 'image/png',
     transparent: false,
     bounds: bounds,
-  };
+  }
+
   return (
     <WMSTileLayer
       key={renderKey}
