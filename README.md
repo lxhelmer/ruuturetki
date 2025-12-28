@@ -48,6 +48,4 @@ As the application is hosted on the free tier of Render.com both 'ends take a se
 - Bring back testing, during the development of backend vitest was used to make sure that the backend functioned correctly, but these tests later became deprecated because of transpiling conflicts
 - I would like to wrap the whole app in container implementation so that it would be easy to migrate anywhere.
 
-## Worklog
 
-The itemized backlog of workhours can be found at [worklog](docs/worklog.md)

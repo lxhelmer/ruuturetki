@@ -8,20 +8,12 @@ import 'leaflet/dist/leaflet.css'
 import { MapContainer, WMSTileLayer} from 'react-leaflet'
 import { Button } from 'react-bootstrap'
 import { getRandomLatLng } from './components/Game'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import './App.css'
 import Game from './components/Game'
-import gameService from './services/games'
-import { LUser, IGame, GameSettings } from './types'
+import { GameSettings } from './types'
 
-import RegisterModal from './components/modals/RegisterModal'
-import LoginModal from './components/modals/LoginModal'
-import HelpModal from './components/modals/HelpModal'
-import ScoreModal from './components/modals/ScoreModal'
 import PlayModal from './components/modals/PlayModal'
-import LogoutButton from './components/LogoutButton'
-import LoginButton from './components/LoginButton'
-import LoginBanner from './components/LoginBanner'
 import Practice from './components/Practice'
 import L from 'leaflet'
 
@@ -37,29 +29,13 @@ function StartMenu({
   const [showHelpModal, setHelpModal] = useState(false)
   const [showScoreModal, setScoreModal] = useState(false)
   const [showPlayModal, setPlayModal] = useState(false)
-
   const bg_pos = getRandomLatLng()
 
-  const handleCloseReg = () => setRegModal(false)
-  const handleShowReg = () => setRegModal(true)
 
-  const handleCloseLog = () => setLogModal(false)
-  const handleShowLog = () => setLogModal(true)
-
-  const handleCloseHelp = () => setHelpModal(false)
-  const handleShowHelp = () => setHelpModal(true)
-
-  const handleCloseScore = () => setScoreModal(false)
-  const handleShowScore = () => {
-    loadGames()
-    setScoreModal(true)
-  }
 
   const handleClosePlay = () => setPlayModal(false)
   const handleShowPlay = () => setPlayModal(true)
 
-  const [games, setGames] = useState<IGame[]>([])
-  const [user, setUser] = useState<LUser | null>(null)
 
   const navigate = useNavigate()
 
@@ -119,28 +95,6 @@ function StartMenu({
   };
   return (
     <>
-      <RegisterModal 
-        show={showRegModal}
-        handleCloseReg={handleCloseReg}
-        />
-
-      <LoginModal
-        show={showLogModal}
-        handleCloseLog={handleCloseLog}
-        />
-
-      <HelpModal
-        show={showHelpModal}
-        handleCloseHelp={handleCloseHelp}
-        />
-
-      <ScoreModal
-        show={showScoreModal}
-        handleCloseScore={handleCloseScore}
-        games={games}
-        setGames={setGames}
-        user={user}
-        />
       <PlayModal
         show={showPlayModal}
         handleClosePlay={handleClosePlay}
@@ -157,7 +111,6 @@ function StartMenu({
       <div id="menu-title">
           Ruuturetki
       </div>
-
       <div id="start-menu" className="d-grid gap-2">
         <Button
           variant="dark"
@@ -169,37 +122,11 @@ function StartMenu({
         <Button
           variant="dark"
           size="lg"
-          onClick={() => handleShowScore()}
-          >
-          scoreboard
-        </Button>
-        <LogoutButton user={user} setUser={setUser}/>
-        <LoginButton user={user} handleShowLog={handleShowLog}/>
-        <Button
-          variant="dark"
-          size="lg"
-          onClick={() => handleShowReg()}
-          >
-          register
-        </Button>
-        <Button
-          variant="dark"
-          size="lg"
           onClick={() => navigate("/practice")}
           >
           practice
         </Button>
-        <Button
-          variant="dark"
-          size="lg"
-          onClick={() => handleShowHelp()}
-          >
-          help
-        </Button>
 
-      </div>
-      <div id="log-banner">
-        <LoginBanner user={user}/>
       </div>
     </>
   )

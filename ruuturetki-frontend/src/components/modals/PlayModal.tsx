@@ -27,7 +27,7 @@ function PlayModal(
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>Time to get mappin</Modal.Title>
+          <Modal.Title>Time to get mapping!</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div id="gamemode-selection">
