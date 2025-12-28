@@ -25,7 +25,13 @@ import LoginBanner from './components/LoginBanner'
 import Practice from './components/Practice'
 import L from 'leaflet'
 
-function StartMenu({setGameSettings}:{setGameSettings: Function}) {
+function StartMenu({
+  setGameSettings,
+  gameSettings
+}: {
+  setGameSettings: Function
+  gameSettings: GameSettings
+}) {
   const [showRegModal, setRegModal] = useState(false)
   const [showLogModal, setLogModal] = useState(false)
   const [showHelpModal, setHelpModal] = useState(false)
@@ -73,6 +79,18 @@ function StartMenu({setGameSettings}:{setGameSettings: Function}) {
     const fetch_id = setInterval(loadGames, 180000)
     return () => clearInterval(fetch_id)
   }, [])
+
+  useEffect(() => {
+    // Reset default game settings when play modal is opened.
+    if (showPlayModal) {
+      console.log('Play modal opened. Resetting game settings: ', gameSettings)
+      setGameSettings({
+        ...gameSettings,
+        dragging: true
+      })
+    }
+    
+  }, [showPlayModal])
 
   const loadGames = async () => {
     try {
@@ -127,6 +145,7 @@ function StartMenu({setGameSettings}:{setGameSettings: Function}) {
         show={showPlayModal}
         handleClosePlay={handleClosePlay}
         setGameSettings={setGameSettings}
+        gameSettings={gameSettings}
         />
       <MapContainer id="map" {...mapOptions}>
         <WMSTileLayer
@@ -195,7 +214,8 @@ function App() {
   const [gameSettings, setGameSettings] = 
     useState<GameSettings>({
       map: 'avoindata:Ortoilmakuva_2019_20cm',
-      year: 2019
+      year: 2019,
+      dragging: true
   })
 
   return (
@@ -204,7 +224,7 @@ function App() {
         <Routes>
           <Route path="/game" element={<Game gameSettings={gameSettings}/>} />
           <Route path="/practice" element={<Practice />} />
-          <Route path="/" element={<StartMenu setGameSettings={setGameSettings}/>} />
+          <Route path="/" element={<StartMenu setGameSettings={setGameSettings} gameSettings={gameSettings}/>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>

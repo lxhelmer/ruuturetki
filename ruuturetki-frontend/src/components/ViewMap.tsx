@@ -68,6 +68,7 @@ function ViewMap(
     zoomControl: false,
     boxZoom: false,
     doubleClickZoom: false,
+    dragging: gameSettings.dragging
   };
 
   const [renderKey, setKey] = useState(1)
