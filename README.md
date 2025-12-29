@@ -2,9 +2,8 @@
 
 ![img](https://github.com/lxhelmer/ruuturetki/blob/main/docs/Banner.png)
 
-App up for now at render: https://ruuturetki.onrender.com
+App up for now at render:  https://ruuturetki.fi https://ruuturetki.onrender.com
 
-Using the backend hosted on https://ruuturetki-backend.onrender.com
 
 This is a map game I made as the submission for University of Helsinki's Full Stack Open Course project.
 
@@ -47,5 +46,6 @@ As the application is hosted on the free tier of Render.com both 'ends take a se
 - General improvement of the codebase. Better implementation of the routers e.g. handlind the checking of authentication in separate middleware.
 - Bring back testing, during the development of backend vitest was used to make sure that the backend functioned correctly, but these tests later became deprecated because of transpiling conflicts
 - I would like to wrap the whole app in container implementation so that it would be easy to migrate anywhere.
+
 
 
