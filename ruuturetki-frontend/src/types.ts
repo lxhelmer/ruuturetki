@@ -22,7 +22,9 @@ export interface LUser {
 
 export interface GameSettings {
   map: string,
-  year: number
+  year: number,
+  dragging: boolean,
+  timed: false | number
 }
 
 export type GameState = {

@@ -6,18 +6,14 @@ import { getDistance } from 'geolib'
 import gameService from '../services/games'
 import { GameState, GameSettings } from '../types'
 
-export function getRandomLatLng () {
+export function getRandomLatLng() {
   const southBoundLat: number = 60.19
   const northBoundLat: number = 60.29
   const eastBoundLon: number = 25.20
   const westBoundLon: number = 24.825
-
   const randomLat: number = Math.random() * (northBoundLat - southBoundLat) + southBoundLat
   const randomLon: number = Math.random() * (eastBoundLon - westBoundLon) + westBoundLon
-
-  return (
-    L.latLng(randomLat, randomLon)
-  )
+  return (L.latLng(randomLat, randomLon))
 }
 
 const startState: GameState = {
@@ -30,51 +26,48 @@ const startState: GameState = {
   user: null
 }
 
-function Game({gameSettings}:{ gameSettings: GameSettings}) {
+function Game({ gameSettings }: { gameSettings: GameSettings }) {
   const [start_pos, setPos] = useState<L.LatLng>(() => getRandomLatLng())
   const [picker_pos, setPosition] = useState<L.LatLng | null>(null)
   const [pick_score, setPickScore] = useState(0)
   const [gameState, setGameState] = useState<GameState>(startState)
   const [maxDist, setDist] = useState(0)
 
-
-
+  // Calculate score for a guess and update game state 
   useEffect(() => {
     if (picker_pos) {
       const score = getDistance(
-        { latitude: start_pos.lat, longitude: start_pos.lng},
-        { latitude: picker_pos.lat, longitude: picker_pos.lng},
+        { latitude: start_pos.lat, longitude: start_pos.lng },
+        { latitude: picker_pos.lat, longitude: picker_pos.lng },
       )
       setPickScore(score)
     }
+    // Update picked state 
     if (picker_pos && gameState.picked === false) {
-      setGameState({...gameState, picked: true})
+      setGameState({ ...gameState, picked: true })
     }
   }, [picker_pos])
-
 
   useEffect(() => {
     const gameUserJSON = window.localStorage.getItem('gameUser')
     if (gameUserJSON) {
       const user = JSON.parse(gameUserJSON)
-      setGameState({...gameState, user: user})
+      setGameState({ ...gameState, user: user })
       gameService.setToken(user.token)
     } else {
       gameService.setToken('')
-      setGameState({...gameState, user: null})
+      setGameState({ ...gameState, user: null })
     }
-
   }, [])
 
-  
   return (
     <>
       <SelectionMap
-          picker_pos = {picker_pos}
-          setPosition = {setPosition}
-          start_pos = {start_pos}
-          setPickScore = {setPickScore}
-         />
+        picker_pos={picker_pos}
+        setPosition={setPosition}
+        start_pos={start_pos}
+        setPickScore={setPickScore}
+      />
       <ViewMap
         start_pos={start_pos}
         pick_score={pick_score}
@@ -85,9 +78,9 @@ function Game({gameSettings}:{ gameSettings: GameSettings}) {
         setGameState={setGameState}
         maxDist={maxDist}
         setDist={setDist}
-        picker_pos = {picker_pos}
-        gameSettings = {gameSettings}
-        />
+        picker_pos={picker_pos}
+        gameSettings={gameSettings}
+      />
     </>
   )
 }

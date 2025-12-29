@@ -75,7 +75,7 @@ html, body {
   color: white;
   position: absolute;
   left: 100px;
-  top: 500px;
+  top: 100px;
   z-index: 500;
 }
 
@@ -156,6 +156,14 @@ html, body {
   font-size: 50px;
   top: 10px;
   left: 30px;
+}
+
+#timer-indicator{
+  position: absolute;
+  z-index: 500;
+  font-size: 20px;
+  top: 2%;
+  left: 50%;
 }
 
 .y-button {

@@ -20,6 +20,7 @@ function LocationPicker({pickPosition, setPosition, start_pos, setPickScore}:
 
   const map = useMapEvents({
     click: (e) => {
+      console.log('Clicked a position on SelectionMap:', e.latlng)
       setPosition(e.latlng)
       if (pickPosition) {
         setPickScore(getDistance(
