@@ -39,28 +39,28 @@ function PracticeComponents (
               inline
               label="1943"
               type='radio'
-              checked={mapLayer === 'avoindata:Ortoilmakuva_1943'}
+              defaultChecked={mapLayer === 'avoindata:Ortoilmakuva_1943'}
               onClick={() => setMapLayer('avoindata:Ortoilmakuva_1943')}
             /> 
             <Form.Check
               inline
               label="1969"
               type='radio'
-              checked={mapLayer === 'avoindata:Ortoilmakuva_1969'}
+              defaultChecked={mapLayer === 'avoindata:Ortoilmakuva_1969'}
               onClick={() => setMapLayer('avoindata:Ortoilmakuva_1969')}
             /> 
             <Form.Check
               inline
               label="1997"
               type='radio'
-              checked={mapLayer === 'avoindata:Ortoilmakuva_1997'}
+              defaultChecked={mapLayer === 'avoindata:Ortoilmakuva_1997'}
               onClick={() => setMapLayer('avoindata:Ortoilmakuva_1997')}
             /> 
             <Form.Check
               inline
               label="2024"
               type='radio'
-              checked={mapLayer === 'avoindata:Ortoilmakuva_2024_5cm'}
+              defaultChecked={mapLayer === 'avoindata:Ortoilmakuva_2024_5cm'}
               onClick={() => setMapLayer('avoindata:Ortoilmakuva_2024_5cm')}
             /> 
           </Form>
