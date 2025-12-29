@@ -42,7 +42,9 @@ function ViewMap(
     maxDist,
     setDist,
     picker_pos,
-    gameSettings
+    gameSettings,
+    timer,
+    setTimer
   }:
     {
       start_pos: L.LatLng,
@@ -55,7 +57,9 @@ function ViewMap(
       maxDist: number,
       setDist: Function,
       picker_pos: L.LatLng | null,
-      gameSettings: GameSettings
+      gameSettings: GameSettings,
+      timer: Number,
+      setTimer: Function
     }) {
   const move_bounds: L.LatLngBounds = start_pos.toBounds(3800)
   const mapOptions: L.MapOptions = {
@@ -99,6 +103,8 @@ function ViewMap(
           setDist={setDist}
           picker_pos={picker_pos}
           gameSettings={gameSettings}
+          timer={timer}
+          setTimer={setTimer}
         />
       </MapContainer>
     </>

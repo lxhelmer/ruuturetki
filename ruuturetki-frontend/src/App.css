@@ -158,6 +158,14 @@ html, body {
   left: 30px;
 }
 
+#timer-indicator{
+  position: absolute;
+  z-index: 500;
+  font-size: 20px;
+  top: 2%;
+  left: 50%;
+}
+
 .y-button {
   width: 100px;
   height: 100px;

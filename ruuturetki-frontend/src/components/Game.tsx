@@ -32,6 +32,7 @@ function Game({ gameSettings }: { gameSettings: GameSettings }) {
   const [pick_score, setPickScore] = useState(0)
   const [gameState, setGameState] = useState<GameState>(startState)
   const [maxDist, setDist] = useState(0)
+  const [timer, setTimer] = useState(10)
 
   useEffect(() => {
     if (picker_pos) {
@@ -78,6 +79,8 @@ function Game({ gameSettings }: { gameSettings: GameSettings }) {
         setDist={setDist}
         picker_pos={picker_pos}
         gameSettings={gameSettings}
+        timer={timer}
+        setTimer={setTimer}
       />
     </>
   )

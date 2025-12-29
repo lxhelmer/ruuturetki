@@ -2,7 +2,7 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { Button } from 'react-bootstrap'
 import { useMap } from 'react-leaflet'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import DevStats from './DevStats.tsx'
 import RoundEndModal from './modals/RoundEndModal.tsx'
 import type { GameState } from './Game.tsx'
@@ -11,49 +11,88 @@ import gameService from '../services/games'
 import LoginBanner from './LoginBanner'
 import { GameSettings } from '../types.tsx'
 
-function SelectButton ({handleEndRound}: {handleEndRound: Function}) {
+const Timer = ({
+  timed,
+  timer,
+  setTimer,
+  handleEndRound
+}: {
+  timed: false | number,
+  timer: Number,
+  setTimer: Function,
+  handleEndRound: Function
+}) => {
+  if (!timed) { return null }
+
+  // Timer is set up in useEffect loop.
+  useEffect(() => {
+    let count = timed
+    const interval = setInterval(() => {
+      setTimer(count)
+      count -= 1
+
+      // Countdown reaches 0.
+      if (count === -1) {
+        clearInterval(interval)
+        console.log('Time is up. Ending the round.')
+
+        // handleEndRound() is not working because gameState.picked 
+        // is not true when countdown reaches 0 (even if location is picked from the map).
+        handleEndRound()
+      }
+    }, 1000)
+  }, [])
+
+  return (
+    <Button variant="dark" disabled id="timer-indicator">
+      {timer.toString()}
+    </Button>
+  )
+}
+
+function SelectButton({ handleEndRound }: { handleEndRound: Function }) {
   return (
     <>
-      <Button 
-        id="select-button" 
+      <Button
+        id="select-button"
         variant="dark"
         onClick={() => handleEndRound()}
-        >
+      >
         Select
       </Button>
     </>
   )
 }
 
-function SkipButton ({handleSkipMap}: {handleSkipMap: Function}) {
+function SkipButton({ handleSkipMap }: { handleSkipMap: Function }) {
   return (
     <>
-      <Button 
-        id="select-button" 
+      <Button
+        id="select-button"
         variant="dark"
         onClick={() => handleSkipMap()}
-        >
+      >
         Skip
       </Button>
     </>
   )
 }
 
-function ResButton ({handleResetMap}: {handleResetMap: Function}) {
+function ResButton({ handleResetMap }: { handleResetMap: Function }) {
   return (
     <>
-      <Button 
-        id="reset-button" 
+      <Button
+        id="reset-button"
         variant="dark"
         onClick={() => handleResetMap()}
-        >
+      >
         Reset map
       </Button>
     </>
   )
 }
 
-function MapComponents (
+function MapComponents(
   {
     start_pos,
     pick_score,
@@ -65,21 +104,25 @@ function MapComponents (
     maxDist,
     setDist,
     picker_pos,
-    gameSettings
+    gameSettings,
+    timer,
+    setTimer
   }:
-   { start_pos: L.LatLng,
-     pick_score: number,
-     setPos: Function,
-     setPickScore: Function,
-     random_latlng: Function,
-     gameState: GameState,
-     setGameState: Function,
-     maxDist: number,
-     setDist: Function,
-     picker_pos: L.LatLng | null,
-     gameSettings: GameSettings
-    })
-  {
+    {
+      start_pos: L.LatLng,
+      pick_score: number,
+      setPos: Function,
+      setPickScore: Function,
+      random_latlng: Function,
+      gameState: GameState,
+      setGameState: Function,
+      maxDist: number,
+      setDist: Function,
+      picker_pos: L.LatLng | null,
+      gameSettings: GameSettings,
+      timer: Number,
+      setTimer: Function
+    }) {
 
 
   const map = useMap()
@@ -91,14 +134,14 @@ function MapComponents (
   const handleCloseREM = () => {
     if (gameState.rounds < 5) {
       setShowREM(false)
-      setGameState({...gameState, picked:false})
+      setGameState({ ...gameState, picked: false })
       refreshMap()
     }
     else {
-      if(gameState.user && gameState.score > 0) {
+      if (gameState.user && gameState.score > 0) {
         try {
           gameService.create({
-            rounds: gameState.rounds-gameState.skipped,
+            rounds: gameState.rounds - gameState.skipped,
             score: gameState.score,
             year: gameSettings.year
           })
@@ -114,31 +157,32 @@ function MapComponents (
   const handleShowREM = () => setShowREM(true)
 
   const handleEndRound = () => {
+    // Needs support for ending the round when timer reaches 0 even if no guess selected.
     if (gameState.picked === true) {
-        const score = Math.max((10000 - pick_score*2 - maxDist*2.5), 0)
+      const score = Math.max((10000 - pick_score * 2 - maxDist * 2.5), 0)
 
-        setScore(score)
-        const new_state = {
-          rounds: gameState.rounds + 1,
-          locations: gameState.locations.concat(start_pos),
-          guesses: gameState.guesses.concat((picker_pos) ? picker_pos : L.latLng(0,0)),
-          score: gameState.score + score,
-          picked: true,
-          skipped: gameState.skipped,
-          user: gameState.user,
-        }
-        setGameState(new_state)
-        handleShowREM()
+      setScore(score)
+      const new_state = {
+        rounds: gameState.rounds + 1,
+        locations: gameState.locations.concat(start_pos),
+        guesses: gameState.guesses.concat((picker_pos) ? picker_pos : L.latLng(0, 0)),
+        score: gameState.score + score,
+        picked: true,
+        skipped: gameState.skipped,
+        user: gameState.user,
+      }
+      setGameState(new_state)
+      handleShowREM()
     }
   }
 
-  const handleSkipMap = async () =>  {
+  const handleSkipMap = async () => {
     console.log(gameState.rounds)
     if (gameState.rounds === 4) {
       const new_state = {
         rounds: gameState.rounds + 1,
         locations: gameState.locations.concat(start_pos),
-        guesses: gameState.guesses.concat(L.latLng(0,0)),
+        guesses: gameState.guesses.concat(L.latLng(0, 0)),
         score: gameState.score,
         picked: false,
         skipped: gameState.skipped + 1,
@@ -150,7 +194,7 @@ function MapComponents (
       const new_state = {
         rounds: gameState.rounds + 1,
         locations: gameState.locations.concat(start_pos),
-        guesses: gameState.guesses.concat(L.latLng(0,0)),
+        guesses: gameState.guesses.concat(L.latLng(0, 0)),
         score: gameState.score,
         picked: false,
         skipped: gameState.skipped + 1,
@@ -173,39 +217,47 @@ function MapComponents (
   }
 
   return (
-      <>
-        <Button variant="dark" disabled id="round-indicator">
-          {(gameState.rounds < 5) ? gameState.rounds+1 : 5}/5
+    <>
+      <Button variant="dark" disabled id="round-indicator">
+        {(gameState.rounds < 5) ? gameState.rounds + 1 : 5}/5
+      </Button>
+
+      <Timer
+        timed={gameSettings.timed}
+        handleEndRound={handleEndRound}
+        timer={timer}
+        setTimer={setTimer}
+      />
+
+      <RoundEndModal
+        gameState={gameState}
+        show={showREM}
+        handleCloseREM={handleCloseREM}
+        round_score={round_score}
+      />
+      <div id="controls">
+        <ResButton handleResetMap={handleResetMap} />
+        <SelectButton handleEndRound={handleEndRound} />
+        <SkipButton handleSkipMap={handleSkipMap} />
+        <Button
+          id="home-button"
+          variant="dark"
+          onClick={() => navigate('/')}
+        >
+          Exit
         </Button>
-        <RoundEndModal
-          gameState={gameState}
-          show={showREM}
-          handleCloseREM={handleCloseREM}
-          round_score = {round_score}
-        />
-        <div id="controls">
-          <ResButton handleResetMap={handleResetMap}/>
-          <SelectButton handleEndRound={handleEndRound}/>
-          <SkipButton handleSkipMap={handleSkipMap}/>
-          <Button 
-            id="home-button" 
-            variant="dark"
-            onClick={() => navigate('/')}
-            >
-            Exit
-          </Button>
-        </div>
-        <DevStats 
-          start_pos = {start_pos}
-          pick_score = {pick_score}
-          maxDist={maxDist}
-          setDist={setDist}
-          gameState={gameState}
-        />
-        <div id="log-banner">
-          <LoginBanner user={gameState.user}/>
-        </div>
-      </>
+      </div>
+      <DevStats
+        start_pos={start_pos}
+        pick_score={pick_score}
+        maxDist={maxDist}
+        setDist={setDist}
+        gameState={gameState}
+      />
+      <div id="log-banner">
+        <LoginBanner user={gameState.user} />
+      </div>
+    </>
   )
 }
 

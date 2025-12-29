@@ -37,10 +37,22 @@ function PlayModal(
                 label="no moving"
                 type='switch'
                 onClick={() => {
-                  console.log('Moving allowed?', !gameSettings.dragging, )
+                  console.log('Moving allowed?', !gameSettings.dragging)
                   setGameSettings({
                     ...gameSettings,
                     dragging: !gameSettings.dragging
+                  })
+                }}
+              />
+              <Form.Check
+                inline
+                label="timed"
+                type='switch'
+                onClick={() => {
+                  console.log('Timed mode?', !gameSettings.timed)
+                  setGameSettings({
+                    ...gameSettings,
+                    timed: 10
                   })
                 }}
               />

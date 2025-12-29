@@ -35,10 +35,11 @@ function StartMenu({
   useEffect(() => {
     // Reset default game settings when play modal is opened.
     if (showPlayModal) {
-      console.log('Play modal opened. Resetting game settings: ', gameSettings)
+      console.log('Play modal opened. Resetting game settings.')
       setGameSettings({
         ...gameSettings,
-        dragging: true
+        dragging: true,
+        timed: false
       })
     }
 
@@ -109,7 +110,8 @@ function App() {
     useState<GameSettings>({
       map: 'avoindata:Ortoilmakuva_2019_20cm',
       year: 2019,
-      dragging: true
+      dragging: true,
+      timed: false
     })
 
   return (
