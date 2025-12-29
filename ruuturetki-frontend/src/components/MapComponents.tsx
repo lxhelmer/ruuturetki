@@ -2,7 +2,7 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { Button } from 'react-bootstrap'
 import { useMap } from 'react-leaflet'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import DevStats from './DevStats.tsx'
 import RoundEndModal from './modals/RoundEndModal.tsx'
 import type { GameState } from './Game.tsx'
@@ -10,47 +10,58 @@ import { useNavigate } from 'react-router-dom'
 import gameService from '../services/games'
 import LoginBanner from './LoginBanner'
 import { GameSettings } from '../types.tsx'
+import useInterval from './useInterval.tsx'
 
 const Timer = ({
-  timed,
   timer,
   setTimer,
   handleEndRound
 }: {
-  timed: false | number,
-  timer: Number,
+  timer: false | number,
   setTimer: Function,
   handleEndRound: Function
 }) => {
-  if (!timed) { return null }
+  // Render timer component only if timed mode is selected.
+  if (!timer) { return null }
+  // Timer is in seconds but delay is in ms => * 100
+  const [delay, setDelay] = useState<number | null>(timer * 100)
 
-  // Timer is set up in useEffect loop.
-  useEffect(() => {
-    let count = timed
-    const interval = setInterval(() => {
-      setTimer(count)
-      count -= 1
-
-      // Countdown reaches 0.
-      if (count === -1) {
-        clearInterval(interval)
-        console.log('Time is up. Ending the round.')
-
-        // handleEndRound() is not working because gameState.picked 
-        // is not true when countdown reaches 0 (even if location is picked from the map).
+  // Custom hook
+  useInterval(() => {
+    setTimer((t: number) => {
+      if (t <= 1) {
+        console.log('Countdown finished.')
+        // Set interval delay to null to stop the timer countdown
+        setDelay(null)
+        // In timed mode select button is disabled. Timer running to 0 is the only way to end a round.
         handleEndRound()
+        // Reset the timer for the next round
+        setTimer(timer)
       }
-    }, 1000)
-  }, [])
+      return t - 1
+    })
+  }, delay)
 
   return (
-    <Button variant="dark" disabled id="timer-indicator">
+    <Button
+      variant="dark"
+      id="timer-indicator"
+      disabled
+    >
       {timer.toString()}
     </Button>
   )
 }
 
-function SelectButton({ handleEndRound }: { handleEndRound: Function }) {
+function SelectButton({
+  handleEndRound,
+  timed
+}: {
+  handleEndRound: Function,
+  timed: false | number
+}) {
+  // Do not render select button if timed mode is selected.
+  if (timed) { return null }
   return (
     <>
       <Button
@@ -104,9 +115,7 @@ function MapComponents(
     maxDist,
     setDist,
     picker_pos,
-    gameSettings,
-    timer,
-    setTimer
+    gameSettings
   }:
     {
       start_pos: L.LatLng,
@@ -119,15 +128,14 @@ function MapComponents(
       maxDist: number,
       setDist: Function,
       picker_pos: L.LatLng | null,
-      gameSettings: GameSettings,
-      timer: Number,
-      setTimer: Function
+      gameSettings: GameSettings
     }) {
 
 
   const map = useMap()
   const [showREM, setShowREM] = useState(false)
   const [round_score, setScore] = useState(0)
+  const [timer, setTimer] = useState(gameSettings.timed)
   const navigate = useNavigate()
 
 
@@ -157,27 +165,56 @@ function MapComponents(
   const handleShowREM = () => setShowREM(true)
 
   const handleEndRound = () => {
-    // Needs support for ending the round when timer reaches 0 even if no guess selected.
-    if (gameState.picked === true) {
-      const score = Math.max((10000 - pick_score * 2 - maxDist * 2.5), 0)
+    console.log('handleEndRound() called. GameState:', gameState)
 
-      setScore(score)
-      const new_state = {
-        rounds: gameState.rounds + 1,
-        locations: gameState.locations.concat(start_pos),
-        guesses: gameState.guesses.concat((picker_pos) ? picker_pos : L.latLng(0, 0)),
-        score: gameState.score + score,
-        picked: true,
-        skipped: gameState.skipped,
-        user: gameState.user,
+    let score = 0
+    if (gameState.picked === false) {
+      if (!gameSettings.timed) {
+        /* Normal mode */
+
+        // Implement here notification to the user to make a guess
+        console.log(
+          'Select clicked without setting a guess of the location.',
+          'Try again after making a guess.'
+        )
+        // Give the user chance to make a guess
+        // by stopping handleEndRound()
+        return null
+      } else {
+        /* Timed mode */
+
+        // Implement here notification to the user to be faster
+        console.log(
+          'Time run out before you made a guess of the location.',
+          'Try being faster on the next round!'
+        )
+        // Score is set to 0 in the timed mode
+        score = 0
       }
-      setGameState(new_state)
-      handleShowREM()
+    } else {
+      /* Both modes and a location succesfully guessed*/
+
+      // Calculate the score of the guess
+      score = Math.max((10000 - pick_score * 2 - maxDist * 2.5), 0)
     }
+    console.log('setscore:', score)
+
+    setScore(score)
+    const newState = {
+      rounds: gameState.rounds + 1,
+      locations: gameState.locations.concat(start_pos),
+      guesses: gameState.guesses.concat((picker_pos) ? picker_pos : L.latLng(0, 0)),
+      score: gameState.score + score,
+      picked: true,
+      skipped: gameState.skipped,
+      user: gameState.user
+    }
+    setGameState(newState)
+    handleShowREM()
   }
 
   const handleSkipMap = async () => {
-    console.log(gameState.rounds)
+    // Different handling if it is the last round
     if (gameState.rounds === 4) {
       const new_state = {
         rounds: gameState.rounds + 1,
@@ -191,6 +228,7 @@ function MapComponents(
       await setGameState(new_state)
       setShowREM(true)
     } else {
+      // Other than the last round
       const new_state = {
         rounds: gameState.rounds + 1,
         locations: gameState.locations.concat(start_pos),
@@ -223,10 +261,9 @@ function MapComponents(
       </Button>
 
       <Timer
-        timed={gameSettings.timed}
-        handleEndRound={handleEndRound}
         timer={timer}
         setTimer={setTimer}
+        handleEndRound={handleEndRound}
       />
 
       <RoundEndModal
@@ -237,7 +274,10 @@ function MapComponents(
       />
       <div id="controls">
         <ResButton handleResetMap={handleResetMap} />
-        <SelectButton handleEndRound={handleEndRound} />
+        <SelectButton
+          handleEndRound={handleEndRound}
+          timed={gameSettings.timed}
+        />
         <SkipButton handleSkipMap={handleSkipMap} />
         <Button
           id="home-button"

@@ -32,8 +32,8 @@ function Game({ gameSettings }: { gameSettings: GameSettings }) {
   const [pick_score, setPickScore] = useState(0)
   const [gameState, setGameState] = useState<GameState>(startState)
   const [maxDist, setDist] = useState(0)
-  const [timer, setTimer] = useState(10)
 
+  // Calculate score for a guess and update game state 
   useEffect(() => {
     if (picker_pos) {
       const score = getDistance(
@@ -42,6 +42,7 @@ function Game({ gameSettings }: { gameSettings: GameSettings }) {
       )
       setPickScore(score)
     }
+    // Update picked state 
     if (picker_pos && gameState.picked === false) {
       setGameState({ ...gameState, picked: true })
     }
@@ -79,8 +80,6 @@ function Game({ gameSettings }: { gameSettings: GameSettings }) {
         setDist={setDist}
         picker_pos={picker_pos}
         gameSettings={gameSettings}
-        timer={timer}
-        setTimer={setTimer}
       />
     </>
   )
