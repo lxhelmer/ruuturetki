@@ -5,13 +5,16 @@ import type { GameState } from './Game.tsx'
 import { GameSettings } from '../types.ts'
 import markerIcon from './MarkerIcon.tsx'
 
-function OrtoLayer({ map, start_pos, renderKey }:
-  {
-    map: string,
-    start_pos: L.LatLng,
-    renderKey: number,
-  }) {
-  const bounds = start_pos.toBounds(4000)
+function OrtoLayer({
+  map,
+  startPosition,
+  renderKey
+}: {
+  map: string,
+  startPosition: L.LatLng,
+  renderKey: number,
+}) {
+  const bounds = startPosition.toBounds(4000)
   const wmsOptions: L.WMSOptions = {
     version: '1.1.1.1',
     layers: map,
@@ -32,34 +35,34 @@ function OrtoLayer({ map, start_pos, renderKey }:
 
 function ViewMap(
   {
-    start_pos,
-    pick_score,
-    setPos,
+    startPosition,
+    setStartPosition,
+    pickScore,
     setPickScore,
-    random_latlng,
+    distance,
+    setDistance,
     gameState,
     setGameState,
-    maxDist,
-    setDist,
-    picker_pos,
+    pickerPosition,
+    getRandomLatLng,
     gameSettings
   }:
     {
-      start_pos: L.LatLng,
-      pick_score: number,
-      setPos: Function,
+      startPosition: L.LatLng,
+      setStartPosition: Function,
+      pickScore: number,
       setPickScore: Function,
-      random_latlng: Function,
+      distance: number,
+      setDistance: Function,
       gameState: GameState,
       setGameState: Function,
-      maxDist: number,
-      setDist: Function,
-      picker_pos: L.LatLng | null,
+      pickerPosition: L.LatLng | null,
+      getRandomLatLng: Function,
       gameSettings: GameSettings
     }) {
-  const move_bounds: L.LatLngBounds = start_pos.toBounds(3800)
+  const move_bounds: L.LatLngBounds = startPosition.toBounds(3800)
   const mapOptions: L.MapOptions = {
-    center: start_pos,
+    center: startPosition,
     zoom: 17,
     scrollWheelZoom: false,
     maxBounds: move_bounds,
@@ -68,36 +71,36 @@ function ViewMap(
     boxZoom: false,
     doubleClickZoom: false,
     dragging: gameSettings.dragging
-  };
+  }
 
   const [renderKey, setKey] = useState(1)
 
   //key trick for forcing rerender on the WMS layer
   useEffect(() => {
     setKey(prevKey => prevKey + 1)
-  }, [start_pos])
+  }, [startPosition])
 
   return (
     <>
       <MapContainer id="map" {...mapOptions} key={renderKey}>
-        <OrtoLayer map={gameSettings.map} start_pos={start_pos} renderKey={renderKey} />
-        <Marker position={start_pos} icon={markerIcon}>
+        <OrtoLayer map={gameSettings.map} startPosition={startPosition} renderKey={renderKey} />
+        <Marker position={startPosition} icon={markerIcon}>
           <Popup>
             Try to match this position!
           </Popup>
         </Marker>
 
         <MapComponents
-          start_pos={start_pos}
-          pick_score={pick_score}
-          setPos={setPos}
+          startPosition={startPosition}
+          setStartPosition={setStartPosition}
+          pickScore={pickScore}
           setPickScore={setPickScore}
-          random_latlng={random_latlng}
+          distance={distance}
+          setDistance={setDistance}
           gameState={gameState}
           setGameState={setGameState}
-          maxDist={maxDist}
-          setDist={setDist}
-          picker_pos={picker_pos}
+          pickerPosition={pickerPosition}
+          getRandomLatLng={getRandomLatLng}
           gameSettings={gameSettings}
         />
       </MapContainer>

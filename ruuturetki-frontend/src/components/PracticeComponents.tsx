@@ -3,12 +3,17 @@ import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useMap } from 'react-leaflet'
 
-function PracticeComponents (
-  {mapLayer, setMapLayer, setPracticePos, setPracticeZoom
-  }:
-  {mapLayer: string, setMapLayer: Function, setPracticePos: Function, setPracticeZoom: Function})
-  
-  {
+function PracticeComponents({
+  mapLayer,
+  setMapLayer,
+  setPracticePos,
+  setPracticeZoom
+}: {
+  mapLayer: string,
+  setMapLayer: Function,
+  setPracticePos: Function,
+  setPracticeZoom: Function
+}) {
   const navigate = useNavigate()
 
   // Set practice position and zoom after each map move to center
@@ -30,46 +35,46 @@ function PracticeComponents (
       <div
         id='prac-controls'
       >
-        <Button 
+        <Button
           id='faux-button'
           variant='dark'
         >
-          <Form>
+          <Form className='prac-controls'>
             <Form.Check
               inline
               label="1943"
               type='radio'
               defaultChecked={mapLayer === 'avoindata:Ortoilmakuva_1943'}
               onClick={() => setMapLayer('avoindata:Ortoilmakuva_1943')}
-            /> 
+            />
             <Form.Check
               inline
               label="1969"
               type='radio'
               defaultChecked={mapLayer === 'avoindata:Ortoilmakuva_1969'}
               onClick={() => setMapLayer('avoindata:Ortoilmakuva_1969')}
-            /> 
+            />
             <Form.Check
               inline
               label="1997"
               type='radio'
               defaultChecked={mapLayer === 'avoindata:Ortoilmakuva_1997'}
               onClick={() => setMapLayer('avoindata:Ortoilmakuva_1997')}
-            /> 
+            />
             <Form.Check
               inline
               label="2024"
               type='radio'
               defaultChecked={mapLayer === 'avoindata:Ortoilmakuva_2024_5cm'}
               onClick={() => setMapLayer('avoindata:Ortoilmakuva_2024_5cm')}
-            /> 
+            />
           </Form>
         </Button>
-        <Button 
-          id="home-button" 
+        <Button
+          id="home-button"
           variant="dark"
           onClick={() => navigate('/')}
-          >
+        >
           Exit
         </Button>
       </div>

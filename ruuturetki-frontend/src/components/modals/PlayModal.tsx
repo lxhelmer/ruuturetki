@@ -3,18 +3,18 @@ import { Button, Form } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { GameSettings } from '../../types'
 
-function PlayModal(
-  { show,
-    handleClosePlay,
-    setGameSettings,
-    gameSettings
-  }:
-    {
-      show: boolean,
-      handleClosePlay: () => void,
-      setGameSettings: Function,
-      gameSettings: GameSettings
-    }) {
+function PlayModal({
+  show,
+  handleClosePlay,
+  setGameSettings,
+  gameSettings
+}:
+  {
+    show: boolean,
+    handleClosePlay: () => void,
+    setGameSettings: Function,
+    gameSettings: GameSettings
+  }) {
   const navigate = useNavigate()
 
   return (
@@ -121,4 +121,5 @@ function PlayModal(
     </>
   )
 }
+
 export default PlayModal

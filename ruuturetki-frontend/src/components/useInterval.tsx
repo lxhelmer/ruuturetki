@@ -2,15 +2,15 @@
 // Posted by - Dan Abramov https://danabra.mov/
 // Retrieved 2025-12-29
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react'
 
 function useInterval(callback: () => void, delay: number | null): void {
-  const savedCallback = useRef<(() => void) | null>(null);
+  const savedCallback = useRef<(() => void) | null>(null)
 
   // Remember the latest callback.
   useEffect(() => {
-    savedCallback.current = callback;
-  }, [callback]);
+    savedCallback.current = callback
+  }, [callback])
 
   // Set up the interval.
   useEffect(() => {

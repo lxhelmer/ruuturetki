@@ -8,11 +8,10 @@ import RoundEndModal from './modals/RoundEndModal.tsx'
 import type { GameState } from './Game.tsx'
 import { useNavigate } from 'react-router-dom'
 import gameService from '../services/games'
-import LoginBanner from './LoginBanner'
 import { GameSettings } from '../types.tsx'
 import useInterval from './useInterval.tsx'
 
-const Timer = ({
+function Timer({
   timer,
   setTimer,
   handleEndRound
@@ -20,7 +19,7 @@ const Timer = ({
   timer: false | number,
   setTimer: Function,
   handleEndRound: Function
-}) => {
+}) {
   // Render timer component only if timed mode is selected.
   if (!timer) { return null }
   // Timer is in seconds but delay is in ms => * 100
@@ -103,49 +102,43 @@ function ResButton({ handleResetMap }: { handleResetMap: Function }) {
   )
 }
 
-function MapComponents(
-  {
-    start_pos,
-    pick_score,
-    setPos,
-    setPickScore,
-    random_latlng,
-    gameState,
-    setGameState,
-    maxDist,
-    setDist,
-    picker_pos,
-    gameSettings
-  }:
-    {
-      start_pos: L.LatLng,
-      pick_score: number,
-      setPos: Function,
-      setPickScore: Function,
-      random_latlng: Function,
-      gameState: GameState,
-      setGameState: Function,
-      maxDist: number,
-      setDist: Function,
-      picker_pos: L.LatLng | null,
-      gameSettings: GameSettings
-    }) {
-
-
+function MapComponents({
+  startPosition,
+  setStartPosition,
+  pickScore,
+  setPickScore,
+  distance,
+  setDistance,
+  gameState,
+  setGameState,
+  pickerPosition,
+  getRandomLatLng,
+  gameSettings
+}: {
+  startPosition: L.LatLng,
+  setStartPosition: Function,
+  pickScore: number,
+  setPickScore: Function,
+  distance: number,
+  setDistance: Function,
+  gameState: GameState,
+  setGameState: Function,
+  pickerPosition: L.LatLng | null,
+  getRandomLatLng: Function,
+  gameSettings: GameSettings
+}) {
   const map = useMap()
   const [showREM, setShowREM] = useState(false)
-  const [round_score, setScore] = useState(0)
+  const [roundScore, setRoundScore] = useState(0)
   const [timer, setTimer] = useState(gameSettings.timed)
   const navigate = useNavigate()
-
 
   const handleCloseREM = () => {
     if (gameState.rounds < 5) {
       setShowREM(false)
       setGameState({ ...gameState, picked: false })
       refreshMap()
-    }
-    else {
+    } else {
       if (gameState.user && gameState.score > 0) {
         try {
           gameService.create({
@@ -195,15 +188,14 @@ function MapComponents(
       /* Both modes and a location succesfully guessed*/
 
       // Calculate the score of the guess
-      score = Math.max((10000 - pick_score * 2 - maxDist * 2.5), 0)
+      score = Math.max((10000 - pickScore * 2 - distance * 2.5), 0)
     }
-    console.log('setscore:', score)
-
-    setScore(score)
+    console.log('setRoundScore:', score)
+    setRoundScore(score)
     const newState = {
       rounds: gameState.rounds + 1,
-      locations: gameState.locations.concat(start_pos),
-      guesses: gameState.guesses.concat((picker_pos) ? picker_pos : L.latLng(0, 0)),
+      locations: gameState.locations.concat(startPosition),
+      guesses: gameState.guesses.concat((pickerPosition) ? pickerPosition : L.latLng(0, 0)),
       score: gameState.score + score,
       picked: true,
       skipped: gameState.skipped,
@@ -218,7 +210,7 @@ function MapComponents(
     if (gameState.rounds === 4) {
       const new_state = {
         rounds: gameState.rounds + 1,
-        locations: gameState.locations.concat(start_pos),
+        locations: gameState.locations.concat(startPosition),
         guesses: gameState.guesses.concat(L.latLng(0, 0)),
         score: gameState.score,
         picked: false,
@@ -231,7 +223,7 @@ function MapComponents(
       // Other than the last round
       const new_state = {
         rounds: gameState.rounds + 1,
-        locations: gameState.locations.concat(start_pos),
+        locations: gameState.locations.concat(startPosition),
         guesses: gameState.guesses.concat(L.latLng(0, 0)),
         score: gameState.score,
         picked: false,
@@ -242,35 +234,38 @@ function MapComponents(
       refreshMap()
     }
   }
+
   const handleResetMap = () => {
-    map.setView(start_pos)
+    map.setView(startPosition)
   }
 
   const refreshMap = () => {
-    const new_center: L.LatLng = random_latlng()
-    setPos(new_center)
-    setScore(0)
+    const newStartPosition: L.LatLng = getRandomLatLng()
+    setStartPosition(newStartPosition)
+    setRoundScore(0)
     setPickScore(0)
-    map.setView(new_center)
+    map.setView(newStartPosition)
   }
 
   return (
     <>
-      <Button variant="dark" disabled id="round-indicator">
+      <Button
+        variant="dark"
+        disabled
+        id="round-indicator"
+      >
         {(gameState.rounds < 5) ? gameState.rounds + 1 : 5}/5
       </Button>
-
       <Timer
         timer={timer}
         setTimer={setTimer}
         handleEndRound={handleEndRound}
       />
-
       <RoundEndModal
         gameState={gameState}
         show={showREM}
         handleCloseREM={handleCloseREM}
-        round_score={round_score}
+        roundScore={roundScore}
       />
       <div id="controls">
         <ResButton handleResetMap={handleResetMap} />
@@ -288,15 +283,12 @@ function MapComponents(
         </Button>
       </div>
       <DevStats
-        start_pos={start_pos}
-        pick_score={pick_score}
-        maxDist={maxDist}
-        setDist={setDist}
+        startPosition={startPosition}
+        pickScore={pickScore}
+        distance={distance}
+        setDistance={setDistance}
         gameState={gameState}
       />
-      <div id="log-banner">
-        <LoginBanner user={gameState.user} />
-      </div>
     </>
   )
 }

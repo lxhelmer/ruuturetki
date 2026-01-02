@@ -30,7 +30,7 @@ function StartMenu({
   const handleClosePlay = () => setPlayModal(false)
   const handleShowPlay = () => setPlayModal(true)
 
-  const bg_pos = getRandomLatLng()
+  const randomPosition = getRandomLatLng()
 
   useEffect(() => {
     // Reset default game settings when play modal is opened.
@@ -50,9 +50,9 @@ function StartMenu({
     layers: 'avoindata:Ortoilmakuva_2019_20cm',
     format: 'image/png',
     transparent: false,
-  };
+  }
   const mapOptions: L.MapOptions = {
-    center: bg_pos,
+    center: randomPosition,
     zoom: 17,
     scrollWheelZoom: false,
     zoomControl: false,

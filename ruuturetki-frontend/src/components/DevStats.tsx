@@ -1,42 +1,38 @@
-import { useState, useEffect} from 'react'
+import { useState, useEffect } from 'react'
 import { getDistance } from 'geolib'
 import { useMap } from 'react-leaflet'
 import type { GameState } from './Game.tsx'
 
-function DevStats(
-  { start_pos,
-    pick_score,
-    maxDist,
-    setDist,
-    gameState,
-  }: 
-    { start_pos: L.LatLng, 
-      pick_score: number,
-      maxDist: number,
-      setDist: Function,
-      gameState: GameState,
-    } 
-) 
-{
-
-  const [pos, setPos] = useState(start_pos)
+function DevStats({
+  startPosition,
+  pickScore,
+  distance,
+  setDistance,
+  gameState,
+}: {
+  startPosition: L.LatLng,
+  pickScore: number,
+  distance: number,
+  setDistance: Function,
+  gameState: GameState,
+}) {
+  const [devPosition, setDevPosition] = useState(startPosition)
   const map = useMap()
   useEffect(() => {
-    setPos(start_pos)
-    setDist(0)
-  }, [start_pos])
+    setDevPosition(startPosition)
+    setDistance(0)
+  }, [startPosition])
 
-  function distUpdate (new_pos: L.LatLng) {
+  function distUpdate(newStartPosition: L.LatLng) {
     const distance = getDistance(
-      { latitude: start_pos.lat, longitude: start_pos.lng},
-      { latitude: pos.lat, longitude: pos.lng},
+      { latitude: startPosition.lat, longitude: startPosition.lng },
+      { latitude: devPosition.lat, longitude: devPosition.lng },
     )
-    if (distance > maxDist) {
-        setDist(distance)
+    if (distance > distance) {
+      setDistance(distance)
     }
-    setPos(new_pos)
+    setDevPosition(newStartPosition)
   }
-
 
   const onMove = () => {
     distUpdate(map.getCenter())
@@ -56,13 +52,14 @@ function DevStats(
   return (
     <div id="dev-stat">
       <h2 >
-        latitude: {pos.lat.toFixed(4)}, longitude: {pos.lng.toFixed(4)}{'  '}
-        maximum distance: {maxDist}{'  '}
-        picker score: {pick_score}{'  '}
+        latitude: {devPosition.lat.toFixed(4)}, longitude: {devPosition.lng.toFixed(4)}{'  '}
+        maximum distance: {distance}{'  '}
+        picker score: {pickScore}{'  '}
       </h2>
       <h1>
-        round: {gameState.rounds+1}{'  '}
+        round: {gameState.rounds + 1}{'  '}
         score: {gameState.score}{'  '}
+        picked(true=1): {Number(gameState.picked)}
       </h1>
     </div>
   )

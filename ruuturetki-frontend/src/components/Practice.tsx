@@ -3,16 +3,13 @@ import { useState, useEffect } from 'react'
 import PracticeComponents from './PracticeComponents'
 import L from 'leaflet'
 
-function OrtoLayer({ map }:
-  {
-    map: string,
-  }) {
+function OrtoLayer({ map }: { map: string, }) {
   const wmsOptions: L.WMSOptions = {
     version: '1.1.1.1',
     layers: map,
     format: 'image/png',
     transparent: false,
-  };
+  }
   return (
     <WMSTileLayer
       url="https://kartta.hel.fi/ws/geoserver/avoindata/wms?"
@@ -41,7 +38,7 @@ function Practice() {
     zoomControl: true,
     boxZoom: false,
     doubleClickZoom: false,
-  };
+  }
 
   return (
     <>

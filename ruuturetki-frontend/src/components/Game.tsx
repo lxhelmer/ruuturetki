@@ -27,26 +27,26 @@ const startState: GameState = {
 }
 
 function Game({ gameSettings }: { gameSettings: GameSettings }) {
-  const [start_pos, setPos] = useState<L.LatLng>(() => getRandomLatLng())
-  const [picker_pos, setPosition] = useState<L.LatLng | null>(null)
-  const [pick_score, setPickScore] = useState(0)
+  const [startPosition, setStartPosition] = useState<L.LatLng>(() => getRandomLatLng())
+  const [pickerPosition, setPickerPosition] = useState<L.LatLng | null>(null)
+  const [pickScore, setPickScore] = useState(0)
   const [gameState, setGameState] = useState<GameState>(startState)
-  const [maxDist, setDist] = useState(0)
+  const [distance, setDistance] = useState(0)
 
   // Calculate score for a guess and update game state 
   useEffect(() => {
-    if (picker_pos) {
+    if (pickerPosition) {
       const score = getDistance(
-        { latitude: start_pos.lat, longitude: start_pos.lng },
-        { latitude: picker_pos.lat, longitude: picker_pos.lng },
+        { latitude: startPosition.lat, longitude: startPosition.lng },
+        { latitude: pickerPosition.lat, longitude: pickerPosition.lng },
       )
       setPickScore(score)
     }
     // Update picked state 
-    if (picker_pos && gameState.picked === false) {
+    if (pickerPosition && gameState.picked === false) {
       setGameState({ ...gameState, picked: true })
     }
-  }, [picker_pos])
+  }, [pickerPosition])
 
   useEffect(() => {
     const gameUserJSON = window.localStorage.getItem('gameUser')
@@ -63,22 +63,22 @@ function Game({ gameSettings }: { gameSettings: GameSettings }) {
   return (
     <>
       <SelectionMap
-        picker_pos={picker_pos}
-        setPosition={setPosition}
-        start_pos={start_pos}
+        pickerPosition={pickerPosition}
+        setPickerPosition={setPickerPosition}
+        startPosition={startPosition}
         setPickScore={setPickScore}
       />
       <ViewMap
-        start_pos={start_pos}
-        pick_score={pick_score}
-        setPos={setPos}
+        startPosition={startPosition}
+        setStartPosition={setStartPosition}
+        pickScore={pickScore}
         setPickScore={setPickScore}
-        random_latlng={getRandomLatLng}
+        distance={distance}
+        setDistance={setDistance}
         gameState={gameState}
-        setGameState={setGameState}
-        maxDist={maxDist}
-        setDist={setDist}
-        picker_pos={picker_pos}
+        setGameState={setGameState}        
+        pickerPosition={pickerPosition}
+        getRandomLatLng={getRandomLatLng}
         gameSettings={gameSettings}
       />
     </>

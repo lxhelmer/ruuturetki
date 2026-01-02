@@ -4,41 +4,47 @@ import { getDistance } from 'geolib'
 import { useEffect } from 'react'
 import markerIcon from './MarkerIcon.tsx'
 
-function LocationPicker({pickPosition, setPosition, start_pos, setPickScore}:
-                        { pickPosition: L.LatLng | null,
-                          setPosition: Function, 
-                          start_pos: L.LatLng
-                          setPickScore: Function
-                        }) {
+function LocationPicker({
+  pickerPosition,
+  setPickerPosition,
+  startPosition,
+  setPickScore
+}: {
+  pickerPosition: L.LatLng | null,
+  setPickerPosition: Function,
+  startPosition: L.LatLng
+  setPickScore: Function
+}) {
 
   const mapInstance = useMap()
   useEffect(() => {
-    setPosition(null)
+    setPickerPosition(null)
     mapInstance.setView(L.latLng(60.18, 24.95), 11)
-    
-  }, [start_pos])
+
+  }, [startPosition])
 
   const map = useMapEvents({
     click: (e) => {
       console.log('Clicked a position on SelectionMap:', e.latlng)
-      setPosition(e.latlng)
-      if (pickPosition) {
+      setPickerPosition(e.latlng)
+      if (pickerPosition) {
         setPickScore(getDistance(
-          { latitude: start_pos.lat, longitude: start_pos.lng},
-          { latitude: pickPosition.lat, longitude: pickPosition.lng},
+          { latitude: startPosition.lat, longitude: startPosition.lng },
+          { latitude: pickerPosition.lat, longitude: pickerPosition.lng },
         ))
       }
     },
     mouseover: () => {
-      map.invalidateSize();
+      map.invalidateSize()
     },
     mouseout: () => {
-      map.invalidateSize();
+      map.invalidateSize()
     }
   })
-  return pickPosition === null ? null : (
-    <Marker position={pickPosition} icon={markerIcon}/>
-  )
+  
+  return pickerPosition === null
+    ? null
+    : <Marker position={pickerPosition} icon={markerIcon} />
 }
 
 export default LocationPicker

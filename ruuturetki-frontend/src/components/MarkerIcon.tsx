@@ -1,10 +1,10 @@
-import icon_img from 'leaflet/dist/images/marker-icon.png';
-import iconShadow_img from 'leaflet/dist/images/marker-shadow.png';
+import iconImg from 'leaflet/dist/images/marker-icon.png'
+import iconShadowImg from 'leaflet/dist/images/marker-shadow.png'
 import L from 'leaflet'
 
 const markerIcon = L.icon({
-    iconUrl : icon_img,
-    shadowUrl: iconShadow_img,
+    iconUrl: iconImg,
+    shadowUrl: iconShadowImg,
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
