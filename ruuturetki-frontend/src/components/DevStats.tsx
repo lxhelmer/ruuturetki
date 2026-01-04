@@ -24,12 +24,12 @@ function DevStats({
   }, [startPosition])
 
   function distUpdate(newStartPosition: L.LatLng) {
-    const distance = getDistance(
+    const maxDistance = getDistance(
       { latitude: startPosition.lat, longitude: startPosition.lng },
       { latitude: devPosition.lat, longitude: devPosition.lng },
     )
-    if (distance > distance) {
-      setDistance(distance)
+    if (maxDistance > distance) {
+      setDistance(maxDistance)
     }
     setDevPosition(newStartPosition)
   }
