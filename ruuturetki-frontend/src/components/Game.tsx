@@ -6,7 +6,7 @@ import getRandomLatLng from "../utils/getRandomLatLng.ts";
 
 const startState: GameState = {
   roundId: 0,
-  locations: [getRandomLatLng()],
+  locations: [...Array(5)].map(() => getRandomLatLng()),
   guesses: [],
   score: [],
   distanceMoved: 0,

@@ -8,7 +8,6 @@ import RoundEndModal from "./modals/RoundEndModal.tsx";
 import { useNavigate } from "react-router-dom";
 import { GameSettings, GameState } from "../types.tsx";
 import { getDistance } from "geolib";
-import getRandomLatLng from "../utils/getRandomLatLng.ts";
 
 function Timer({
   timer,
@@ -148,17 +147,15 @@ function MapComponents({
   const handleStartRound = () => {
     // console.log('handleStartRound() called. Old gameState:', gameState)
     // Change gameState for the next round
-    const newStartPosition = getRandomLatLng();
     const newRoundGameState = {
       ...gameState,
       roundId: gameState.roundId + 1,
-      locations: gameState.locations.concat(newStartPosition),
       movedDistance: 0,
       picked: false,
     };
     // console.log('new gamestate:', newRoundGameState)
     // Center the viewMap to the new starting location and update gameState
-    map.setView(newStartPosition);
+    map.setView(gameState.locations[gameState.roundId + 1]);
     setGameState(newRoundGameState);
   };
 
@@ -237,11 +234,9 @@ function MapComponents({
       setShowREM(true);
     } else {
       // Prepare a new state for the next round
-      const newStartPosition = getRandomLatLng();
       const newState = {
         ...gameState,
         roundId: gameState.roundId + 1,
-        locations: gameState.locations.concat(newStartPosition),
         guesses: gameState.guesses
           .slice(0, gameState.roundId)
           .concat(L.latLng(0, 0)),
@@ -253,7 +248,7 @@ function MapComponents({
       // console.log('skip newstate:', newState)
       /* Skip is broken. GameState is set correctly,
       but the changes are not updated to the map view and map components. */
-      map.setView(newStartPosition);
+      map.setView(gameState.locations[gameState.roundId + 1]);
       setGameState(newState);
     }
   };
