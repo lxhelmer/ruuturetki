@@ -8,6 +8,7 @@ const startState: GameState = {
   roundId: 0,
   locations: [...Array(5)].map(() => getRandomLatLng()),
   guesses: [],
+  zooms: [...Array(5)].map(() => 17),
   score: [],
   distanceMoved: 0,
   picked: false,

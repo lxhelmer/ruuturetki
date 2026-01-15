@@ -73,6 +73,69 @@ body {
   width: 500px;
 }
 
+#curator-controls,
+#curator-info,
+#curator-zoom-selection {
+  position: fixed;
+  left: 50%;
+  transform: translate(-50%);
+  top: 1rem;
+  z-index: 500;
+  display: flex;
+  gap: 0.5rem;
+}
+
+#curator-info,
+#curator-zoom-selection {
+  top: 4rem;
+  background-color: rgba(80, 80, 80, 0.6);
+  max-width: 35%;
+}
+
+#curator-zoom-selection {
+  gap: 0;
+  flex-direction: column;
+}
+
+#curator-info > h5,
+#curator-zoom-selection > * {
+  margin: 0.5rem;
+}
+
+#curator-zoom-selection > h5 {
+  margin-bottom: 0;
+}
+
+#curator-zoom-selection-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+#curator-form {
+  display: flex;
+  flex-direction: column;
+}
+
+#curator-form > * {
+  margin: 0.5rem;
+}
+
+#curator-form > #date {
+  width: 30%;
+}
+
+#curator-form > #map {
+  height: 40vh;
+}
+
+#curator-end-controls {
+  display: flex;
+  gap: 1rem;
+  justify-content: end;
+}
+
 #dev-stat {
   color: white;
   position: absolute;

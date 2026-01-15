@@ -27,13 +27,14 @@ export interface GameSettings {
   timed: false | number;
 }
 
-export type GameState = {
+export interface GameState {
   roundId: number;
   locations: L.LatLng[];
   guesses: L.LatLng[];
+  zooms: number[];
   score: number[];
   distanceMoved: number;
   picked: boolean;
   skipped: number;
   user: LUser | null;
-};
+}

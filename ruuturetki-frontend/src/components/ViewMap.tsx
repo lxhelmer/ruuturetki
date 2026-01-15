@@ -50,7 +50,7 @@ function ViewMap({
   const maxBounds: L.LatLngBounds = startPosition.toBounds(3800);
   const mapOptions: L.MapOptions = {
     center: startPosition,
-    zoom: 17,
+    zoom: gameState.zooms[gameState.roundId],
     scrollWheelZoom: false,
     maxBounds: maxBounds,
     maxBoundsViscosity: 0.9,
