@@ -1,44 +1,62 @@
-import L from 'leaflet'
-import { useMapEvents, useMap, Marker } from 'react-leaflet'
-import { getDistance } from 'geolib'
-import { useEffect } from 'react'
-import markerIcon from './MarkerIcon.tsx'
+import L from "leaflet";
+import { useMapEvents, useMap, Marker } from "react-leaflet";
+import { useEffect, useState } from "react";
+import markerIcon from "./MarkerIcon.tsx";
+import { GameState } from "../types.ts";
 
-function LocationPicker({pickPosition, setPosition, start_pos, setPickScore}:
-                        { pickPosition: L.LatLng | null,
-                          setPosition: Function, 
-                          start_pos: L.LatLng
-                          setPickScore: Function
-                        }) {
+function LocationPicker({
+  gameState,
+  setGameState,
+}: {
+  gameState: GameState;
+  setGameState: React.Dispatch<React.SetStateAction<GameState>>;
+}) {
+  // Marker for the guessed location
+  const [marker, setMarker] = useState<null | L.LatLng>(null);
 
-  const mapInstance = useMap()
+  // Get the starting position of each round from gameState
+  const startPosition = gameState.locations[gameState.roundId];
+
+  // Center the selection map when a round starts
+  const mapInstance = useMap();
   useEffect(() => {
-    setPosition(null)
-    mapInstance.setView(L.latLng(60.18, 24.95), 11)
-    
-  }, [start_pos])
+    mapInstance.setView(L.latLng(60.18, 24.95), 11);
+    setMarker(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startPosition]);
 
+  // Listen to selection map events (location guesses and hover)
   const map = useMapEvents({
+    // Location guesses
     click: (e) => {
-      console.log('Clicked a position on SelectionMap:', e.latlng)
-      setPosition(e.latlng)
-      if (pickPosition) {
-        setPickScore(getDistance(
-          { latitude: start_pos.lat, longitude: start_pos.lng},
-          { latitude: pickPosition.lat, longitude: pickPosition.lng},
-        ))
-      }
+      // Get guessed location
+      const guessedLocation = e.latlng;
+      // console.log('Clicked a position on SelectionMap:', guessedLocation)
+
+      // Get previous round guesses
+      const oldGuesses = gameState.guesses.slice(0, gameState.roundId);
+
+      // Set or (if already set) reset the guess to the gameState
+      setGameState({
+        ...gameState,
+        picked: true,
+        guesses: oldGuesses.concat(guessedLocation),
+      });
+
+      // Show marker of the guess on the selection map
+      setMarker(guessedLocation);
     },
+
+    // Switch to larger or smaller selection map
     mouseover: () => {
       map.invalidateSize();
     },
     mouseout: () => {
       map.invalidateSize();
-    }
-  })
-  return pickPosition === null ? null : (
-    <Marker position={pickPosition} icon={markerIcon}/>
-  )
+    },
+  });
+
+  return marker ? <Marker position={marker} icon={markerIcon} /> : null;
 }
 
-export default LocationPicker
+export default LocationPicker;
