@@ -5,30 +5,28 @@ import { GameSettings, GameState } from "../types.ts";
 import markerIcon from "./MarkerIcon.tsx";
 
 function OrtoLayer({
-  map,
+  gameSettings,
   startPosition,
   renderKey,
 }: {
-  map: string;
+  gameSettings: GameSettings;
   startPosition: L.LatLng;
   renderKey: number;
 }) {
   const bounds = startPosition.toBounds(4000);
   const wmsOptions: L.WMSOptions = {
-    version: "1.1.1.1",
-    layers: map,
+    // version: "1.1.1.1",
+    layers: gameSettings.map,
     format: "image/png",
-    transparent: false,
+    // transparent: false,
     bounds: bounds,
   };
 
   return (
     <WMSTileLayer
       key={renderKey}
-      url="https://kartta.hel.fi/ws/geoserver/avoindata/wms?"
-      attribution={
-        '&copy; <a href=https://hri.fi/data/fi/dataset/helsingin-ortoilmakuvat target="_blank">Helsingin kaupunki, kaupunkimittauspalvelut 2025</a>'
-      }
+      url={gameSettings.wmsurl}
+      attribution={gameSettings.attribution}
       {...wmsOptions}
     />
   );
@@ -70,7 +68,7 @@ function ViewMap({
     <>
       <MapContainer id="map" {...mapOptions} key={renderKey}>
         <OrtoLayer
-          map={gameSettings.map}
+          gameSettings={gameSettings}
           startPosition={startPosition}
           renderKey={renderKey}
         />

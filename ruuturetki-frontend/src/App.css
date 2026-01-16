@@ -184,7 +184,8 @@ body {
 }
 
 #year-selection,
-#gamemode-selection {
+#gamemode-selection,
+#turku {
   max-width: fit-content;
   margin-left: auto;
   margin-right: auto;

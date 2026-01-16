@@ -1,5 +1,6 @@
 import { Modal } from "react-bootstrap";
 import { Button } from "react-bootstrap";
+import { MapContainer, WMSTileLayer } from "react-leaflet";
 
 function HelpModal({
   show,
@@ -31,6 +32,22 @@ function HelpModal({
             while not moving at all. You can skip a round, but forfit points
             from that round.
           </div>
+          <MapContainer
+            center={[60.4518, 22.2666]} // Turku center
+            zoom={13}
+            style={{ height: "100vh", width: "100%" }}
+          >
+            <WMSTileLayer
+              url="https://opaskartta.turku.fi/TeklaOGCWeb/WMS.ashx"
+              layers="Ilmakuva 2022 True ortho"
+              format="image/png"
+              transparent={true}
+              version="1.1.1"
+              attribution="© Turun kaupunki"
+              // Optional params
+              uppercase={true} // some WMS servers are case sensitive
+            />
+          </MapContainer>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={() => handleCloseHelp()} variant="secondary">
