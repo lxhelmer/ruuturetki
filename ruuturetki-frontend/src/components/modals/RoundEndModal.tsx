@@ -37,6 +37,12 @@ function FitBounds({
   guessedLocation: L.LatLng;
 }) {
   const map = useMap();
+  if (guessedLocation === undefined) {
+    // Guessed location is undefined when it is the last round and
+    // skip is clicked without selecting a guess location
+    // Return without trying to fit the map to bounds
+    return null;
+  }
   if (guessedLocation.equals(L.latLng(0, 0))) {
     // Guessed location is equal to (0, 0) in timed mode if not guessed in time
     // Return without trying to fit the map to bounds
