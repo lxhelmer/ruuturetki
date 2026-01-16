@@ -35,7 +35,7 @@ function StartMenu({
   const handleCloseHelp = () => setHelpModal(false);
   const handleShowHelp = () => setHelpModal(true);
 
-  const randomPosition = getRandomLatLng();
+  const randomPosition = getRandomLatLng(gameSettings.city);
   useEffect(() => {
     // Reset default game settings when play modal is opened.
     if (showPlayModal) {
@@ -50,8 +50,8 @@ function StartMenu({
   }, [showPlayModal]);
 
   const wmsOptions: L.WMSOptions = {
-    version: "1.1.1.1",
-    layers: "avoindata:Ortoilmakuva_2019_20cm",
+    // version: "1.1.1.1",
+    layers: gameSettings.map,
     format: "image/png",
     transparent: false,
   };
@@ -76,10 +76,8 @@ function StartMenu({
       <HelpModal show={showHelpModal} handleCloseHelp={handleCloseHelp} />
       <MapContainer id="map" {...mapOptions}>
         <WMSTileLayer
-          url="https://kartta.hel.fi/ws/geoserver/avoindata/wms?"
-          attribution={
-            '&copy; <a href=https://hri.fi/data/fi/dataset/helsingin-ortoilmakuvat target="_blank">Helsingin kaupunki, kaupunkimittauspalvelut 2025</a>'
-          }
+          url={gameSettings.wmsurl}
+          attribution={gameSettings.attribution}
           {...wmsOptions}
         />
       </MapContainer>
@@ -107,7 +105,11 @@ function App() {
     htmlElement.setAttribute("data-bs-theme", "dark");
   }
   const [gameSettings, setGameSettings] = useState<GameSettings>({
+    wmsurl: "https://kartta.hel.fi/ws/geoserver/avoindata/wms?",
+    attribution:
+      '&copy; <a href=https://hri.fi/data/fi/dataset/helsingin-ortoilmakuvat target="_blank">Helsingin kaupunki, kaupunkimittauspalvelut 2025</a>',
     map: "avoindata:Ortoilmakuva_2019_20cm",
+    city: "Helsinki",
     year: 2019,
     dragging: true,
     timed: false,

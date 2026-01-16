@@ -21,7 +21,10 @@ export interface LUser {
 }
 
 export interface GameSettings {
+  wmsurl: string;
+  attribution: string;
   map: string;
+  city: string;
   year: number;
   dragging: boolean;
   timed: false | number;
