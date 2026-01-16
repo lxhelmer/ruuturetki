@@ -2,6 +2,7 @@ import { MapContainer, WMSTileLayer } from "react-leaflet";
 import { useState, useEffect } from "react";
 import PracticeComponents from "./PracticeComponents";
 import L from "leaflet";
+import Curator from "./Curator";
 
 function OrtoLayer({ map }: { map: string }) {
   const wmsOptions: L.WMSOptions = {
@@ -54,6 +55,7 @@ function Practice() {
           setPracticePos={setPracticePos}
           setPracticeZoom={setPracticeZoom}
         />
+        <Curator mapLayer={mapLayer}/>
       </MapContainer>
     </>
   );
