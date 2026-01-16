@@ -150,7 +150,7 @@ function MapComponents({
     const newRoundGameState = {
       ...gameState,
       roundId: gameState.roundId + 1,
-      movedDistance: 0,
+      distanceMoved: 0,
       picked: false,
     };
     // console.log('new gamestate:', newRoundGameState)
@@ -208,8 +208,8 @@ function MapComponents({
           longitude: gameState.guesses[gameState.roundId].lng,
         }
       );
-      const movedDistance = gameState.distanceMoved;
-      const score = Math.max(10000 - pickScore * 2 - movedDistance * 2.5, 0);
+      const distanceMoved = gameState.distanceMoved;
+      const score = Math.max(10000 - pickScore * 2 - distanceMoved * 2.5, 0);
       // Set round end calculations to the gameState
       const roundEndState = {
         ...gameState,
@@ -241,7 +241,7 @@ function MapComponents({
           .slice(0, gameState.roundId)
           .concat(L.latLng(0, 0)),
         score: gameState.score.concat(0),
-        movedDistance: 0,
+        distanceMoved: 0,
         picked: false,
         skipped: gameState.skipped + 1,
       };
