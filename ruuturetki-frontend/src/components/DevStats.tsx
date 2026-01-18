@@ -1,5 +1,5 @@
 import { getDistance } from "geolib";
-import { GameState } from "../types";
+import { GameState } from "../types/types";
 
 function DevStats({ gameState }: { gameState: GameState }) {
   if (!gameState.user || (gameState.user && !gameState.user.admin)) {

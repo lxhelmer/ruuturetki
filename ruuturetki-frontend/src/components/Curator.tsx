@@ -10,7 +10,7 @@ import {
 import L from "leaflet";
 import { useEffect, useRef, useState } from "react";
 import markerIcon from "./MarkerIcon";
-import { FormEvent } from "../types";
+import { FormEvent } from "../types/types";
 
 export default function Curator({ mapLayer }: { mapLayer: string }) {
   // TO DO: implement admin check

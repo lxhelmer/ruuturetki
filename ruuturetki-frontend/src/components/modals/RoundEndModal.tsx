@@ -8,7 +8,7 @@ import {
   useMap,
 } from "react-leaflet";
 import markerIcon from "../MarkerIcon.tsx";
-import { GameState } from "../../types.ts";
+import { GameState } from "../../types/types.ts";
 import L from "leaflet";
 
 function ModalButton({

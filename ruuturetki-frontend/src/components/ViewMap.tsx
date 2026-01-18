@@ -1,7 +1,13 @@
-import { MapContainer, WMSTileLayer, Marker, Popup } from "react-leaflet";
+import {
+  MapContainer,
+  WMSTileLayer,
+  Marker,
+  Popup,
+  WMSTileLayerProps,
+} from "react-leaflet";
 import MapComponents from "./MapComponents.tsx";
 import { useState, useEffect } from "react";
-import { GameSettings, GameState } from "../types.ts";
+import { GameSettings, GameState } from "../types/types.ts";
 import markerIcon from "./MarkerIcon.tsx";
 
 function OrtoLayer({
@@ -14,22 +20,16 @@ function OrtoLayer({
   renderKey: number;
 }) {
   const bounds = startPosition.toBounds(4000);
-  const wmsOptions: L.WMSOptions = {
-    // version: "1.1.1.1",
-    layers: gameSettings.map,
-    format: "image/png",
-    // transparent: false,
+  const wmsOptions: WMSTileLayerProps = {
+    url: gameSettings.wmsurl,
+    attribution: gameSettings.attribution,
+    version: gameSettings.wmsversion,
+    layers: gameSettings.ortolayer,
+    format: gameSettings.wmsformat,
     bounds: bounds,
   };
 
-  return (
-    <WMSTileLayer
-      key={renderKey}
-      url={gameSettings.wmsurl}
-      attribution={gameSettings.attribution}
-      {...wmsOptions}
-    />
-  );
+  return <WMSTileLayer key={renderKey} {...wmsOptions} />;
 }
 
 function ViewMap({
@@ -58,7 +58,7 @@ function ViewMap({
     dragging: gameSettings.dragging,
   };
 
-  //key trick for forcing rerender on the WMS layer
+  // key trick for forcing rerender on the WMS layer
   const [renderKey, setKey] = useState(1);
   useEffect(() => {
     setKey((prevKey) => prevKey + 1);
@@ -75,7 +75,6 @@ function ViewMap({
         <Marker position={startPosition} icon={markerIcon}>
           <Popup>Try to match this position!</Popup>
         </Marker>
-
         <MapComponents
           gameState={gameState}
           setGameState={setGameState}

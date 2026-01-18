@@ -1,6 +1,6 @@
 import L from "leaflet";
 
-export default function getRandomLatLng(city: string) {
+export default function getRandomLatLng(city: "Helsinki" | "Turku") {
   let southBoundLat = 0;
   let northBoundLat = 0;
   let eastBoundLon = 0;

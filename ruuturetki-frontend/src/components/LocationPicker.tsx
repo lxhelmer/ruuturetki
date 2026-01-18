@@ -2,7 +2,7 @@ import L from "leaflet";
 import { useMapEvents, useMap, Marker } from "react-leaflet";
 import { useEffect, useState } from "react";
 import markerIcon from "./MarkerIcon.tsx";
-import { GameState } from "../types.ts";
+import { GameState } from "../types/types.ts";
 
 function LocationPicker({
   gameState,
