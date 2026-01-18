@@ -6,12 +6,12 @@ import {
   useNavigate,
 } from "react-router-dom";
 import "leaflet/dist/leaflet.css";
-import { MapContainer, WMSTileLayer } from "react-leaflet";
+import { MapContainer, WMSTileLayer, WMSTileLayerProps } from "react-leaflet";
 import { Button } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import "./App.css";
 import Game from "./components/Game";
-import { GameSettings } from "./types";
+import { GameSettings } from "./types/types";
 import PlayModal from "./components/modals/PlayModal";
 import Practice from "./components/Practice";
 import L from "leaflet";
@@ -35,7 +35,6 @@ function StartMenu({
   const handleCloseHelp = () => setHelpModal(false);
   const handleShowHelp = () => setHelpModal(true);
 
-  const randomPosition = getRandomLatLng(gameSettings.city);
   useEffect(() => {
     // Reset default game settings when play modal is opened.
     if (showPlayModal) {
@@ -49,14 +48,17 @@ function StartMenu({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showPlayModal]);
 
-  const wmsOptions: L.WMSOptions = {
-    // version: "1.1.1.1",
-    layers: gameSettings.map,
+  // Settings for the background map in the main menu
+  const wmsOptions: WMSTileLayerProps = {
+    url: "https://kartta.hel.fi/ws/geoserver/avoindata/wms?",
+    version: "1.1.1",
+    layers: "avoindata:Ortoilmakuva_2024_5cm",
     format: "image/png",
-    transparent: false,
+    attribution:
+      '&copy; <a href=https://hri.fi/data/fi/dataset/helsingin-ortoilmakuvat target="_blank">Helsingin kaupunki, kaupunkimittauspalvelut 2025</a>',
   };
   const mapOptions: L.MapOptions = {
-    center: randomPosition,
+    center: getRandomLatLng("Helsinki"),
     zoom: 17,
     scrollWheelZoom: false,
     zoomControl: false,
@@ -75,11 +77,7 @@ function StartMenu({
       />
       <HelpModal show={showHelpModal} handleCloseHelp={handleCloseHelp} />
       <MapContainer id="map" {...mapOptions}>
-        <WMSTileLayer
-          url={gameSettings.wmsurl}
-          attribution={gameSettings.attribution}
-          {...wmsOptions}
-        />
+        <WMSTileLayer {...wmsOptions} />
       </MapContainer>
 
       <div id="menu-title">Ruuturetki</div>
@@ -104,15 +102,18 @@ function App() {
   if (htmlElement) {
     htmlElement.setAttribute("data-bs-theme", "dark");
   }
+  // Set default game settings when the main menu is loaded
+  // Default game settings
   const [gameSettings, setGameSettings] = useState<GameSettings>({
-    wmsurl: "https://kartta.hel.fi/ws/geoserver/avoindata/wms?",
-    attribution:
-      '&copy; <a href=https://hri.fi/data/fi/dataset/helsingin-ortoilmakuvat target="_blank">Helsingin kaupunki, kaupunkimittauspalvelut 2025</a>',
-    map: "avoindata:Ortoilmakuva_2019_20cm",
-    city: "Helsinki",
-    year: 2019,
     dragging: true,
     timed: false,
+    wmsurl: "https://kartta.hel.fi/ws/geoserver/avoindata/wms?",
+    wmsversion: "1.1.1.1",
+    wmsformat: "image/png",
+    attribution:
+      '&copy; <a href=https://hri.fi/data/fi/dataset/helsingin-ortoilmakuvat target="_blank">Helsingin kaupunki, kaupunkimittauspalvelut 2025</a>',
+    ortolayer: "avoindata:Ortoilmakuva_1943",
+    city: "Helsinki",
   });
 
   return (

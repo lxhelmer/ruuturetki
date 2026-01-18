@@ -1,5 +1,4 @@
 import { Modal } from "react-bootstrap";
-import { Button } from "react-bootstrap";
 import { MapContainer, WMSTileLayer } from "react-leaflet";
 
 function HelpModal({
@@ -49,11 +48,6 @@ function HelpModal({
             />
           </MapContainer>
         </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={() => handleCloseHelp()} variant="secondary">
-            close
-          </Button>
-        </Modal.Footer>
       </Modal>
     </>
   );

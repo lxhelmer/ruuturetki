@@ -1,7 +1,7 @@
 import { useState } from "react";
 import SelectionMap from "./SelectionMap.tsx";
 import ViewMap from "./ViewMap.tsx";
-import { GameState, GameSettings } from "../types";
+import { GameState, GameSettings } from "../types/types.ts";
 import getRandomLatLng from "../utils/getRandomLatLng.ts";
 
 function Game({ gameSettings }: { gameSettings: GameSettings }) {

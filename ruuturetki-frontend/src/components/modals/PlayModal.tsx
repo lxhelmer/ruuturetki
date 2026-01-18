@@ -1,7 +1,7 @@
 import { Modal } from "react-bootstrap";
 import { Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { GameSettings } from "../../types";
+import { GameSettings } from "../../types/types";
 
 function PlayModal({
   show,
@@ -64,12 +64,12 @@ function PlayModal({
               onClick={() => {
                 setGameSettings({
                   ...gameSettings,
-                  map: "avoindata:Ortoilmakuva_1943",
                   city: "Helsinki",
+                  ortolayer: "avoindata:Ortoilmakuva_1943",
                   wmsurl: "https://kartta.hel.fi/ws/geoserver/avoindata/wms?",
                   attribution:
                     '&copy; <a href=https://hri.fi/data/fi/dataset/helsingin-ortoilmakuvat target="_blank">Helsingin kaupunki, kaupunkimittauspalvelut 2025</a>',
-                  year: 1943,
+                  wmsversion: "1.1.1.1",
                 });
                 navigate("/game");
               }}
@@ -82,12 +82,12 @@ function PlayModal({
               onClick={() => {
                 setGameSettings({
                   ...gameSettings,
-                  map: "avoindata:Ortoilmakuva_1969",
                   city: "Helsinki",
+                  ortolayer: "avoindata:Ortoilmakuva_1969",
                   wmsurl: "https://kartta.hel.fi/ws/geoserver/avoindata/wms?",
                   attribution:
                     '&copy; <a href=https://hri.fi/data/fi/dataset/helsingin-ortoilmakuvat target="_blank">Helsingin kaupunki, kaupunkimittauspalvelut 2025</a>',
-                  year: 1969,
+                  wmsversion: "1.1.1.1",
                 });
                 navigate("/game");
               }}
@@ -100,12 +100,12 @@ function PlayModal({
               onClick={() => {
                 setGameSettings({
                   ...gameSettings,
-                  map: "avoindata:Ortoilmakuva_1997",
                   city: "Helsinki",
+                  ortolayer: "avoindata:Ortoilmakuva_1997",
                   wmsurl: "https://kartta.hel.fi/ws/geoserver/avoindata/wms?",
                   attribution:
                     '&copy; <a href=https://hri.fi/data/fi/dataset/helsingin-ortoilmakuvat target="_blank">Helsingin kaupunki, kaupunkimittauspalvelut 2025</a>',
-                  year: 1997,
+                  wmsversion: "1.1.1.1",
                 });
                 navigate("/game");
               }}
@@ -118,12 +118,12 @@ function PlayModal({
               onClick={() => {
                 setGameSettings({
                   ...gameSettings,
-                  map: "avoindata:Ortoilmakuva_2024_5cm",
                   city: "Helsinki",
+                  ortolayer: "avoindata:Ortoilmakuva_2024_5cm",
                   wmsurl: "https://kartta.hel.fi/ws/geoserver/avoindata/wms?",
                   attribution:
                     '&copy; <a href=https://hri.fi/data/fi/dataset/helsingin-ortoilmakuvat target="_blank">Helsingin kaupunki, kaupunkimittauspalvelut 2025</a>',
-                  year: 2024,
+                  wmsversion: "1.1.1.1",
                 });
                 navigate("/game");
               }}
@@ -138,12 +138,12 @@ function PlayModal({
               onClick={() => {
                 setGameSettings({
                   ...gameSettings,
-                  map: "Ilmakuva 2022 True ortho",
                   city: "Turku",
-                  wmsurl: "https://opaskartta.turku.fi/TeklaOGCWeb/WMS.ashx",
+                  ortolayer: "Ilmakuva 2022 True ortho",
+                  wmsurl: "https://turku.asiointi.fi/teklaogcweb/WMS.ashx",
                   attribution:
                     '&copy; <a href=https://www.avoindata.fi/data/fi/dataset/turun-seudun-ilmakuva target="_blank">Turun Kaupunkiympäristö</a>',
-                  year: 2022,
+                  wmsversion: "1.1.1",
                 });
                 navigate("/game");
               }}

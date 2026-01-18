@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import DevStats from "./DevStats.tsx";
 import RoundEndModal from "./modals/RoundEndModal.tsx";
 import { useNavigate } from "react-router-dom";
-import { GameSettings, GameState } from "../types.tsx";
+import { GameSettings, GameState } from "../types/types.ts";
 import { getDistance } from "geolib";
 
 function Timer({
@@ -112,7 +112,7 @@ function MapComponents({
       {
         latitude: map.getCenter().lat,
         longitude: map.getCenter().lng,
-      }
+      },
     );
 
     if (distanceMoved > gameState.distanceMoved) {
@@ -171,7 +171,7 @@ function MapComponents({
         // Implement here notification to the user to make a guess
         console.log(
           "Select clicked without setting a guess of the location.",
-          "Try again after making a guess."
+          "Try again after making a guess.",
         );
         // Give the user chance to make a guess
         // by returning to the round
@@ -180,7 +180,7 @@ function MapComponents({
         // Implement here notification to the user to be faster
         console.log(
           "Time run out before you made a guess of the location.",
-          "Try being faster on the next round!"
+          "Try being faster on the next round!",
         );
         // Score is set to 0 in the timed mode
         const score = 0;
@@ -206,7 +206,7 @@ function MapComponents({
         {
           latitude: gameState.guesses[gameState.roundId].lat,
           longitude: gameState.guesses[gameState.roundId].lng,
-        }
+        },
       );
       const distanceMoved = gameState.distanceMoved;
       const score = Math.max(10000 - pickScore * 2 - distanceMoved * 2.5, 0);
