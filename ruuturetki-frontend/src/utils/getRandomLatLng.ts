@@ -14,7 +14,7 @@ export default function getRandomLatLng(city: "Helsinki" | "Turku") {
     const randomLat = Math.random() * (box.NE.lat - box.SW.lat) + box.SW.lat;
     const randomLon = Math.random() * (box.NE.lng - box.SW.lng) + box.SW.lng;
     return L.latLng(randomLat, randomLon);
-  } else if (city === "Helsinki") {
+  } else /* city === "Helsinki" */ {
     // To prevent black screen specially in 2020's
     // Helsinki is divided into two adjacent bounding boxes.
     // First (left, west) box dimensions: SW=(60.1417, 24.8541); NE(60.2524, 25.0124)
