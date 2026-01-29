@@ -59,3 +59,10 @@ export interface GameState {
   skipped: number;
   user: LUser | null;
 }
+
+export interface CuratorRound {
+  id: number;
+  latlng: L.LatLng;
+  zoom: number;
+  draggable: boolean;
+}

@@ -26,7 +26,7 @@ function Practice() {
   const [renderKey, setKey] = useState(1);
   const [mapLayer, setMapLayer] = useState("avoindata:Ortoilmakuva_2024_5cm");
   const [practicePos, setPracticePos] = useState(
-    L.latLng(60.170678, 24.941543) // Default location Helsinki Central Station
+    L.latLng(60.170678, 24.941543), // Default location Helsinki Central Station
   );
   const [practiceZoom, setPracticeZoom] = useState(15); // Default zoom level 15
 
@@ -55,7 +55,7 @@ function Practice() {
           setPracticePos={setPracticePos}
           setPracticeZoom={setPracticeZoom}
         />
-        <Curator mapLayer={mapLayer}/>
+        <Curator mapLayer={mapLayer} />
       </MapContainer>
     </>
   );

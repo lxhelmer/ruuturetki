@@ -10,7 +10,7 @@ import {
 import L from "leaflet";
 import { useEffect, useRef, useState } from "react";
 import markerIcon from "./MarkerIcon";
-import { FormEvent } from "../types/types";
+import { CuratorRound, FormEvent } from "../types/types";
 
 export default function Curator({ mapLayer }: { mapLayer: string }) {
   // TO DO: implement admin check
@@ -19,38 +19,44 @@ export default function Curator({ mapLayer }: { mapLayer: string }) {
   // Comment the next line to use curator mode
   // return null;
 
-  const [curatorLocations, setCuratorLocations] = useState<L.LatLng[]>([]);
-  const [curatorZooms, setCuratorZooms] = useState<number[]>([]);
+  const [curatorRounds, setCuratorRounds] = useState<CuratorRound[]>([]);
   const [showInfo, setShowInfo] = useState(false);
   const [showZoomSelection, setShowZoomSelection] = useState(false);
   const [showCuratorEndModal, setShowCuratorEndModal] = useState(false);
   const [id, setId] = useState(0);
   const map = useMap();
+
   // Save map click locations to the state
   useMapEvents({
     click(e) {
-      if (curatorLocations.length < 5) {
-        setCuratorLocations(curatorLocations.concat(e.latlng));
+      if (curatorRounds.length < 5) {
+        // setCuratorLocations(curatorLocations.concat(e.latlng));
+        setCuratorRounds((prevState) =>
+          prevState.concat({
+            id: curatorRounds.length,
+            latlng: e.latlng,
+            zoom: 16,
+            draggable: false,
+          }),
+        );
       }
       // Alert if map is clicked after selecting 5 locations and zoom selection is not opened yet
-      if (curatorLocations.length === 5 && !showZoomSelection) {
+      if (curatorRounds.length === 5 && !showZoomSelection) {
         alert(
-          "You have selected a sufficient number of locations. Click Set locations to continue to the zoom selection."
+          "You have selected a sufficient number of locations. Click Set locations to continue to the zoom selection.",
         );
       }
     },
   });
 
   const handleSetLocations = () => {
-    // This function checks if the user has selected locations
-    // correctly. If so, it continues to the zoom selection.
+    // This function continues to the zoom selection by checking
+    // if locations are guessed correctly and making required preparations.
 
     // Alert the user if insufficient number of locations clicked
-    if (curatorLocations.length < 5) {
+    if (curatorRounds.length < 5) {
       alert(
-        `Click ${
-          5 - curatorLocations.length
-        } more location(s) before continuing!`
+        `Click ${5 - curatorRounds.length} more location(s) before continuing!`,
       );
       return;
     }
@@ -58,16 +64,20 @@ export default function Curator({ mapLayer }: { mapLayer: string }) {
     if (showZoomSelection) {
       alert(
         `You are selecting a zoom level for the round ${
-          curatorZooms.length + 1
+          curatorRounds.length + 1
         }. Click ${
-          curatorZooms.length === 4 ? "end" : "next"
-        } to select current zoom and continue.`
+          curatorRounds.length === 4 ? "end" : "next"
+        } to select current zoom and continue.`,
       );
       return;
     }
 
-    // Center the map to the first location
-    map.setView(curatorLocations[0], 16);
+    // Prepare for the zoom selection
+    // Center the map to the first location and enable dragging the 1st marker
+    map.setView(curatorRounds[0].latlng, 16);
+    setCuratorRounds((curatorRounds) =>
+      curatorRounds.map((c) => (c.id === 0 ? { ...c, draggable: true } : c)),
+    );
     // Disable moving and scrollwheel zooming
     map.dragging.disable();
     map.scrollWheelZoom.disable();
@@ -76,34 +86,45 @@ export default function Curator({ mapLayer }: { mapLayer: string }) {
   };
 
   const handleReset = () => {
-    // This function resets curator selection to the initial state:
-    // 1) clear selected locations, zooms and their ids
-    // 2) hide zoom selection
-    // 3) enable moving and scrollwheel zooming
-    setCuratorLocations([]);
-    setCuratorZooms([]);
+    // This function fully resets the progress of creating a daily challenge
+    // in the curator mode.
+
+    // Remove any selected locations
+    setCuratorRounds([]);
+    // Reset zoom selection id
     setId(0);
+    // Hide zoom selection UI
     setShowZoomSelection(false);
+    // Enable map movement
     map.dragging.enable();
     map.scrollWheelZoom.enable();
   };
 
-  const handleNext = () => {
+  const handleNext = (id: number) => {
     // This function saves current map zoom level, handles
     // continuing to the next zoom selection and handles ending the zoom selection
 
-    // Save selected zoom to curators state
-    setCuratorZooms(curatorZooms.concat(map.getZoom()));
-    // On the last round get results of the selected locations and zooms
+    // Save selected zoom level to curators state
+    setCuratorRounds((prevState) =>
+      prevState.map((c) => (c.id === id ? { ...c, zoom: map.getZoom() } : c)),
+    );
+
+    // Continue to the next location or to the submit daily form
     if (id === 4) {
-      // Show submit form
+      // On the last round continue to the submit daily form
       setShowCuratorEndModal(true);
-      // Reset curator mode
-      // handleReset();
     } else {
-      // Continue to the next location if it isn't the last round
+      // Otherwise continue to the next location
       setId(id + 1);
-      map.setView(curatorLocations[id + 1]);
+      map.setView(curatorRounds[id + 1].latlng);
+      // Enable dragging the next marker and disable dragging the current marker
+      setCuratorRounds((prevState) =>
+        prevState.map((c) => {
+          if (c.id === id) return { ...c, draggable: false };
+          else if (c.id === id + 1) return { ...c, draggable: true };
+          else return c;
+        }),
+      );
     }
   };
 
@@ -140,7 +161,7 @@ export default function Curator({ mapLayer }: { mapLayer: string }) {
           variant="dark"
           onClick={() => {
             return confirm(
-              "Are you sure you want to reset your curator progress?"
+              "Are you sure you want to reset your curator progress?",
             )
               ? handleReset()
               : () => {};
@@ -168,28 +189,41 @@ export default function Curator({ mapLayer }: { mapLayer: string }) {
           ? ZoomSelection(map, id, handleNext)
           : null}
       </div>
+      <div id="curator-map-markers">
+        {curatorRounds.map((round) => (
+          <CuratorMarker
+            position={round.latlng}
+            index={round.id}
+            key={round.id}
+            draggable={round.draggable}
+            setCuratorRounds={setCuratorRounds}
+            map={map}
+          />
+        ))}
+      </div>
       <div id="curator-end-modal">
         {showCuratorEndModal ? (
           <CuratorEndModal
             showCuratorEndModal={showCuratorEndModal}
             setShowCuratorEndModal={setShowCuratorEndModal}
-            curatorLocations={curatorLocations}
-            curatorZooms={curatorZooms}
+            curatorRounds={curatorRounds}
             mapLayer={mapLayer}
             handleReset={handleReset}
           />
         ) : null}
       </div>
-      <div id="curator-map-markers">
-        {curatorLocations.map((position, index) => (
-          <CuratorMarker position={position} index={index} key={index} />
-        ))}
-      </div>
     </>
   );
 }
 
-function ZoomSelection(map: L.Map, id: number, handleNext: () => void) {
+/**
+ * Returns UI for selecting the zoom for the daily challenge locations.
+ */
+function ZoomSelection(
+  map: L.Map,
+  id: number,
+  handleNext: (id: number) => void,
+) {
   return (
     <>
       <h5>Select zoom level for round {id + 1} location. </h5>
@@ -202,7 +236,12 @@ function ZoomSelection(map: L.Map, id: number, handleNext: () => void) {
             map.setZoom(Number(target.value));
           }}
         />
-        <Button variant="dark" onClick={handleNext}>
+        <Button
+          variant="dark"
+          onClick={() => {
+            handleNext(id);
+          }}
+        >
           {id < 4 ? "Next" : "End"}
         </Button>
       </div>
@@ -210,63 +249,90 @@ function ZoomSelection(map: L.Map, id: number, handleNext: () => void) {
   );
 }
 
+/**
+ * Returns a map marker. If the marker is draggable,
+ * updates the new location to the curator state after dragging.
+ */
 function CuratorMarker({
   position,
   index,
+  draggable,
+  setCuratorRounds,
+  map,
 }: {
   position: L.LatLng;
   index: number;
+  draggable: boolean;
+  setCuratorRounds: React.Dispatch<React.SetStateAction<CuratorRound[]>>;
+  map: L.Map;
 }) {
+  // Update the location after dragging the marker
+  const handleDrag = (e: L.DragEndEvent) => {
+    const latlng = e.target.getLatLng();
+    setCuratorRounds((prevState) =>
+      prevState.map((c) => (c.id === index ? { ...c, latlng: latlng } : c)),
+    );
+    // Move to the new location
+    map.setView(latlng);
+  };
+
   return (
-    <Marker position={position} icon={markerIcon}>
+    <Marker
+      position={position}
+      icon={markerIcon}
+      draggable={draggable}
+      eventHandlers={{ dragend: handleDrag }}
+    >
       <Tooltip permanent>{index + 1}</Tooltip>
     </Marker>
   );
 }
 
+/**
+ * Returns a form for submitting the daily challenge and a map view of
+ * the daily challenge locations.
+ */
 function CuratorEndModal({
   showCuratorEndModal,
   setShowCuratorEndModal,
-  curatorLocations,
-  curatorZooms,
+  curatorRounds,
   mapLayer,
   handleReset,
 }: {
   showCuratorEndModal: boolean;
   setShowCuratorEndModal: React.Dispatch<React.SetStateAction<boolean>>;
-  curatorLocations: L.LatLng[];
-  curatorZooms: number[];
+  curatorRounds: CuratorRound[];
   mapLayer: string;
   handleReset: () => void;
 }) {
-  const result = {
-    locations: curatorLocations,
-    zooms: curatorZooms, // State is not updated for the last zoom
-    layer: mapLayer,
+  const returnToPractice = () => {
+    // Reset curator mode and return to the practice mode
+    setShowCuratorEndModal(false);
+    handleReset();
   };
 
   const handleSubmit = (event: FormEvent) => {
-    // This function submits the daily challenge to the daily calendar
+    // This form event handler submits the daily challenge to the daily calendar
     // and returns to the practice mode
     event.preventDefault();
-    
+
     // Submit the daily challenge to the daily calendar
     const selectedDate = event.currentTarget.date.value;
     console.log("Date selected:", selectedDate);
-    console.log("Submit daily:", result);
+    console.log("Submit daily:", curatorRounds);
+    console.log("maplayer:", mapLayer);
     // TO DO:
     // ...
 
-    // Reset curator mode and return to the practice mode
-    setShowCuratorEndModal(false);
-    handleReset()
+    returnToPractice();
   };
+
   const handleClose = () => {
     if (confirm("Return to practice map without submitting daily challenge?")) {
-      setShowCuratorEndModal(false);
-      handleReset();
+      returnToPractice();
     }
   };
+
   return (
     <Modal show={showCuratorEndModal} size="lg" backdrop>
       <Modal.Header>
@@ -292,7 +358,9 @@ function CuratorEndModal({
                 "https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"
               }
             />
-            <CuratorSelectedLocations curatorLocations={curatorLocations} />
+            <DailyChallengeMarkers
+              locations={curatorRounds.map((c) => c.latlng)}
+            />
           </MapContainer>
           <div id="curator-end-controls">
             <Button variant="secondary" onClick={handleClose}>
@@ -308,19 +376,28 @@ function CuratorEndModal({
   );
 }
 
-function CuratorSelectedLocations({
-  curatorLocations,
+/**
+ * Returns markers for the provided latlng locations
+ * and fits the map view to the markers after the delay.
+ */
+function DailyChallengeMarkers({
+  locations,
+  delay = 1500,
 }: {
-  curatorLocations: L.LatLng[];
+  locations: L.LatLng[];
+  delay?: number;
 }) {
   const map = useMap();
   setTimeout(() => {
-    map.fitBounds(L.latLngBounds(curatorLocations), { padding: [50, 50] });
-  }, 1500);
+    map.fitBounds(L.latLngBounds(locations), { padding: [50, 50] });
+  }, delay);
+
   return (
     <>
-      {curatorLocations.map((position, index) => (
-        <CuratorMarker position={position} index={index} key={index} />
+      {locations.map((position, index) => (
+        <Marker position={position} key={index}>
+          <Tooltip permanent>{index + 1}</Tooltip>
+        </Marker>
       ))}
     </>
   );
