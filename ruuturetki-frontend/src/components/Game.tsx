@@ -5,11 +5,12 @@ import { GameState, GameSettings } from "../types/types.ts";
 import getRandomLatLng from "../utils/getRandomLatLng.ts";
 
 function Game({ gameSettings }: { gameSettings: GameSettings }) {
+  const zoomLevel = gameSettings.city === "Helsinki" ? 17 : 18; // Helsinki 17, Turku 18
   const startState: GameState = {
     roundId: 0,
     locations: [...Array(5)].map(() => getRandomLatLng(gameSettings.city)),
     guesses: [],
-    zooms: [...Array(5)].map(() => 17),
+    zooms: [...Array(5)].map(() => zoomLevel),
     score: [],
     distanceMoved: 0,
     picked: false,

@@ -16,6 +16,21 @@ function PlayModal({
 }) {
   const navigate = useNavigate();
 
+  const ortolayersHelsinki: GameSettings["ortolayer"][] = [
+    "avoindata:Ortoilmakuva_1943",
+    "avoindata:Ortoilmakuva_1969",
+    "avoindata:Ortoilmakuva_1997",
+    "avoindata:Ortoilmakuva_2024_5cm",
+  ];
+  const ortolayersTurku: GameSettings["ortolayer"][] = [
+    "Turku ilmakuva 1939",
+    "Turku ilmakuva 1958",
+    "Turku ilmakuva 1973",
+    "Turku ilmakuva 1998",
+    "Turku ilmakuva 2010",
+    "Ilmakuva 2022 True ortho",
+  ];
+
   return (
     <>
       <Modal
@@ -28,8 +43,11 @@ function PlayModal({
         <Modal.Header closeButton>
           <Modal.Title>Time to get mapping!</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <div id="gamemode-selection">
+        <Modal.Body id="play-modal-body">
+          <label htmlFor="game-settings" className="play-modal-label">
+            Game settings
+          </label>
+          <div id="game-settings">
             <Form>
               <Form.Check
                 inline
@@ -57,99 +75,59 @@ function PlayModal({
               />
             </Form>
           </div>
-          <div id="year-selection">
-            <Button
-              className="y-button"
-              variant="secondary"
-              onClick={() => {
-                setGameSettings({
-                  ...gameSettings,
-                  city: "Helsinki",
-                  ortolayer: "avoindata:Ortoilmakuva_1943",
-                  wmsurl: "https://kartta.hel.fi/ws/geoserver/avoindata/wms?",
-                  attribution:
-                    '&copy; <a href=https://hri.fi/data/fi/dataset/helsingin-ortoilmakuvat target="_blank">Helsingin kaupunki, kaupunkimittauspalvelut 2025</a>',
-                  wmsversion: "1.1.1.1",
-                });
-                navigate("/game");
-              }}
-            >
-              1940's
-            </Button>
-            <Button
-              className="y-button"
-              variant="secondary"
-              onClick={() => {
-                setGameSettings({
-                  ...gameSettings,
-                  city: "Helsinki",
-                  ortolayer: "avoindata:Ortoilmakuva_1969",
-                  wmsurl: "https://kartta.hel.fi/ws/geoserver/avoindata/wms?",
-                  attribution:
-                    '&copy; <a href=https://hri.fi/data/fi/dataset/helsingin-ortoilmakuvat target="_blank">Helsingin kaupunki, kaupunkimittauspalvelut 2025</a>',
-                  wmsversion: "1.1.1.1",
-                });
-                navigate("/game");
-              }}
-            >
-              1960's
-            </Button>
-            <Button
-              className="y-button"
-              variant="secondary"
-              onClick={() => {
-                setGameSettings({
-                  ...gameSettings,
-                  city: "Helsinki",
-                  ortolayer: "avoindata:Ortoilmakuva_1997",
-                  wmsurl: "https://kartta.hel.fi/ws/geoserver/avoindata/wms?",
-                  attribution:
-                    '&copy; <a href=https://hri.fi/data/fi/dataset/helsingin-ortoilmakuvat target="_blank">Helsingin kaupunki, kaupunkimittauspalvelut 2025</a>',
-                  wmsversion: "1.1.1.1",
-                });
-                navigate("/game");
-              }}
-            >
-              1990's
-            </Button>
-            <Button
-              className="y-button"
-              variant="secondary"
-              onClick={() => {
-                setGameSettings({
-                  ...gameSettings,
-                  city: "Helsinki",
-                  ortolayer: "avoindata:Ortoilmakuva_2024_5cm",
-                  wmsurl: "https://kartta.hel.fi/ws/geoserver/avoindata/wms?",
-                  attribution:
-                    '&copy; <a href=https://hri.fi/data/fi/dataset/helsingin-ortoilmakuvat target="_blank">Helsingin kaupunki, kaupunkimittauspalvelut 2025</a>',
-                  wmsversion: "1.1.1.1",
-                });
-                navigate("/game");
-              }}
-            >
-              2020's
-            </Button>
+          <label htmlFor="helsinki" className="play-modal-label">
+            Helsinki
+          </label>
+          <div id="helsinki">
+            {/* Helsinki ortolayer buttons */}
+            {ortolayersHelsinki.map((layerName) => (
+              <Button
+                className="y-button"
+                variant="secondary"
+                onClick={() => {
+                  setGameSettings({
+                    ...gameSettings,
+                    city: "Helsinki",
+                    ortolayer: layerName,
+                    wmsurl: "https://kartta.hel.fi/ws/geoserver/avoindata/wms?",
+                    attribution:
+                      '&copy; <a href=https://hri.fi/data/fi/dataset/helsingin-ortoilmakuvat target="_blank">Helsingin kaupunki, kaupunkimittauspalvelut 2025</a>',
+                    wmsversion: "1.1.1.1",
+                  });
+                  navigate("/game");
+                }}
+              >
+                {/* Displayed button name for example "1940's" or "2010's" */}
+                {layerName.match(/[0-9][0-9][0-9]/) + "0's"}
+              </Button>
+            ))}
           </div>
+          <label htmlFor="turku" className="play-modal-label">
+            Turku
+          </label>
           <div id="turku">
-            <Button
-              className="y-button"
-              variant="secondary"
-              onClick={() => {
-                setGameSettings({
-                  ...gameSettings,
-                  city: "Turku",
-                  ortolayer: "Ilmakuva 2022 True ortho",
-                  wmsurl: "https://turku.asiointi.fi/teklaogcweb/WMS.ashx",
-                  attribution:
-                    '&copy; <a href=https://www.avoindata.fi/data/fi/dataset/turun-seudun-ilmakuva target="_blank">Turun Kaupunkiympäristö</a>',
-                  wmsversion: "1.1.1",
-                });
-                navigate("/game");
-              }}
-            >
-              2020's
-            </Button>
+            {/* Turku ortolayer buttons */}
+            {ortolayersTurku.map((layerName) => (
+              <Button
+                className="y-button"
+                variant="secondary"
+                onClick={() => {
+                  setGameSettings({
+                    ...gameSettings,
+                    city: "Turku",
+                    ortolayer: layerName,
+                    wmsurl: "https://turku.asiointi.fi/teklaogcweb/WMS.ashx",
+                    attribution:
+                      '&copy; <a href=https://www.avoindata.fi/data/fi/dataset/turun-seudun-ilmakuva target="_blank">Turun Kaupunkiympäristö</a>',
+                    wmsversion: "1.1.1",
+                  });
+                  navigate("/game");
+                }}
+              >
+                {/* Displayed button name for example "1950's" or "2020's" */}
+                {layerName.match(/[0-9][0-9][0-9]/) + "0's"}
+              </Button>
+            ))}
           </div>
         </Modal.Body>
       </Modal>
