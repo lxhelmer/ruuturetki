@@ -183,16 +183,24 @@ body {
   margin-right: auto;
 }
 
-#year-selection,
-#gamemode-selection,
+/* Play modal */
+#play-modal-body {
+  display: flex;
+  flex-direction: column;
+}
+label.play-modal-label {
+  margin: auto;
+}
+#game-settings,
+#helsinki,
 #turku {
   max-width: fit-content;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto 2rem auto;
   display: flex;
   gap: 10px;
   padding: 10px;
 }
+/*  */
 
 #modal-score {
   padding-top: 10px;
