@@ -20,10 +20,13 @@ export interface LUser {
   admin: boolean;
 }
 
-export interface GameSettings {
+export interface GameSettings extends WMSOptions {
   dragging: boolean; // Is moving allowed
   timed: false | number; // Number is the round time in seconds
   city: "Helsinki" | "Turku";
+}
+
+export interface WMSOptions {
   ortolayer:
     | "avoindata:Ortoilmakuva_1943"
     | "avoindata:Ortoilmakuva_1969"

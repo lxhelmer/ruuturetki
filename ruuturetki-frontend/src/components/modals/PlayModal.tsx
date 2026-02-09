@@ -8,28 +8,17 @@ function PlayModal({
   handleClosePlay,
   setGameSettings,
   gameSettings,
+  ortolayersHelsinki,
+  ortolayersTurku,
 }: {
   show: boolean;
   handleClosePlay: () => void;
   setGameSettings: React.Dispatch<React.SetStateAction<GameSettings>>;
   gameSettings: GameSettings;
+  ortolayersHelsinki: GameSettings["ortolayer"][];
+  ortolayersTurku: GameSettings["ortolayer"][];
 }) {
   const navigate = useNavigate();
-
-  const ortolayersHelsinki: GameSettings["ortolayer"][] = [
-    "avoindata:Ortoilmakuva_1943",
-    "avoindata:Ortoilmakuva_1969",
-    "avoindata:Ortoilmakuva_1997",
-    "avoindata:Ortoilmakuva_2024_5cm",
-  ];
-  const ortolayersTurku: GameSettings["ortolayer"][] = [
-    "Turku ilmakuva 1939",
-    "Turku ilmakuva 1958",
-    "Turku ilmakuva 1973",
-    "Turku ilmakuva 1998",
-    "Turku ilmakuva 2010",
-    "Ilmakuva 2022 True ortho",
-  ];
 
   return (
     <>
