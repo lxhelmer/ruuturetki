@@ -198,7 +198,8 @@ function MapComponents({
     } else {
       /* Both modes and a location guessed*/
       // Calculate the score of the guess
-      const pickScore = getDistance(
+      const distanceMoved = gameState.distanceMoved;
+      let pickScore = getDistance(
         {
           latitude: gameState.locations[gameState.roundId].lat,
           longitude: gameState.locations[gameState.roundId].lng,
@@ -208,8 +209,13 @@ function MapComponents({
           longitude: gameState.guesses[gameState.roundId].lng,
         },
       );
-      const distanceMoved = gameState.distanceMoved;
+      // Making a guess inside a threshold distance gives a perfect pick score
+      const threshold = 10
+      pickScore = pickScore < threshold ? 0 : pickScore
+      
+      // Score calculation formula
       const score = Math.max(10000 - pickScore * 2 - distanceMoved * 2.5, 0);
+      
       // Set round end calculations to the gameState
       const roundEndState = {
         ...gameState,
