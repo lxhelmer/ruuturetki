@@ -39,39 +39,35 @@ body {
   left: 0;
 }
 
-#reset-button {
-  margin-left: -10px;
-}
-
-#select-button {
-  margin-left: 10px;
-}
-
-#home-button {
-  margin: 10px;
-}
-
 #controls {
   position: absolute;
   width: 100%;
-  bottom: 10px;
-  margin-left: auto;
-  margin-right: auto;
+  bottom: 1rem;
   z-index: 500;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
-#prac-controls {
-  position: absolute;
-  width: 100%;
-  bottom: 10px;
-  margin-left: auto;
-  margin-right: auto;
-  z-index: 500;
+/* Practice controls */
+#ortolayer-selection:hover {
+  background: #212529;
+  cursor: default;
 }
-
-#faux-button {
-  width: 500px;
+div.year-selection:hover {
+  cursor: pointer;
 }
+form.ortolayer-selection {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+select.city-selection:hover,
+label.form-check-label:hover,
+input.form-check-input:hover {
+  cursor: pointer;
+}
+/*  */
 
 #curator-controls,
 #curator-info,

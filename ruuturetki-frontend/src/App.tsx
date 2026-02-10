@@ -21,9 +21,13 @@ import HelpModal from "./components/modals/HelpModal";
 function StartMenu({
   setGameSettings,
   gameSettings,
+  ortolayersHelsinki,
+  ortolayersTurku,
 }: {
   setGameSettings: React.Dispatch<React.SetStateAction<GameSettings>>;
   gameSettings: GameSettings;
+  ortolayersHelsinki: GameSettings["ortolayer"][];
+  ortolayersTurku: GameSettings["ortolayer"][];
 }) {
   const [showPlayModal, setPlayModal] = useState(false);
   const [showHelpModal, setHelpModal] = useState(false);
@@ -74,6 +78,8 @@ function StartMenu({
         handleClosePlay={handleClosePlay}
         setGameSettings={setGameSettings}
         gameSettings={gameSettings}
+        ortolayersHelsinki={ortolayersHelsinki}
+        ortolayersTurku={ortolayersTurku}
       />
       <HelpModal show={showHelpModal} handleCloseHelp={handleCloseHelp} />
       <MapContainer id="map" {...mapOptions}>
@@ -116,18 +122,43 @@ function App() {
     city: "Helsinki",
   });
 
+  const ortolayersHelsinki: GameSettings["ortolayer"][] = [
+    "avoindata:Ortoilmakuva_1943",
+    "avoindata:Ortoilmakuva_1969",
+    "avoindata:Ortoilmakuva_1997",
+    "avoindata:Ortoilmakuva_2024_5cm",
+  ];
+  const ortolayersTurku: GameSettings["ortolayer"][] = [
+    "Turku ilmakuva 1939",
+    "Turku ilmakuva 1958",
+    "Turku ilmakuva 1973",
+    "Turku ilmakuva 1998",
+    "Turku ilmakuva 2010",
+    "Ilmakuva 2022 True ortho",
+  ];
+
   return (
     <>
       <Router>
         <Routes>
           <Route path="/game" element={<Game gameSettings={gameSettings} />} />
-          <Route path="/practice" element={<Practice />} />
+          <Route
+            path="/practice"
+            element={
+              <Practice
+                ortolayersHelsinki={ortolayersHelsinki}
+                ortolayersTurku={ortolayersTurku}
+              />
+            }
+          />
           <Route
             path="/"
             element={
               <StartMenu
                 setGameSettings={setGameSettings}
                 gameSettings={gameSettings}
+                ortolayersHelsinki={ortolayersHelsinki}
+                ortolayersTurku={ortolayersTurku}
               />
             }
           />
