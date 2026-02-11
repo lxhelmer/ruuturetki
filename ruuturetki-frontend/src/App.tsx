@@ -96,7 +96,7 @@ function StartMenu({
           practice
         </Button>
         <Button variant="dark" size="lg" onClick={() => handleShowHelp()}>
-          help
+          how to play
         </Button>
       </div>
     </>
