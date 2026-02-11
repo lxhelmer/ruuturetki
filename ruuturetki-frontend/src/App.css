@@ -198,6 +198,16 @@ label.play-modal-label {
 }
 /*  */
 
+/* Help modal */
+div.help-content img {
+  width: 100%;
+  margin: 0.5rem 0 1rem 0;
+}
+table.control-button-explanations td {
+  padding: 0 0 1rem 0;
+}
+/*  */
+
 #modal-score {
   padding-top: 10px;
 }
