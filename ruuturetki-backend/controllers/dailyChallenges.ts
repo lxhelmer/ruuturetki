@@ -5,12 +5,14 @@ import { z } from "zod";
 
 const newDailyChallengeSchema = z.object({
   date: z.string(),
-  dailyChallenge: z.object({
-    id: z.number(),
-    zoom: z.number(),
-    draggable: z.boolean(),
-    latlng: z.object({ lat: z.number(), lng: z.number() }),
-  }),
+  dailyChallenge: z.array(
+    z.object({
+      id: z.number(),
+      zoom: z.number(),
+      draggable: z.boolean(),
+      latlng: z.object({ lat: z.number(), lng: z.number() }),
+    }),
+  ),
   maplayer: z.string(),
 });
 
