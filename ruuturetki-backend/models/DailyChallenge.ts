@@ -9,7 +9,7 @@ interface DailyChallenge {
     zoom: number;
     draggable: boolean;
     latlng: { lat: number; lng: number };
-  };
+  }[];
   maplayer: string;
 }
 
