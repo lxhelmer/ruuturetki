@@ -1,6 +1,6 @@
-import mongoose from 'mongoose'
+import mongoose from "mongoose";
 
-mongoose.set('strictQuery', false)
+mongoose.set("strictQuery", false);
 
 interface IUser {
   username: string;
@@ -9,7 +9,7 @@ interface IUser {
   admin: boolean;
 }
 
-export type NewUserEntry = Omit<IUser, 'games'>;
+export type NewUserEntry = Omit<IUser, "games">;
 
 const userSchema = new mongoose.Schema<IUser>({
   username: {
@@ -20,21 +20,22 @@ const userSchema = new mongoose.Schema<IUser>({
   games: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Note'
-    }
+      ref: "Note",
+    },
   ],
   admin: Boolean,
-})
+});
 
-userSchema.set('toJSON', {
+userSchema.set("toJSON", {
   transform: (_document, returnedObject) => {
-    returnedObject.id = returnedObject._id.toString()
-    delete returnedObject._id
-    delete returnedObject.__v
-    delete returnedObject.pswd_hash
-  }
-})
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+    returnedObject.id = returnedObject._id.toString();
+    delete returnedObject._id;
+    delete returnedObject.__v;
+    delete returnedObject.pswd_hash;
+  },
+});
 
-const User = mongoose.model<IUser>('User', userSchema);
+const User = mongoose.model<IUser>("User", userSchema);
 
-export default User
+export default User;

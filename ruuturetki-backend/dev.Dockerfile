@@ -1,5 +1,5 @@
-from node:23
-workdir /usr/src/app
+FROM node:23
+WORKDIR /usr/src/app
 COPY . .
 RUN npm install
 

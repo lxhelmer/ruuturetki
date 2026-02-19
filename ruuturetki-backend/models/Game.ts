@@ -1,6 +1,6 @@
-import mongoose from 'mongoose'
+import mongoose from "mongoose";
 
-mongoose.set('strictQuery', false)
+mongoose.set("strictQuery", false);
 
 interface IGame {
   rounds: number;
@@ -15,19 +15,19 @@ const gameSchema = new mongoose.Schema<IGame>({
   year: Number,
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    ref: "User",
   },
-})
+});
 
-
-gameSchema.set('toJSON', {
+gameSchema.set("toJSON", {
   transform: (_document, returnedObject) => {
-    returnedObject.id = returnedObject._id.toString()
-    delete returnedObject._id
-    delete returnedObject.__v
-  }
-})
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+    returnedObject.id = returnedObject._id.toString();
+    delete returnedObject._id;
+    delete returnedObject.__v;
+  },
+});
 
-const Game = mongoose.model<IGame>('Game', gameSchema);
+const Game = mongoose.model<IGame>("Game", gameSchema);
 
 export default Game;
