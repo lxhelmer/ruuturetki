@@ -5,6 +5,7 @@ import { env } from "./env.js";
 import gamesRouter from "./controllers/games.js";
 import usersRouter from "./controllers/users.js";
 import loginRouter from "./controllers/login.js";
+import dailyChallengesRouter from "./controllers/dailyChallenges.js";
 
 const app = express();
 
@@ -22,5 +23,6 @@ app.use(express.json());
 app.use("/api/games", gamesRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/login", loginRouter);
+app.use("/api/dailychallenges", dailyChallengesRouter);
 
 export default app;

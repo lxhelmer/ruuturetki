@@ -1,5 +1,5 @@
 import { Button, Modal } from "react-bootstrap";
-import calendarservice from "../../services/calendar";
+import calendarservice from "../../services/dailyChallenge";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
@@ -63,16 +63,8 @@ export default function Calendar({
    *  */
   const loadCalendar = async () => {
     try {
-      const calendar = await calendarservice.getGames();
-      console.log(calendar);
-    } catch {
-      console.log("could not fetch games");
-    }
-  };
-  const postCalendar = async () => {
-    try {
-      const calendar = await calendarservice.getGames();
-      console.log(calendar);
+      const calendar = await calendarservice.getAll();
+      console.log("Calendar loaded, dailies:", calendar);
     } catch {
       console.log("could not fetch games");
     }
@@ -129,9 +121,6 @@ export default function Calendar({
         <Modal.Body>
           <Button variant="secondary" onClick={loadCalendar}>
             load games
-          </Button>
-          <Button variant="secondary" onClick={postCalendar}>
-            post calendar
           </Button>
           <ThemeProvider theme={darkTheme}>
             <CssBaseline />
