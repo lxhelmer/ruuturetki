@@ -69,3 +69,14 @@ export interface CuratorRound {
   zoom: number;
   draggable: boolean;
 }
+
+export interface DailyChallenge {
+  date: string;
+  dailyChallenge: {
+    id: number;
+    zoom: number;
+    draggable: boolean;
+    latlng: { lat: number; lng: number };
+  }[];
+  maplayer: string;
+}

@@ -10,7 +10,8 @@ import {
 import L from "leaflet";
 import { useEffect, useRef, useState } from "react";
 import markerIcon from "./MarkerIcon";
-import { CuratorRound, FormEvent } from "../types/types";
+import { CuratorRound, DailyChallenge, FormEvent } from "../types/types";
+import dailyChallengeService from "../services/dailyChallenge";
 
 export default function Curator({ mapLayer }: { mapLayer: string }) {
   // TO DO: implement admin check
@@ -321,6 +322,13 @@ function CuratorEndModal({
     console.log("Date selected:", selectedDate);
     console.log("Submit daily:", curatorRounds);
     console.log("maplayer:", mapLayer);
+    const newDailyChallenge: DailyChallenge = {
+      date: selectedDate,
+      dailyChallenge: curatorRounds,
+      maplayer: mapLayer,
+    };
+    console.log("Posting a new daily challenge:", newDailyChallenge);
+    dailyChallengeService.create(newDailyChallenge);
     // TO DO:
     // ...
 
