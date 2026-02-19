@@ -17,6 +17,7 @@ import Practice from "./components/Practice";
 import L from "leaflet";
 import getRandomLatLng from "./utils/getRandomLatLng";
 import HelpModal from "./components/modals/HelpModal";
+import Calendar from "./components/modals/Calendar";
 
 function StartMenu({
   setGameSettings,
@@ -31,6 +32,7 @@ function StartMenu({
 }) {
   const [showPlayModal, setPlayModal] = useState(false);
   const [showHelpModal, setHelpModal] = useState(false);
+  const [showCalendarModal, setCalendarModal] = useState(false);
   const navigate = useNavigate();
 
   const handleClosePlay = () => setPlayModal(false);
@@ -38,6 +40,9 @@ function StartMenu({
 
   const handleCloseHelp = () => setHelpModal(false);
   const handleShowHelp = () => setHelpModal(true);
+
+  const handleCloseCalendar = () => setCalendarModal(false);
+  const handleShowCalendar = () => setCalendarModal(true);
 
   useEffect(() => {
     // Reset default game settings when play modal is opened.
@@ -82,6 +87,7 @@ function StartMenu({
         ortolayersTurku={ortolayersTurku}
       />
       <HelpModal show={showHelpModal} handleCloseHelp={handleCloseHelp} />
+      <Calendar show={showCalendarModal} handleCloseCalendar={handleCloseCalendar} />
       <MapContainer id="map" {...mapOptions}>
         <WMSTileLayer {...wmsOptions} />
       </MapContainer>
@@ -97,6 +103,9 @@ function StartMenu({
         </Button>
         <Button variant="dark" size="lg" onClick={() => handleShowHelp()}>
           how to play
+        </Button>
+        <Button variant="dark" size="lg" onClick={() => handleShowCalendar()}>
+          calendar
         </Button>
       </div>
     </>
