@@ -12,6 +12,7 @@ import { useEffect, useRef, useState } from "react";
 import markerIcon from "./MarkerIcon";
 import { CuratorRound, DailyChallenge, FormEvent } from "../types/types";
 import dailyChallengeService from "../services/dailyChallenge";
+import MapMarkers from "./MapMarkers";
 
 export default function Curator({ mapLayer }: { mapLayer: string }) {
   // TO DO: implement admin check
@@ -366,9 +367,7 @@ function CuratorEndModal({
                 "https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"
               }
             />
-            <DailyChallengeMarkers
-              locations={curatorRounds.map((c) => c.latlng)}
-            />
+            <MapMarkers locations={curatorRounds.map((c) => c.latlng)} />
           </MapContainer>
           <div id="curator-end-controls">
             <Button variant="secondary" onClick={handleClose}>
@@ -381,32 +380,5 @@ function CuratorEndModal({
         </Form>
       </Modal.Body>
     </Modal>
-  );
-}
-
-/**
- * Returns markers for the provided latlng locations
- * and fits the map view to the markers after the delay.
- */
-function DailyChallengeMarkers({
-  locations,
-  delay = 1500,
-}: {
-  locations: L.LatLng[];
-  delay?: number;
-}) {
-  const map = useMap();
-  setTimeout(() => {
-    map.fitBounds(L.latLngBounds(locations), { padding: [50, 50] });
-  }, delay);
-
-  return (
-    <>
-      {locations.map((position, index) => (
-        <Marker position={position} key={index}>
-          <Tooltip permanent>{index + 1}</Tooltip>
-        </Marker>
-      ))}
-    </>
   );
 }
