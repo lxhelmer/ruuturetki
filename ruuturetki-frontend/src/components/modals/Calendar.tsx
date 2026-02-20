@@ -9,6 +9,9 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { PickersDay, StaticDatePicker } from "@mui/x-date-pickers";
 import { memo, useMemo, useState } from "react";
 import { PickerValue } from "@mui/x-date-pickers/internals";
+import { DailyChallenge } from "../../types/types";
+import { MapContainer, TileLayer } from "react-leaflet";
+import MapMarkers from "../MapMarkers";
 
 // Set monday as the first day of the week
 dayjs.extend(updateLocale);
@@ -22,12 +25,109 @@ const darkTheme = createTheme({
   },
 });
 // Some arbitrary data for testing the calendar
-const dailyChallenges = [
-  { date: "2026-02-01", value: 1 },
-  { date: "2026-02-04", value: 4 },
-  { date: "2026-02-08", value: 3 },
-  { date: "2026-02-12", value: 87 },
-  { date: "2026-02-24", value: 166 },
+const dailyChallenges: DailyChallenge[] = [
+  {
+    date: "2026-02-11",
+    dailyChallenge: [
+      {
+        id: 0,
+        latlng: {
+          lat: 60.17072018908489,
+          lng: 24.93802070617676,
+        },
+        zoom: 16,
+        draggable: false,
+      },
+      {
+        id: 1,
+        latlng: {
+          lat: 60.17313229308546,
+          lng: 24.93973731994629,
+        },
+        zoom: 16,
+        draggable: false,
+      },
+      {
+        id: 2,
+        latlng: {
+          lat: 60.17347381562102,
+          lng: 24.94458675384522,
+        },
+        zoom: 16,
+        draggable: false,
+      },
+      {
+        id: 3,
+        latlng: {
+          lat: 60.171638090243235,
+          lng: 24.945359230041507,
+        },
+        zoom: 16,
+        draggable: false,
+      },
+      {
+        id: 4,
+        latlng: {
+          lat: 60.169994388616885,
+          lng: 24.942355155944824,
+        },
+        zoom: 16,
+        draggable: true,
+      },
+    ],
+    maplayer: "avoindata:Ortoilmakuva_2024_5cm",
+  },
+  {
+    date: "2026-02-17",
+    dailyChallenge: [
+      {
+        id: 0,
+        latlng: {
+          lat: 60.44799054795659,
+          lng: 22.26458787918091,
+        },
+        zoom: 16,
+        draggable: false,
+      },
+      {
+        id: 1,
+        latlng: {
+          lat: 60.44875253025832,
+          lng: 22.256004810333256,
+        },
+        zoom: 17,
+        draggable: false,
+      },
+      {
+        id: 2,
+        latlng: {
+          lat: 60.450953712063914,
+          lng: 22.256669998168945,
+        },
+        zoom: 18,
+        draggable: false,
+      },
+      {
+        id: 3,
+        latlng: {
+          lat: 60.44723913123926,
+          lng: 22.26063966751099,
+        },
+        zoom: 18,
+        draggable: false,
+      },
+      {
+        id: 4,
+        latlng: {
+          lat: 60.44463549662398,
+          lng: 22.267205715179447,
+        },
+        zoom: 18,
+        draggable: true,
+      },
+    ],
+    maplayer: "Ilmakuva 2022 True ortho",
+  },
 ];
 
 /**
@@ -117,29 +217,33 @@ export default function Calendar({
       >
         <Modal.Header closeButton>
           <Modal.Title>Daily Calendar</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
           <Button variant="secondary" onClick={loadCalendar}>
             load games
           </Button>
-          <ThemeProvider theme={darkTheme}>
-            <CssBaseline />
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <StaticDatePicker
-                defaultValue={today}
-                slots={{ day: CustomDay }} // Highlight days with daily challenges
-                slotProps={{ actionBar: { actions: [] } }} // Disable default buttons
-                displayWeekNumber // Important
-                value={selectedDate}
-                onChange={handleDateChange}
+        </Modal.Header>
+        <Modal.Body>
+          <div className="calendar-modal-body">
+            <div className="calendar">
+              <ThemeProvider theme={darkTheme}>
+                <CssBaseline />
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <StaticDatePicker
+                    defaultValue={today}
+                    slots={{ day: CustomDay }} // Highlight days with daily challenges
+                    slotProps={{ actionBar: { actions: [] } }} // Disable default buttons
+                    displayWeekNumber // Important
+                    value={selectedDate}
+                    onChange={handleDateChange}
+                  />
+                </LocalizationProvider>
+              </ThemeProvider>
+            </div>
+            <div className="daily-challenge-content">
+              <DailyChallengeContent
+                dailyChallenges={dailyChallenges}
+                selectedDate={selectedDate}
               />
-            </LocalizationProvider>
-          </ThemeProvider>
-          <div className="daily-challenge-content">
-            <DailyChallenge
-              dailyChallenges={dailyChallenges}
-              selectedDate={selectedDate}
-            />
+            </div>
           </div>
         </Modal.Body>
       </Modal>
@@ -150,23 +254,55 @@ export default function Calendar({
 /**
  * Renders a daily challenge content if the challenge exists for the selected date.
  */
-function DailyChallenge({
+function DailyChallengeContent({
   dailyChallenges,
   selectedDate,
 }: {
-  dailyChallenges: { date: string; value: number }[];
+  dailyChallenges: DailyChallenge[];
   selectedDate: dayjs.Dayjs;
 }) {
   const dailyChallenge = dailyChallenges.find(
     (daily) => daily.date === selectedDate.format("YYYY-MM-DD"),
   );
 
-  return dailyChallenge === undefined ? (
-    <h4>No daily challenge yet!</h4>
-  ) : (
+  // Exit early if no daily challenge for the selected date
+  if (dailyChallenge === undefined)
+    return <h5>Daily challenge for the selected day</h5>;
+
+  const resultMapOptions: L.MapOptions = {
+    center: [60.170678, 24.941543],
+    zoom: 13,
+  };
+
+  const roundLocations = dailyChallenge.dailyChallenge.map(
+    (round) => round.latlng,
+  );
+  return (
     <>
-      <h4>Daily challenge</h4>
-      <p>{dailyChallenge.value}</p>
+      <h5>Daily challenge for the selected day</h5>
+      <table>
+        <tbody>
+          <tr>
+            <td>
+              <b>Maplayer:</b>
+            </td>
+            <td>
+              <i>{dailyChallenge.maplayer}</i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <MapContainer id="calendar-map" {...resultMapOptions}>
+        <TileLayer
+          attribution={
+            '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          }
+          url={
+            "https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"
+          }
+        />
+        <MapMarkers locations={roundLocations} />
+      </MapContainer>
     </>
   );
 }
