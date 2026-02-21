@@ -7,7 +7,7 @@ import updateLocale from "dayjs/plugin/updateLocale";
 import { ThemeProvider, createTheme, styled } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { PickersDay, StaticDatePicker } from "@mui/x-date-pickers";
-import { memo, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { PickerValue } from "@mui/x-date-pickers/internals";
 import { DailyChallenge } from "../../types/types";
 import { MapContainer, TileLayer } from "react-leaflet";
@@ -25,7 +25,7 @@ const darkTheme = createTheme({
   },
 });
 // Some arbitrary data for testing the calendar
-const dailyChallenges: DailyChallenge[] = [
+const dailyChallengesExamples: DailyChallenge[] = [
   {
     date: "2026-02-11",
     dailyChallenge: [
@@ -140,14 +140,42 @@ export default function Calendar({
   show: boolean;
   handleCloseCalendar: () => void;
 }) {
-  // Convert array to set for faster lookup
-  const dateSet = useMemo(() => {
-    return new Set(dailyChallenges.map((daily) => daily.date));
-  }, []);
-
   // Initialize state variables
   const today = dayjs();
   const [selectedDate, setSelectedDate] = useState(today);
+  const [dailyChallenges, setDailyChallenges] = useState<DailyChallenge[]>(
+    dailyChallengesExamples,
+  );
+
+  // Load daily challenges
+  useEffect(() => {
+    fetchDailies();
+  }, []);
+
+  // Convert dailychallenge dates to a set for faster lookup
+  const dateSet = useMemo(() => {
+    try {
+      const set = new Set(dailyChallenges.map((daily) => daily.date));
+      console.log("Memoized set:", set);
+      return set;
+    } catch (error) {
+      console.log("Cannot convert daily challenges dates to a set:", error);
+      return new Set(""); // Return empty set if conversion fails
+    }
+  }, [dailyChallenges]);
+
+  /**
+   * Loads daily challenges from the database and saves them to the state variable.
+   */
+  async function fetchDailies() {
+    try {
+      const response: DailyChallenge[] = await calendarservice.getAll();
+      console.log("Dailies fetched, response:", response);
+      setDailyChallenges(response);
+    } catch (error) {
+      console.log("Cannot fetch dailies:", error);
+    }
+  }
 
   /**
    * Handles clicking different dates on the calendar by saving
@@ -163,8 +191,7 @@ export default function Calendar({
    *  */
   const loadCalendar = async () => {
     try {
-      const calendar = await calendarservice.getAll();
-      console.log("Calendar loaded, dailies:", calendar);
+      fetchDailies();
     } catch {
       console.log("could not fetch games");
     }
@@ -179,7 +206,7 @@ export default function Calendar({
       color: theme.palette.primary.contrastText,
     },
   }));
-  const CustomDay = memo(function CustomDay({
+  const CustomDay = function CustomDay({
     day,
     outsideCurrentMonth,
     onDaySelect,
@@ -204,7 +231,7 @@ export default function Calendar({
         day={day}
       />
     );
-  });
+  };
 
   return (
     <>
@@ -217,8 +244,8 @@ export default function Calendar({
       >
         <Modal.Header closeButton>
           <Modal.Title>Daily Calendar</Modal.Title>
-          <Button variant="secondary" onClick={loadCalendar}>
-            load games
+          <Button className="reload" variant="secondary" onClick={loadCalendar}>
+            reload daily challenges
           </Button>
         </Modal.Header>
         <Modal.Body>
@@ -261,15 +288,21 @@ function DailyChallengeContent({
   dailyChallenges: DailyChallenge[];
   selectedDate: dayjs.Dayjs;
 }) {
-  const dailyChallenge = dailyChallenges.find(
-    (daily) => daily.date === selectedDate.format("YYYY-MM-DD"),
-  );
+  // Find a daily challenge corresponding to the selected date
+  let dailyChallenge: DailyChallenge | undefined;
+  try {
+    dailyChallenge = dailyChallenges.find(
+      (daily) => daily.date === selectedDate.format("YYYY-MM-DD"),
+    );
+  } catch (error) {
+    console.log("Cannot find daily challenge:", error);
+  }
 
   // Exit early if no daily challenge for the selected date
   if (dailyChallenge === undefined)
     return <h5>Daily challenge for the selected day</h5>;
 
-  const resultMapOptions: L.MapOptions = {
+  const mapOptions: L.MapOptions = {
     center: [60.170678, 24.941543],
     zoom: 13,
   };
@@ -277,6 +310,7 @@ function DailyChallengeContent({
   const roundLocations = dailyChallenge.dailyChallenge.map(
     (round) => round.latlng,
   );
+
   return (
     <>
       <h5>Daily challenge for the selected day</h5>
@@ -292,7 +326,7 @@ function DailyChallengeContent({
           </tr>
         </tbody>
       </table>
-      <MapContainer id="calendar-map" {...resultMapOptions}>
+      <MapContainer id="calendar-map" {...mapOptions}>
         <TileLayer
           attribution={
             '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -301,7 +335,7 @@ function DailyChallengeContent({
             "https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"
           }
         />
-        <MapMarkers locations={roundLocations} />
+        <MapMarkers locations={roundLocations} delay={0} />
       </MapContainer>
     </>
   );

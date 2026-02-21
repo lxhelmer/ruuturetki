@@ -71,28 +71,30 @@ function HelpModal({
             </p>
             <h5>Control buttons</h5>
             <table className="control-button-explanations">
-              <tr>
-                <td>Reset map</td>
-                <td>
-                  Returns your view to the starting location of the round, if
-                  you have moved away from it.
-                </td>
-              </tr>
-              <tr>
-                <td>Select</td>
-                <td>Ends the round and shows you the round score.</td>
-              </tr>
-              <tr>
-                <td>Skip</td>
-                <td>
-                  Continues to the next round without showing the round score.
-                  The score for a skipped round will be 0.
-                </td>
-              </tr>
-              <tr>
-                <td>Exit</td>
-                <td>Ends the game and returns to main menu.</td>
-              </tr>
+              <tbody>
+                <tr>
+                  <td>Reset map</td>
+                  <td>
+                    Returns your view to the starting location of the round, if
+                    you have moved away from it.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Select</td>
+                  <td>Ends the round and shows you the round score.</td>
+                </tr>
+                <tr>
+                  <td>Skip</td>
+                  <td>
+                    Continues to the next round without showing the round score.
+                    The score for a skipped round will be 0.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Exit</td>
+                  <td>Ends the game and returns to main menu.</td>
+                </tr>
+              </tbody>
             </table>
             <h4 id="score-calculation">Round score calculation</h4>
             The maximum score per round is 10 000 which is decreased based on
