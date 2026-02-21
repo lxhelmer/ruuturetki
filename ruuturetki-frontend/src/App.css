@@ -223,6 +223,9 @@ div.daily-challenge-content {
   height: 100%;
   min-height: 0; /* AI said this is important 🙏 */
 }
+button.reload {
+  margin-left: auto;
+}
 /*  */
 
 #modal-score {

@@ -1,5 +1,6 @@
 import L from "leaflet";
 import { Marker, Tooltip, useMap } from "react-leaflet";
+import markerIcon from "./MarkerIcon";
 
 /**
  * Returns markers for the provided latlng locations
@@ -22,7 +23,7 @@ export default function MapMarkers({
   return (
     <>
       {locations.map((position, index) => (
-        <Marker position={position} key={index}>
+        <Marker position={position} key={index} icon={markerIcon}>
           <Tooltip permanent>{index + 1}</Tooltip>
         </Marker>
       ))}

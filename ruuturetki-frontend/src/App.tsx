@@ -86,8 +86,15 @@ function StartMenu({
         ortolayersHelsinki={ortolayersHelsinki}
         ortolayersTurku={ortolayersTurku}
       />
-      <HelpModal show={showHelpModal} handleCloseHelp={handleCloseHelp} />
-      <Calendar show={showCalendarModal} handleCloseCalendar={handleCloseCalendar} />
+      {showHelpModal && (
+        <HelpModal show={showHelpModal} handleCloseHelp={handleCloseHelp} />
+      )}
+      {showCalendarModal && (
+        <Calendar
+          show={showCalendarModal}
+          handleCloseCalendar={handleCloseCalendar}
+        />
+      )}
       <MapContainer id="map" {...mapOptions}>
         <WMSTileLayer {...wmsOptions} />
       </MapContainer>
