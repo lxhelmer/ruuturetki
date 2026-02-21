@@ -11,7 +11,7 @@ import { Button } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import "./App.css";
 import Game from "./components/Game";
-import { GameSettings } from "./types/types";
+import { DailyChallenge, GameSettings } from "./types/types";
 import PlayModal from "./components/modals/PlayModal";
 import Practice from "./components/Practice";
 import L from "leaflet";
@@ -22,11 +22,15 @@ import Calendar from "./components/modals/Calendar";
 function StartMenu({
   setGameSettings,
   gameSettings,
+  setChallenge,
   ortolayersHelsinki,
   ortolayersTurku,
 }: {
   setGameSettings: React.Dispatch<React.SetStateAction<GameSettings>>;
   gameSettings: GameSettings;
+  setChallenge: React.Dispatch<
+    React.SetStateAction<DailyChallenge | undefined>
+  >;
   ortolayersHelsinki: GameSettings["ortolayer"][];
   ortolayersTurku: GameSettings["ortolayer"][];
 }) {
@@ -53,6 +57,7 @@ function StartMenu({
         dragging: true,
         timed: false,
       });
+      setChallenge(undefined);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showPlayModal]);
@@ -93,6 +98,7 @@ function StartMenu({
         <Calendar
           show={showCalendarModal}
           handleCloseCalendar={handleCloseCalendar}
+          setChallenge={setChallenge}
         />
       )}
       <MapContainer id="map" {...mapOptions}>
@@ -137,6 +143,9 @@ function App() {
     ortolayer: "avoindata:Ortoilmakuva_1943",
     city: "Helsinki",
   });
+  const [challenge, setChallenge] = useState<DailyChallenge | undefined>(
+    undefined,
+  );
 
   const ortolayersHelsinki: GameSettings["ortolayer"][] = [
     "avoindata:Ortoilmakuva_1943",
@@ -157,7 +166,10 @@ function App() {
     <>
       <Router>
         <Routes>
-          <Route path="/game" element={<Game gameSettings={gameSettings} />} />
+          <Route
+            path="/game"
+            element={<Game gameSettings={gameSettings} challenge={challenge} />}
+          />
           <Route
             path="/practice"
             element={
@@ -173,6 +185,7 @@ function App() {
               <StartMenu
                 setGameSettings={setGameSettings}
                 gameSettings={gameSettings}
+                setChallenge={setChallenge}
                 ortolayersHelsinki={ortolayersHelsinki}
                 ortolayersTurku={ortolayersTurku}
               />

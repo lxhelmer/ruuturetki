@@ -12,6 +12,7 @@ import { PickerValue } from "@mui/x-date-pickers/internals";
 import { DailyChallenge } from "../../types/types";
 import { MapContainer, TileLayer } from "react-leaflet";
 import MapMarkers from "../MapMarkers";
+import { useNavigate } from "react-router-dom";
 
 // Set monday as the first day of the week
 dayjs.extend(updateLocale);
@@ -25,110 +26,161 @@ const darkTheme = createTheme({
   },
 });
 // Some arbitrary data for testing the calendar
-const dailyChallengesExamples: DailyChallenge[] = [
-  {
-    date: "2026-02-11",
-    dailyChallenge: [
-      {
-        id: 0,
-        latlng: {
-          lat: 60.17072018908489,
-          lng: 24.93802070617676,
-        },
-        zoom: 16,
-        draggable: false,
-      },
-      {
-        id: 1,
-        latlng: {
-          lat: 60.17313229308546,
-          lng: 24.93973731994629,
-        },
-        zoom: 16,
-        draggable: false,
-      },
-      {
-        id: 2,
-        latlng: {
-          lat: 60.17347381562102,
-          lng: 24.94458675384522,
-        },
-        zoom: 16,
-        draggable: false,
-      },
-      {
-        id: 3,
-        latlng: {
-          lat: 60.171638090243235,
-          lng: 24.945359230041507,
-        },
-        zoom: 16,
-        draggable: false,
-      },
-      {
-        id: 4,
-        latlng: {
-          lat: 60.169994388616885,
-          lng: 24.942355155944824,
-        },
-        zoom: 16,
-        draggable: true,
-      },
-    ],
-    maplayer: "avoindata:Ortoilmakuva_2024_5cm",
-  },
-  {
-    date: "2026-02-17",
-    dailyChallenge: [
-      {
-        id: 0,
-        latlng: {
-          lat: 60.44799054795659,
-          lng: 22.26458787918091,
-        },
-        zoom: 16,
-        draggable: false,
-      },
-      {
-        id: 1,
-        latlng: {
-          lat: 60.44875253025832,
-          lng: 22.256004810333256,
-        },
-        zoom: 17,
-        draggable: false,
-      },
-      {
-        id: 2,
-        latlng: {
-          lat: 60.450953712063914,
-          lng: 22.256669998168945,
-        },
-        zoom: 18,
-        draggable: false,
-      },
-      {
-        id: 3,
-        latlng: {
-          lat: 60.44723913123926,
-          lng: 22.26063966751099,
-        },
-        zoom: 18,
-        draggable: false,
-      },
-      {
-        id: 4,
-        latlng: {
-          lat: 60.44463549662398,
-          lng: 22.267205715179447,
-        },
-        zoom: 18,
-        draggable: true,
-      },
-    ],
-    maplayer: "Ilmakuva 2022 True ortho",
-  },
-];
+// const dailyChallengesExamples: DailyChallenge[] = [
+//   {
+//     date: "2026-02-11",
+//     dailyChallenge: [
+//       {
+//         id: 0,
+//         latlng: {
+//           lat: 60.17072018908489,
+//           lng: 24.93802070617676,
+//         },
+//         zoom: 16,
+//         draggable: false,
+//       },
+//       {
+//         id: 1,
+//         latlng: {
+//           lat: 60.17313229308546,
+//           lng: 24.93973731994629,
+//         },
+//         zoom: 16,
+//         draggable: false,
+//       },
+//       {
+//         id: 2,
+//         latlng: {
+//           lat: 60.17347381562102,
+//           lng: 24.94458675384522,
+//         },
+//         zoom: 16,
+//         draggable: false,
+//       },
+//       {
+//         id: 3,
+//         latlng: {
+//           lat: 60.171638090243235,
+//           lng: 24.945359230041507,
+//         },
+//         zoom: 16,
+//         draggable: false,
+//       },
+//       {
+//         id: 4,
+//         latlng: {
+//           lat: 60.169994388616885,
+//           lng: 24.942355155944824,
+//         },
+//         zoom: 16,
+//         draggable: true,
+//       },
+//     ],
+//     maplayer: "avoindata:Ortoilmakuva_2019_20cm",
+//   },
+//   {
+//     date: "2026-02-21",
+//     dailyChallenge: [
+//       {
+//         id: 0,
+//         latlng: {
+//           lat: 60.17072018908489,
+//           lng: 24.93802070617676,
+//         },
+//         zoom: 16,
+//         draggable: false,
+//       },
+//       {
+//         id: 1,
+//         latlng: {
+//           lat: 60.17313229308546,
+//           lng: 24.93973731994629,
+//         },
+//         zoom: 16,
+//         draggable: false,
+//       },
+//       {
+//         id: 2,
+//         latlng: {
+//           lat: 60.17347381562102,
+//           lng: 24.94458675384522,
+//         },
+//         zoom: 16,
+//         draggable: false,
+//       },
+//       {
+//         id: 3,
+//         latlng: {
+//           lat: 60.171638090243235,
+//           lng: 24.945359230041507,
+//         },
+//         zoom: 16,
+//         draggable: false,
+//       },
+//       {
+//         id: 4,
+//         latlng: {
+//           lat: 60.169994388616885,
+//           lng: 24.942355155944824,
+//         },
+//         zoom: 16,
+//         draggable: true,
+//       },
+//     ],
+//     maplayer: "avoindata:Ortoilmakuva_2019_21cm",
+//   },
+//   {
+//     date: "2026-02-21",
+//     dailyChallenge: [
+//       {
+//         id: 0,
+//         latlng: {
+//           lat: 60.17072018908489,
+//           lng: 24.93802070617676,
+//         },
+//         zoom: 16,
+//         draggable: false,
+//       },
+//       {
+//         id: 1,
+//         latlng: {
+//           lat: 60.17313229308546,
+//           lng: 24.93973731994629,
+//         },
+//         zoom: 16,
+//         draggable: false,
+//       },
+//       {
+//         id: 2,
+//         latlng: {
+//           lat: 60.17347381562102,
+//           lng: 24.94458675384522,
+//         },
+//         zoom: 16,
+//         draggable: false,
+//       },
+//       {
+//         id: 3,
+//         latlng: {
+//           lat: 60.171638090243235,
+//           lng: 24.945359230041507,
+//         },
+//         zoom: 16,
+//         draggable: false,
+//       },
+//       {
+//         id: 4,
+//         latlng: {
+//           lat: 60.169994388616885,
+//           lng: 24.942355155944824,
+//         },
+//         zoom: 16,
+//         draggable: true,
+//       },
+//     ],
+//     maplayer: "avoindata:Ortoilmakuva_2019_20cm",
+//   },
+// ];
 
 /**
  * A calendar modal for viewing daily challenges.
@@ -136,16 +188,18 @@ const dailyChallengesExamples: DailyChallenge[] = [
 export default function Calendar({
   show,
   handleCloseCalendar,
+  setChallenge,
 }: {
   show: boolean;
   handleCloseCalendar: () => void;
+  setChallenge: React.Dispatch<
+    React.SetStateAction<DailyChallenge | undefined>
+  >;
 }) {
   // Initialize state variables
   const today = dayjs();
   const [selectedDate, setSelectedDate] = useState(today);
-  const [dailyChallenges, setDailyChallenges] = useState<DailyChallenge[]>(
-    dailyChallengesExamples,
-  );
+  const [dailyChallenges, setDailyChallenges] = useState<DailyChallenge[]>([]);
 
   // Load daily challenges
   useEffect(() => {
@@ -156,11 +210,11 @@ export default function Calendar({
   const dateSet = useMemo(() => {
     try {
       const set = new Set(dailyChallenges.map((daily) => daily.date));
-      console.log("Memoized set:", set);
+      // console.log("Memoized set:", set);
       return set;
     } catch (error) {
       console.log("Cannot convert daily challenges dates to a set:", error);
-      return new Set(""); // Return empty set if conversion fails
+      return new Set(""); // Return empty set if the conversion fails
     }
   }, [dailyChallenges]);
 
@@ -269,6 +323,7 @@ export default function Calendar({
               <DailyChallengeContent
                 dailyChallenges={dailyChallenges}
                 selectedDate={selectedDate}
+                setChallenge={setChallenge}
               />
             </div>
           </div>
@@ -284,10 +339,15 @@ export default function Calendar({
 function DailyChallengeContent({
   dailyChallenges,
   selectedDate,
+  setChallenge,
 }: {
   dailyChallenges: DailyChallenge[];
   selectedDate: dayjs.Dayjs;
+  setChallenge: React.Dispatch<
+    React.SetStateAction<DailyChallenge | undefined>
+  >;
 }) {
+  const navigate = useNavigate();
   // Find a daily challenge corresponding to the selected date
   let dailyChallenge: DailyChallenge | undefined;
   try {
@@ -300,20 +360,34 @@ function DailyChallengeContent({
 
   // Exit early if no daily challenge for the selected date
   if (dailyChallenge === undefined)
-    return <h5>Daily challenge for the selected day</h5>;
+    return <h5>Daily challenge for {selectedDate.format("YYYY-MM-DD")}</h5>;
 
+  // Define options for map view and markers
   const mapOptions: L.MapOptions = {
     center: [60.170678, 24.941543],
     zoom: 13,
   };
-
   const roundLocations = dailyChallenge.dailyChallenge.map(
     (round) => round.latlng,
   );
 
+  // Clicking play starts a game with the selected challenge
+  const handlePlay = () => {
+    setChallenge(dailyChallenge);
+    navigate("/game");
+  };
+
+  const today = dayjs();
+  const beforeToday = selectedDate.isBefore(today, "day");
+  const afterToday = !beforeToday;
+  const isToday = today.isSame(selectedDate, "day");
+
   return (
     <>
-      <h5>Daily challenge for the selected day</h5>
+      <h5>
+        Daily challenge for{" "}
+        {isToday ? "today" : selectedDate.format("YYYY-MM-DD")}
+      </h5>
       <table>
         <tbody>
           <tr>
@@ -326,17 +400,34 @@ function DailyChallengeContent({
           </tr>
         </tbody>
       </table>
-      <MapContainer id="calendar-map" {...mapOptions}>
-        <TileLayer
-          attribution={
-            '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          }
-          url={
-            "https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"
-          }
-        />
-        <MapMarkers locations={roundLocations} delay={0} />
-      </MapContainer>
+      {/* Play button shown only for todays challenge */}
+      {isToday && (
+        <Button variant="secondary" onClick={handlePlay}>
+          play
+        </Button>
+      )}
+      {/* Map view of the locations. Shown only for past dates. */}
+      {beforeToday && (
+        <MapContainer id="calendar-map" {...mapOptions}>
+          <TileLayer
+            attribution={
+              '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }
+            url={
+              "https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"
+            }
+          />
+          <MapMarkers locations={roundLocations} delay={0} />
+        </MapContainer>
+      )}
+      {/* Text to display for challenges in the place of the map */}
+      {afterToday && (
+        <p>
+          Locations are revealed a day after the challenge date. For this
+          challenge the reveal date will be{" "}
+          {selectedDate.add(1, "day").format("YYYY-MM-DD")}.
+        </p>
+      )}
     </>
   );
 }
