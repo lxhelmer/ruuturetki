@@ -38,4 +38,13 @@ dailyChallengesRouter.post("/", (request, response) => {
   }
 });
 
+dailyChallengesRouter.delete("/:id", async (request, response) => {
+  try {
+    await DailyChallenge.findByIdAndDelete(request.params.id);
+    response.status(204).end();
+  } catch (error) {
+    response.send(error);
+  }
+});
+
 export default dailyChallengesRouter;
