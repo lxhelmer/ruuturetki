@@ -15,12 +15,14 @@ interface DailyChallenge {
 
 const dailyChallengeSchema = new mongoose.Schema<DailyChallenge>({
   date: String,
-  dailyChallenge: {
-    id: Number,
-    zoom: Number,
-    draggable: Boolean,
-    latlng: { lat: Number, lng: Number },
-  },
+  dailyChallenge: [
+    {
+      id: Number,
+      zoom: Number,
+      draggable: Boolean,
+      latlng: { lat: Number, lng: Number },
+    },
+  ],
   maplayer: String,
 });
 
