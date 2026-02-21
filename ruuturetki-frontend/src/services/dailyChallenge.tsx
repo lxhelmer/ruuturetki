@@ -17,4 +17,10 @@ const create = async (newDailyChallenge: DailyChallenge) => {
   return response.data;
 };
 
-export default { getAll, create };
+const deleteById = async (id: string) => {
+  // console.log(id)
+  const response = await axios.delete(`${baseUrl}/${id}`);
+  return response.data;
+};
+
+export default { getAll, create, deleteById };
