@@ -33,15 +33,12 @@ function LocationPicker({
       const guessedLocation = e.latlng;
       // console.log('Clicked a position on SelectionMap:', guessedLocation)
 
-      // Get previous round guesses
-      const oldGuesses = gameState.guesses.slice(0, gameState.roundId);
-
       // Set or (if already set) reset the guess to the gameState
-      setGameState({
-        ...gameState,
+      setGameState((prev) => ({
+        ...prev,
         picked: true,
-        guesses: oldGuesses.concat(guessedLocation),
-      });
+        guesses: prev.guesses.slice(0, prev.roundId).concat(guessedLocation),
+      }));
 
       // Show marker of the guess on the selection map
       setMarker(guessedLocation);
