@@ -9,7 +9,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { PickersDay, StaticDatePicker } from "@mui/x-date-pickers";
 import { useEffect, useMemo, useState } from "react";
 import { PickerValue } from "@mui/x-date-pickers/internals";
-import { DailyChallenge } from "../../types/types";
+import { DailyChallenge, GameSettings } from "../../types/types";
 import { MapContainer, TileLayer } from "react-leaflet";
 import MapMarkers from "../MapMarkers";
 import { useNavigate } from "react-router-dom";
@@ -128,10 +128,10 @@ const darkTheme = createTheme({
 //         draggable: true,
 //       },
 //     ],
-//     maplayer: "avoindata:Ortoilmakuva_2019_21cm",
+//     maplayer: "avoindata:Ortoilmakuva_2019_20cm",
 //   },
 //   {
-//     date: "2026-02-21",
+//     date: "2026-02-22",
 //     dailyChallenge: [
 //       {
 //         id: 0,
@@ -181,6 +181,57 @@ const darkTheme = createTheme({
 //     ],
 //     maplayer: "avoindata:Ortoilmakuva_2019_20cm",
 //   },
+//   {
+//     date: "2026-02-05",
+//     dailyChallenge: [
+//       {
+//         id: 0,
+//         latlng: {
+//           lat: 60.44902768614139,
+//           lng: 22.25903034210205,
+//         },
+//         zoom: 15,
+//         draggable: false,
+//       },
+//       {
+//         id: 1,
+//         latlng: {
+//           lat: 60.45307009236637,
+//           lng: 22.272462844848633,
+//         },
+//         zoom: 15,
+//         draggable: false,
+//       },
+//       {
+//         id: 2,
+//         latlng: {
+//           lat: 60.44964148702026,
+//           lng: 22.275724411010746,
+//         },
+//         zoom: 15,
+//         draggable: false,
+//       },
+//       {
+//         id: 3,
+//         latlng: {
+//           lat: 60.443841664076615,
+//           lng: 22.290616035461426,
+//         },
+//         zoom: 15,
+//         draggable: false,
+//       },
+//       {
+//         id: 4,
+//         latlng: {
+//           lat: 60.44418036833581,
+//           lng: 22.243494987487793,
+//         },
+//         zoom: 15,
+//         draggable: true,
+//       },
+//     ],
+//     maplayer: "Turku ilmakuva 1998",
+//   },
 // ];
 
 /**
@@ -190,12 +241,14 @@ export default function Calendar({
   show,
   handleCloseCalendar,
   setChallenge,
+  setGameSettings,
 }: {
   show: boolean;
   handleCloseCalendar: () => void;
   setChallenge: React.Dispatch<
     React.SetStateAction<DailyChallenge | undefined>
   >;
+  setGameSettings: React.Dispatch<React.SetStateAction<GameSettings>>;
 }) {
   // Initialize state variables
   const today = dayjs();
@@ -325,6 +378,7 @@ export default function Calendar({
                 dailyChallenges={dailyChallenges}
                 selectedDate={selectedDate}
                 setChallenge={setChallenge}
+                setGameSettings={setGameSettings}
               />
             </div>
           </div>
@@ -341,12 +395,14 @@ function DailyChallengeContent({
   dailyChallenges,
   selectedDate,
   setChallenge,
+  setGameSettings,
 }: {
   dailyChallenges: DailyChallenge[];
   selectedDate: dayjs.Dayjs;
   setChallenge: React.Dispatch<
     React.SetStateAction<DailyChallenge | undefined>
   >;
+  setGameSettings: React.Dispatch<React.SetStateAction<GameSettings>>;
 }) {
   const navigate = useNavigate();
   // Find a daily challenge corresponding to the selected date
@@ -375,6 +431,11 @@ function DailyChallengeContent({
   // Clicking play starts a game with the selected challenge
   const handlePlay = () => {
     setChallenge(dailyChallenge);
+    setGameSettings({
+      ortolayer: dailyChallenge.maplayer,
+      dragging: true,
+      timed: false,
+    });
     navigate("/game");
   };
 

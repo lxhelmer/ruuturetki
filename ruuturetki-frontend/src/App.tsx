@@ -60,7 +60,7 @@ function StartMenu({
     if (showPlayModal) {
       console.log("Play modal opened. Resetting game settings.");
       setGameSettings({
-        ...gameSettings,
+        ortolayer: "avoindata:Ortoilmakuva_1943",
         dragging: true,
         timed: false,
       });
@@ -100,6 +100,7 @@ function StartMenu({
           show={showCalendarModal}
           handleCloseCalendar={handleCloseCalendar}
           setChallenge={setChallenge}
+          setGameSettings={setGameSettings}
         />
       )}
       <MapContainer id="map" {...mapOptions}>
