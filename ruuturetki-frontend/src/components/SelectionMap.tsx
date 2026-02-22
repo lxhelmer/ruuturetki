@@ -2,6 +2,7 @@ import L from "leaflet";
 import { MapContainer, TileLayer } from "react-leaflet";
 import LocationPicker from "./LocationPicker.tsx";
 import { GameSettings, GameState } from "../types/types.ts";
+import { cityForMapLayer, tileLayerOptions } from "../utils/mapLayerHelpers.ts";
 
 function SelectionMap({
   gameState,
@@ -14,7 +15,8 @@ function SelectionMap({
 }) {
   let zone: L.LatLng[] = [];
   let selectorMapOptions: L.MapOptions = {};
-  if (gameSettings.city === "Helsinki") {
+  const city = cityForMapLayer(gameSettings.ortolayer);
+  if (city === "Helsinki") {
     zone = [L.latLng(60.13, 24.82), L.latLng(60.295, 25.2)];
     const zoneCenter: L.LatLng = L.latLngBounds(zone).getCenter();
     const pickerBounds: L.LatLngBounds = zoneCenter.toBounds(30000);
@@ -24,7 +26,7 @@ function SelectionMap({
       scrollWheelZoom: true,
       maxBounds: pickerBounds,
     };
-  } else if (gameSettings.city === "Turku") {
+  } else if (city === "Turku") {
     zone = [L.latLng(60.428, 22.228), L.latLng(60.468, 22.289)];
     const zoneCenter: L.LatLng = L.latLngBounds(zone).getCenter();
     const pickerBounds: L.LatLngBounds = zoneCenter.toBounds(10000);
@@ -38,14 +40,7 @@ function SelectionMap({
 
   return (
     <MapContainer id="selector-map" {...selectorMapOptions}>
-      <TileLayer
-        attribution={
-          '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }
-        url={
-          "https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"
-        }
-      />
+      <TileLayer {...tileLayerOptions()} />
       <LocationPicker gameState={gameState} setGameState={setGameState} />
     </MapContainer>
   );

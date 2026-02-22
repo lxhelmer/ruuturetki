@@ -1,6 +1,9 @@
 import L from "leaflet";
+import { MapLayerName } from "../types/types";
+import { cityForMapLayer } from "./mapLayerHelpers";
 
-export default function getRandomLatLng(city: "Helsinki" | "Turku") {
+export default function getRandomLatLng(MapLayerName: MapLayerName) {
+  const city = cityForMapLayer(MapLayerName);
   let southBoundLat = 0;
   let northBoundLat = 0;
   let eastBoundLon = 0;

@@ -20,36 +20,29 @@ export interface LUser {
   admin: boolean;
 }
 
-export interface GameSettings extends WMSOptions {
+export interface GameSettings {
   dragging: boolean; // Is moving allowed
   timed: false | number; // Number is the round time in seconds
-  city: "Helsinki" | "Turku";
+  ortolayer: MapLayerName;
 }
 
-export interface WMSOptions {
-  ortolayer:
-    | "avoindata:Ortoilmakuva_1943"
-    | "avoindata:Ortoilmakuva_1969"
-    | "avoindata:Ortoilmakuva_1997"
-    | "avoindata:Ortoilmakuva_2024_5cm"
-    | "avoindata:Ortoilmakuva_2019_20cm"
-    | "Turku ilmakuva 1939"
-    | "Turku ilmakuva 1958"
-    | "Turku ilmakuva 1973"
-    | "Turku ilmakuva 1998"
-    | "Turku ilmakuva 2010"
-    | "Ilmakuva 2022 True ortho"
-    | "Turun Osoitekartta 1945";
+export type MapLayerName = MapLayerNameHelsinki | MapLayerNameTurku;
 
-  wmsurl:
-    | "https://kartta.hel.fi/ws/geoserver/avoindata/wms?"
-    | "https://turku.asiointi.fi/teklaogcweb/WMS.ashx";
-  attribution:
-    | '&copy; <a href=https://hri.fi/data/fi/dataset/helsingin-ortoilmakuvat target="_blank">Helsingin kaupunki, kaupunkimittauspalvelut 2025</a>'
-    | '&copy; <a href=https://www.avoindata.fi/data/fi/dataset/turun-seudun-ilmakuva target="_blank">Turun Kaupunkiympäristö</a>';
-  wmsversion: "1.1.1" | "1.1.1.1";
-  wmsformat: "image/png";
-}
+export type MapLayerNameHelsinki =
+  | "avoindata:Ortoilmakuva_1943"
+  | "avoindata:Ortoilmakuva_1969"
+  | "avoindata:Ortoilmakuva_1997"
+  | "avoindata:Ortoilmakuva_2024_5cm"
+  | "avoindata:Ortoilmakuva_2019_20cm";
+
+export type MapLayerNameTurku =
+  | "Turku ilmakuva 1939"
+  | "Turku ilmakuva 1958"
+  | "Turku ilmakuva 1973"
+  | "Turku ilmakuva 1998"
+  | "Turku ilmakuva 2010"
+  | "Ilmakuva 2022 True ortho"
+  | "Turun Osoitekartta 1945";
 
 export interface GameState {
   roundId: number;
@@ -72,11 +65,11 @@ export interface CuratorRound {
 
 export interface DailyChallenge {
   date: string;
+  maplayer: MapLayerName;
   dailyChallenge: {
     id: number;
     zoom: number;
     draggable: boolean;
     latlng: { lat: number; lng: number };
   }[];
-  maplayer: string;
 }

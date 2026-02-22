@@ -4,6 +4,7 @@ import ViewMap from "./ViewMap.tsx";
 import { GameState, GameSettings, DailyChallenge } from "../types/types.ts";
 import getRandomLatLng from "../utils/getRandomLatLng.ts";
 import L from "leaflet";
+import { cityForMapLayer } from "../utils/mapLayerHelpers.ts";
 
 function Game({
   gameSettings,
@@ -23,9 +24,11 @@ function Game({
     zooms = challenge.dailyChallenge.map((round) => round.zoom);
   } else {
     // Generate random
-    locations = [...Array(5)].map(() => getRandomLatLng(gameSettings.city));
+    locations = [...Array(5)].map(() =>
+      getRandomLatLng(gameSettings.ortolayer),
+    );
     zooms = [...Array(5)].map(() =>
-      gameSettings.city === "Helsinki" ? 17 : 18,
+      cityForMapLayer(gameSettings.ortolayer) === "Helsinki" ? 17 : 18,
     ); // Zoom 17 for Helsinki, 18 for Turku
   }
   // console.log(locations, zooms);

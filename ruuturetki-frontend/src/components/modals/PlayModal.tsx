@@ -73,15 +73,11 @@ function PlayModal({
               <Button
                 className="y-button"
                 variant="secondary"
+                key={layerName}
                 onClick={() => {
                   setGameSettings({
                     ...gameSettings,
-                    city: "Helsinki",
                     ortolayer: layerName,
-                    wmsurl: "https://kartta.hel.fi/ws/geoserver/avoindata/wms?",
-                    attribution:
-                      '&copy; <a href=https://hri.fi/data/fi/dataset/helsingin-ortoilmakuvat target="_blank">Helsingin kaupunki, kaupunkimittauspalvelut 2025</a>',
-                    wmsversion: "1.1.1.1",
                   });
                   navigate("/game");
                 }}
@@ -100,15 +96,11 @@ function PlayModal({
               <Button
                 className="y-button"
                 variant="secondary"
+                key={layerName}
                 onClick={() => {
                   setGameSettings({
                     ...gameSettings,
-                    city: "Turku",
                     ortolayer: layerName,
-                    wmsurl: "https://turku.asiointi.fi/teklaogcweb/WMS.ashx",
-                    attribution:
-                      '&copy; <a href=https://www.avoindata.fi/data/fi/dataset/turun-seudun-ilmakuva target="_blank">Turun Kaupunkiympäristö</a>',
-                    wmsversion: "1.1.1",
                   });
                   navigate("/game");
                 }}

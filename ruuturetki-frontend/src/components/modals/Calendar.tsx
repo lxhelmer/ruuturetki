@@ -13,6 +13,7 @@ import { DailyChallenge } from "../../types/types";
 import { MapContainer, TileLayer } from "react-leaflet";
 import MapMarkers from "../MapMarkers";
 import { useNavigate } from "react-router-dom";
+import { tileLayerOptions } from "../../utils/mapLayerHelpers";
 
 // Set monday as the first day of the week
 dayjs.extend(updateLocale);
@@ -409,14 +410,7 @@ function DailyChallengeContent({
       {/* Map view of the locations. Shown only for past dates. */}
       {beforeToday && (
         <MapContainer id="calendar-map" {...mapOptions}>
-          <TileLayer
-            attribution={
-              '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            }
-            url={
-              "https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"
-            }
-          />
+          <TileLayer {...tileLayerOptions()} />
           <MapMarkers locations={roundLocations} delay={0} />
         </MapContainer>
       )}

@@ -1,35 +1,31 @@
-import { MapContainer, WMSTileLayer, WMSTileLayerProps } from "react-leaflet";
+import { MapContainer, WMSTileLayer } from "react-leaflet";
 import { useState, useEffect } from "react";
 import PracticeComponents from "./PracticeComponents";
 import L from "leaflet";
 import Curator from "./Curator";
-import { GameSettings, WMSOptions } from "../types/types";
+import {
+  MapLayerName,
+  MapLayerNameHelsinki,
+  MapLayerNameTurku,
+} from "../types/types";
+import { wmsOptionsForMapLayer } from "../utils/mapLayerHelpers";
 
-function OrtoLayer({
-  mapLayer,
-  wmsOptions,
-}: {
-  mapLayer: string;
-  wmsOptions: WMSOptions;
-}) {
-  const options: WMSTileLayerProps = {
-    url: wmsOptions.wmsurl,
-    attribution: wmsOptions.attribution,
-    version: wmsOptions.wmsversion,
-    format: wmsOptions.wmsformat,
-  };
-  return <WMSTileLayer layers={mapLayer} {...options} />;
+function OrtoLayer({ mapLayer }: { mapLayer: MapLayerName }) {
+  const wmsOptions = wmsOptionsForMapLayer(mapLayer);
+  return <WMSTileLayer layers={mapLayer} {...wmsOptions} />;
 }
 
 function Practice({
   ortolayersHelsinki,
   ortolayersTurku,
 }: {
-  ortolayersHelsinki: GameSettings["ortolayer"][];
-  ortolayersTurku: GameSettings["ortolayer"][];
+  ortolayersHelsinki: MapLayerNameHelsinki[];
+  ortolayersTurku: MapLayerNameTurku[];
 }) {
   const [renderKey, setKey] = useState(1);
-  const [mapLayer, setMapLayer] = useState("avoindata:Ortoilmakuva_2024_5cm");
+  const [mapLayer, setMapLayer] = useState<MapLayerName>(
+    "avoindata:Ortoilmakuva_2024_5cm",
+  );
   const [practicePos, setPracticePos] = useState(
     L.latLng(60.170678, 24.941543), // Default location Helsinki Central Station
   );
@@ -51,31 +47,12 @@ function Practice({
     doubleClickZoom: false,
   };
 
-  const wmsOptions: WMSOptions =
-    city === "Helsinki"
-      ? {
-          ortolayer: "avoindata:Ortoilmakuva_2019_20cm",
-          wmsurl: "https://kartta.hel.fi/ws/geoserver/avoindata/wms?",
-          attribution:
-            '&copy; <a href=https://hri.fi/data/fi/dataset/helsingin-ortoilmakuvat target="_blank">Helsingin kaupunki, kaupunkimittauspalvelut 2025</a>',
-          wmsversion: "1.1.1.1",
-          wmsformat: "image/png",
-        }
-      : {
-          ortolayer: "Ilmakuva 2022 True ortho",
-          wmsurl: "https://turku.asiointi.fi/teklaogcweb/WMS.ashx",
-          attribution:
-            '&copy; <a href=https://www.avoindata.fi/data/fi/dataset/turun-seudun-ilmakuva target="_blank">Turun Kaupunkiympäristö</a>',
-          wmsversion: "1.1.1",
-          wmsformat: "image/png",
-        };
-
   const ortolayers = city === "Helsinki" ? ortolayersHelsinki : ortolayersTurku;
 
   return (
     <>
       <MapContainer id="map" {...mapOptions} key={renderKey}>
-        <OrtoLayer mapLayer={mapLayer} wmsOptions={wmsOptions} />
+        <OrtoLayer mapLayer={mapLayer} />
         <PracticeComponents
           mapLayer={mapLayer}
           setMapLayer={setMapLayer}
