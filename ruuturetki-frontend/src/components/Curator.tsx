@@ -10,12 +10,17 @@ import {
 import L from "leaflet";
 import { useEffect, useRef, useState } from "react";
 import markerIcon from "./MarkerIcon";
-import { CuratorRound, DailyChallenge, FormEvent } from "../types/types";
+import {
+  CuratorRound,
+  DailyChallenge,
+  FormEvent,
+  MapLayerName,
+} from "../types/types";
 import dailyChallengeService from "../services/dailyChallenge";
 import MapMarkers from "./MapMarkers";
 import { tileLayerOptions } from "../utils/mapLayerHelpers";
 
-export default function Curator({ mapLayer }: { mapLayer: string }) {
+export default function Curator({ mapLayer }: { mapLayer: MapLayerName }) {
   // TO DO: implement admin check
   // ...
 
@@ -305,7 +310,7 @@ function CuratorEndModal({
   showCuratorEndModal: boolean;
   setShowCuratorEndModal: React.Dispatch<React.SetStateAction<boolean>>;
   curatorRounds: CuratorRound[];
-  mapLayer: string;
+  mapLayer: MapLayerName;
   handleReset: () => void;
 }) {
   const returnToPractice = () => {
