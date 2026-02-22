@@ -22,6 +22,18 @@ dailyChallengesRouter.get("/", (_request, response) => {
   });
 });
 
+dailyChallengesRouter.get("/:id", async (request, response) => {
+  try {
+    const dailyChallenge = await DailyChallenge.findById(request.params.id);
+    if (!dailyChallenge) {
+      response.status(404).json({ error: "Daily challenge not found" });
+    }
+    response.json(dailyChallenge);
+  } catch (error) {
+    response.status(400).send(error);
+  }
+});
+
 dailyChallengesRouter.post("/", (request, response) => {
   try {
     const newDailyChallenge = newDailyChallengeSchema.parse(request.body);

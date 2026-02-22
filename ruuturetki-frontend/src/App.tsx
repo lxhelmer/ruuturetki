@@ -25,6 +25,7 @@ import getRandomLatLng from "./utils/getRandomLatLng";
 import HelpModal from "./components/modals/HelpModal";
 import Calendar from "./components/modals/Calendar";
 import { wmsOptionsForMapLayer } from "./utils/mapLayerHelpers";
+import calendarservice from "./services/dailyChallenge";
 
 function StartMenu({
   setGameSettings,
@@ -54,6 +55,20 @@ function StartMenu({
 
   const handleCloseCalendar = () => setCalendarModal(false);
   const handleShowCalendar = () => setCalendarModal(true);
+
+  // Keep backend alive by pinging it every 14 minutes
+  useEffect(() => {
+    async function pingBackend() {
+      try {
+        const ping = await calendarservice.getById("123456789");
+        console.log("Backend ping:", ping);
+      } catch (error) {
+        console.log("Cannot ping backend!", error);
+      }
+    }
+    const fetch_id = setInterval(pingBackend, 840000);
+    return () => clearInterval(fetch_id);
+  }, []);
 
   useEffect(() => {
     // Reset default game settings when play modal is opened.

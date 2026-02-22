@@ -12,6 +12,11 @@ const getAll = async () => {
   return response.data;
 };
 
+const getById = async (id: string) => {
+  const response = await axios.get(`${baseUrl}/${id}`);
+  return response.data;
+};
+
 const create = async (newDailyChallenge: DailyChallenge) => {
   const response = await axios.post(baseUrl, newDailyChallenge);
   return response.data;
@@ -23,4 +28,4 @@ const deleteById = async (id: string) => {
   return response.data;
 };
 
-export default { getAll, create, deleteById };
+export default { getAll, getById, create, deleteById };
