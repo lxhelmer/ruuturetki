@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ChangeEvent, useEffect, useRef } from "react";
 import { useMap } from "react-leaflet";
 import L from "leaflet";
-import { GameSettings } from "../types/types";
+import { MapLayerName } from "../types/types";
 
 function PracticeComponents({
   mapLayer,
@@ -14,11 +14,11 @@ function PracticeComponents({
   city,
   setCity,
 }: {
-  mapLayer: string;
-  setMapLayer: React.Dispatch<React.SetStateAction<string>>;
+  mapLayer: MapLayerName;
+  setMapLayer: React.Dispatch<React.SetStateAction<MapLayerName>>;
   setPracticePos: React.Dispatch<React.SetStateAction<L.LatLng>>;
   setPracticeZoom: React.Dispatch<React.SetStateAction<number>>;
-  ortolayers: GameSettings["ortolayer"][];
+  ortolayers: MapLayerName[];
   city: "Helsinki" | "Turku";
   setCity: React.Dispatch<React.SetStateAction<"Helsinki" | "Turku">>;
 }) {

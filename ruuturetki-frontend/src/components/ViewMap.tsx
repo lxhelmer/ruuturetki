@@ -1,14 +1,9 @@
-import {
-  MapContainer,
-  WMSTileLayer,
-  Marker,
-  Popup,
-  WMSTileLayerProps,
-} from "react-leaflet";
+import { MapContainer, WMSTileLayer, Marker, Popup } from "react-leaflet";
 import MapComponents from "./MapComponents.tsx";
 import { useState, useEffect } from "react";
 import { GameSettings, GameState } from "../types/types.ts";
 import markerIcon from "./MarkerIcon.tsx";
+import { wmsOptionsForMapLayer } from "../utils/mapLayerHelpers.ts";
 
 function OrtoLayer({
   gameSettings,
@@ -20,16 +15,8 @@ function OrtoLayer({
   renderKey: number;
 }) {
   const bounds = startPosition.toBounds(4000);
-  const wmsOptions: WMSTileLayerProps = {
-    url: gameSettings.wmsurl,
-    attribution: gameSettings.attribution,
-    version: gameSettings.wmsversion,
-    layers: gameSettings.ortolayer,
-    format: gameSettings.wmsformat,
-    bounds: bounds,
-  };
-
-  return <WMSTileLayer key={renderKey} {...wmsOptions} />;
+  const wmsOptions = wmsOptionsForMapLayer(gameSettings.ortolayer);
+  return <WMSTileLayer key={renderKey} {...wmsOptions} bounds={bounds} />;
 }
 
 function ViewMap({

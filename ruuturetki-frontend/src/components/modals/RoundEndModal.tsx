@@ -10,6 +10,7 @@ import {
 import markerIcon from "../MarkerIcon.tsx";
 import { GameState } from "../../types/types.ts";
 import L from "leaflet";
+import { tileLayerOptions } from "../../utils/mapLayerHelpers.ts";
 
 function ModalButton({
   roundId,
@@ -76,14 +77,7 @@ const ModalMap = ({ gameState }: { gameState: GameState }) => {
   // console.log('REM gameState:', gameState)
   return (
     <MapContainer id="results-map" {...resultMapOptions}>
-      <TileLayer
-        attribution={
-          '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }
-        url={
-          "https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"
-        }
-      />
+      <TileLayer {...tileLayerOptions()} />
       <Marker position={correctLocation} icon={markerIcon}>
         <Tooltip permanent>The correct answer</Tooltip>
       </Marker>

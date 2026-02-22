@@ -180,9 +180,9 @@ input.form-check-input:hover {
 }
 
 /* Play modal */
-#play-modal-body {
+#play-modal-body label {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
 }
 label.play-modal-label {
   margin: auto;
@@ -195,6 +195,7 @@ label.play-modal-label {
   display: flex;
   gap: 10px;
   padding: 10px;
+  overflow: scroll;
 }
 /*  */
 
@@ -270,6 +271,6 @@ button.reload {
 }
 
 .y-button {
-  width: 100px;
-  height: 100px;
+  min-width: 100px;
+  min-height: 100px;
 }

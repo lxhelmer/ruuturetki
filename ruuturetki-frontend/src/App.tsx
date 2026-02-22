@@ -6,18 +6,26 @@ import {
   useNavigate,
 } from "react-router-dom";
 import "leaflet/dist/leaflet.css";
-import { MapContainer, WMSTileLayer, WMSTileLayerProps } from "react-leaflet";
+import { MapContainer, WMSTileLayer } from "react-leaflet";
 import { Button } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import "./App.css";
 import Game from "./components/Game";
-import { DailyChallenge, GameSettings } from "./types/types";
+import {
+  DailyChallenge,
+  GameSettings,
+  MapLayerName,
+  MapLayerNameHelsinki,
+  MapLayerNameTurku,
+} from "./types/types";
 import PlayModal from "./components/modals/PlayModal";
 import Practice from "./components/Practice";
 import L from "leaflet";
 import getRandomLatLng from "./utils/getRandomLatLng";
 import HelpModal from "./components/modals/HelpModal";
 import Calendar from "./components/modals/Calendar";
+import { wmsOptionsForMapLayer } from "./utils/mapLayerHelpers";
+import calendarservice from "./services/dailyChallenge";
 
 function StartMenu({
   setGameSettings,
@@ -48,12 +56,26 @@ function StartMenu({
   const handleCloseCalendar = () => setCalendarModal(false);
   const handleShowCalendar = () => setCalendarModal(true);
 
+  // Keep backend alive by pinging it every 14 minutes
+  useEffect(() => {
+    async function pingBackend() {
+      try {
+        const ping = await calendarservice.getById("123456789");
+        console.log("Backend ping:", ping);
+      } catch (error) {
+        console.log("Cannot ping backend!", error);
+      }
+    }
+    const fetch_id = setInterval(pingBackend, 840000);
+    return () => clearInterval(fetch_id);
+  }, []);
+
   useEffect(() => {
     // Reset default game settings when play modal is opened.
     if (showPlayModal) {
       console.log("Play modal opened. Resetting game settings.");
       setGameSettings({
-        ...gameSettings,
+        ortolayer: "avoindata:Ortoilmakuva_1943",
         dragging: true,
         timed: false,
       });
@@ -63,16 +85,10 @@ function StartMenu({
   }, [showPlayModal]);
 
   // Settings for the background map in the main menu
-  const wmsOptions: WMSTileLayerProps = {
-    url: "https://kartta.hel.fi/ws/geoserver/avoindata/wms?",
-    version: "1.1.1",
-    layers: "avoindata:Ortoilmakuva_2024_5cm",
-    format: "image/png",
-    attribution:
-      '&copy; <a href=https://hri.fi/data/fi/dataset/helsingin-ortoilmakuvat target="_blank">Helsingin kaupunki, kaupunkimittauspalvelut 2025</a>',
-  };
+  const ortoLayer: MapLayerName = "avoindata:Ortoilmakuva_2024_5cm";
+  const wmsOptions = wmsOptionsForMapLayer(ortoLayer);
   const mapOptions: L.MapOptions = {
-    center: getRandomLatLng("Helsinki"),
+    center: getRandomLatLng(ortoLayer),
     zoom: 17,
     scrollWheelZoom: false,
     zoomControl: false,
@@ -99,6 +115,7 @@ function StartMenu({
           show={showCalendarModal}
           handleCloseCalendar={handleCloseCalendar}
           setChallenge={setChallenge}
+          setGameSettings={setGameSettings}
         />
       )}
       <MapContainer id="map" {...mapOptions}>
@@ -114,11 +131,11 @@ function StartMenu({
         <Button variant="dark" size="lg" onClick={() => navigate("/practice")}>
           practice
         </Button>
-        <Button variant="dark" size="lg" onClick={() => handleShowHelp()}>
-          how to play
-        </Button>
         <Button variant="dark" size="lg" onClick={() => handleShowCalendar()}>
           calendar
+        </Button>
+        <Button variant="dark" size="lg" onClick={() => handleShowHelp()}>
+          how to play
         </Button>
       </div>
     </>
@@ -135,25 +152,19 @@ function App() {
   const [gameSettings, setGameSettings] = useState<GameSettings>({
     dragging: true,
     timed: false,
-    wmsurl: "https://kartta.hel.fi/ws/geoserver/avoindata/wms?",
-    wmsversion: "1.1.1.1",
-    wmsformat: "image/png",
-    attribution:
-      '&copy; <a href=https://hri.fi/data/fi/dataset/helsingin-ortoilmakuvat target="_blank">Helsingin kaupunki, kaupunkimittauspalvelut 2025</a>',
     ortolayer: "avoindata:Ortoilmakuva_1943",
-    city: "Helsinki",
   });
   const [challenge, setChallenge] = useState<DailyChallenge | undefined>(
     undefined,
   );
 
-  const ortolayersHelsinki: GameSettings["ortolayer"][] = [
+  const ortolayersHelsinki: MapLayerNameHelsinki[] = [
     "avoindata:Ortoilmakuva_1943",
     "avoindata:Ortoilmakuva_1969",
     "avoindata:Ortoilmakuva_1997",
     "avoindata:Ortoilmakuva_2024_5cm",
   ];
-  const ortolayersTurku: GameSettings["ortolayer"][] = [
+  const ortolayersTurku: MapLayerNameTurku[] = [
     "Turku ilmakuva 1939",
     "Turku ilmakuva 1958",
     "Turku ilmakuva 1973",

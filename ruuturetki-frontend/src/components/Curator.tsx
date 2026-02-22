@@ -13,6 +13,7 @@ import markerIcon from "./MarkerIcon";
 import { CuratorRound, DailyChallenge, FormEvent } from "../types/types";
 import dailyChallengeService from "../services/dailyChallenge";
 import MapMarkers from "./MapMarkers";
+import { tileLayerOptions } from "../utils/mapLayerHelpers";
 
 export default function Curator({ mapLayer }: { mapLayer: string }) {
   // TO DO: implement admin check
@@ -359,14 +360,7 @@ function CuratorEndModal({
             center={L.latLng(60.170678, 24.941543)}
             zoom={12}
           >
-            <TileLayer
-              attribution={
-                '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-              }
-              url={
-                "https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"
-              }
-            />
+            <TileLayer {...tileLayerOptions()} />
             <MapMarkers locations={curatorRounds.map((c) => c.latlng)} />
           </MapContainer>
           <div id="curator-end-controls">
