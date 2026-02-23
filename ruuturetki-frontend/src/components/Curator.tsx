@@ -18,7 +18,11 @@ import {
 } from "../types/types";
 import dailyChallengeService from "../services/dailyChallenge";
 import MapMarkers from "./MapMarkers";
-import { tileLayerOptions } from "../utils/mapLayerHelpers";
+import {
+  cityForMapLayer,
+  decadeForMapLayer,
+  tileLayerOptions,
+} from "../utils/mapLayerHelpers";
 
 export default function Curator({ mapLayer }: { mapLayer: MapLayerName }) {
   // TO DO: implement admin check
@@ -324,17 +328,31 @@ function CuratorEndModal({
     // and returns to the practice mode
     event.preventDefault();
 
+    // Get user input from the form
+    const form = event.currentTarget;
+    const date = form.date.value;
+    const moving = form.moving.value === "enabled";
+    const timed = form.timer.value === "15s" ? 15 : false;
+
+    // Exit early if date not selected
+    if (date === "") {
+      alert("Select a date before submitting your challenge!");
+      return;
+    }
+
     // Submit the daily challenge to the daily calendar
-    const selectedDate = event.currentTarget.date.value;
-    console.log("Date selected:", selectedDate);
-    console.log("Submit daily:", curatorRounds);
-    console.log("maplayer:", mapLayer);
     const newDailyChallenge: DailyChallenge = {
-      date: selectedDate,
-      dailyChallenge: curatorRounds,
+      date: date,
       maplayer: mapLayer,
+      moving: moving,
+      timed: timed,
+      dailyChallenge: curatorRounds.map((round: CuratorRound) => ({
+        id: round.id,
+        zoom: round.zoom,
+        latlng: round.latlng,
+      })),
     };
-    console.log("Posting a new daily challenge:", newDailyChallenge);
+    console.log("Submitting a new daily challenge:", newDailyChallenge);
     dailyChallengeService.create(newDailyChallenge);
     // TO DO:
     // ...
@@ -357,8 +375,41 @@ function CuratorEndModal({
       </Modal.Header>
       <Modal.Body id="curator-end-modal">
         <Form id="curator-form" onSubmit={handleSubmit}>
-          <h5>Select date for your daily challenge</h5>
-          <Form.Control id="date" type="date" />
+          <h5>Select the date and the game modes for your daily challenge</h5>
+          <div className="curator-settings">
+            <Form.Control id="date" type="date" />
+            <Form.Select id="moving">
+              <option value="enabled">Moving enabled</option>
+              <option value="disabled">Moving disabled</option>
+            </Form.Select>
+            <Form.Select id="timer">
+              <option value="no">No timer</option>
+              <option value="15s">15 s timer</option>
+            </Form.Select>
+          </div>
+          <h5>Your daily challenge</h5>
+          <div className="curator-daily-overview">
+            <table>
+              <tbody>
+                <tr>
+                  <td className="header">
+                    <b>City:</b>
+                  </td>
+                  <td>
+                    <i>{cityForMapLayer(mapLayer)}</i>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="header">
+                    <b>Decade:</b>
+                  </td>
+                  <td>
+                    <i>{decadeForMapLayer(mapLayer)}</i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
           <h5>Your daily challenge locations</h5>
           <MapContainer
             id="map"
@@ -366,7 +417,10 @@ function CuratorEndModal({
             zoom={12}
           >
             <TileLayer {...tileLayerOptions()} />
-            <MapMarkers locations={curatorRounds.map((c) => c.latlng)} />
+            <MapMarkers
+              locations={curatorRounds.map((c) => c.latlng)}
+              delay={0}
+            />
           </MapContainer>
           <div id="curator-end-controls">
             <Button variant="secondary" onClick={handleClose}>

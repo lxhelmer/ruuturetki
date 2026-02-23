@@ -21,10 +21,10 @@ const turkuMapLayers: Set<MapLayerName> = new Set([
 /**
  * Returns WMSOptions for the provided map layer name.
  */
-export function wmsOptionsForMapLayer(MapLayerName: MapLayerName) {
-  if (helsinkiMapLayers.has(MapLayerName)) {
+export function wmsOptionsForMapLayer(mapLayerName: MapLayerName) {
+  if (helsinkiMapLayers.has(mapLayerName)) {
     const wmsOptions: WMSTileLayerProps = {
-      layers: MapLayerName,
+      layers: mapLayerName,
       url: "https://kartta.hel.fi/ws/geoserver/avoindata/wms?",
       attribution:
         '&copy; <a href=https://hri.fi/data/fi/dataset/helsingin-ortoilmakuvat target="_blank">Helsingin kaupunki, kaupunkimittauspalvelut 2025</a>',
@@ -32,9 +32,9 @@ export function wmsOptionsForMapLayer(MapLayerName: MapLayerName) {
       format: "image/png",
     };
     return wmsOptions;
-  } else if (turkuMapLayers.has(MapLayerName)) {
+  } else if (turkuMapLayers.has(mapLayerName)) {
     const wmsOptions: WMSTileLayerProps = {
-      layers: MapLayerName,
+      layers: mapLayerName,
       url: "https://turku.asiointi.fi/teklaogcweb/WMS.ashx",
       attribution:
         '&copy; <a href=https://www.avoindata.fi/data/fi/dataset/turun-seudun-ilmakuva target="_blank">Turun Kaupunkiympäristö</a>',
@@ -50,10 +50,10 @@ export function wmsOptionsForMapLayer(MapLayerName: MapLayerName) {
 /**
  * Returns city of the provided map layer.
  */
-export function cityForMapLayer(MapLayerName: MapLayerName) {
-  if (helsinkiMapLayers.has(MapLayerName)) {
+export function cityForMapLayer(mapLayerName: MapLayerName) {
+  if (helsinkiMapLayers.has(mapLayerName)) {
     return "Helsinki";
-  } else if (turkuMapLayers.has(MapLayerName)) {
+  } else if (turkuMapLayers.has(mapLayerName)) {
     return "Turku";
   } else {
     throw new Error("Cannot define city!");
@@ -69,4 +69,10 @@ export function tileLayerOptions(): TileLayerProps {
       '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     url: "https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png",
   };
+}
+
+export function decadeForMapLayer(mapLayerName: MapLayerName) {
+  // Examples: 1990's, 2020's, 1940's
+  const str = mapLayerName.match(/[0-9][0-9][0-9]/) + "0's";
+  return str;
 }

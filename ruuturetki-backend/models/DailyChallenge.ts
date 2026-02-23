@@ -4,26 +4,28 @@ mongoose.set("strictQuery", false);
 
 interface DailyChallenge {
   date: string;
+  maplayer: string;
+  moving: boolean;
+  timed: boolean;
   dailyChallenge: {
     id: number;
     zoom: number;
-    draggable: boolean;
     latlng: { lat: number; lng: number };
   }[];
-  maplayer: string;
 }
 
 const dailyChallengeSchema = new mongoose.Schema<DailyChallenge>({
   date: String,
+  maplayer: String,
+  moving: Boolean,
+  timed: Boolean,
   dailyChallenge: [
     {
       id: Number,
       zoom: Number,
-      draggable: Boolean,
       latlng: { lat: Number, lng: Number },
     },
   ],
-  maplayer: String,
 });
 
 dailyChallengeSchema.set("toJSON", {

@@ -13,7 +13,11 @@ import { DailyChallenge, GameSettings } from "../../types/types";
 import { MapContainer, TileLayer } from "react-leaflet";
 import MapMarkers from "../MapMarkers";
 import { useNavigate } from "react-router-dom";
-import { tileLayerOptions } from "../../utils/mapLayerHelpers";
+import {
+  cityForMapLayer,
+  decadeForMapLayer,
+  tileLayerOptions,
+} from "../../utils/mapLayerHelpers";
 
 // Set monday as the first day of the week
 dayjs.extend(updateLocale);
@@ -38,7 +42,6 @@ const darkTheme = createTheme({
 //           lng: 24.93802070617676,
 //         },
 //         zoom: 16,
-//         draggable: false,
 //       },
 //       {
 //         id: 1,
@@ -47,7 +50,6 @@ const darkTheme = createTheme({
 //           lng: 24.93973731994629,
 //         },
 //         zoom: 16,
-//         draggable: false,
 //       },
 //       {
 //         id: 2,
@@ -56,7 +58,6 @@ const darkTheme = createTheme({
 //           lng: 24.94458675384522,
 //         },
 //         zoom: 16,
-//         draggable: false,
 //       },
 //       {
 //         id: 3,
@@ -65,7 +66,6 @@ const darkTheme = createTheme({
 //           lng: 24.945359230041507,
 //         },
 //         zoom: 16,
-//         draggable: false,
 //       },
 //       {
 //         id: 4,
@@ -74,10 +74,11 @@ const darkTheme = createTheme({
 //           lng: 24.942355155944824,
 //         },
 //         zoom: 16,
-//         draggable: true,
 //       },
 //     ],
 //     maplayer: "avoindata:Ortoilmakuva_2019_20cm",
+//     moving: true,
+//     timed: false,
 //   },
 //   {
 //     date: "2026-02-21",
@@ -89,7 +90,6 @@ const darkTheme = createTheme({
 //           lng: 24.93802070617676,
 //         },
 //         zoom: 16,
-//         draggable: false,
 //       },
 //       {
 //         id: 1,
@@ -98,7 +98,6 @@ const darkTheme = createTheme({
 //           lng: 24.93973731994629,
 //         },
 //         zoom: 16,
-//         draggable: false,
 //       },
 //       {
 //         id: 2,
@@ -107,7 +106,6 @@ const darkTheme = createTheme({
 //           lng: 24.94458675384522,
 //         },
 //         zoom: 16,
-//         draggable: false,
 //       },
 //       {
 //         id: 3,
@@ -116,7 +114,6 @@ const darkTheme = createTheme({
 //           lng: 24.945359230041507,
 //         },
 //         zoom: 16,
-//         draggable: false,
 //       },
 //       {
 //         id: 4,
@@ -125,10 +122,11 @@ const darkTheme = createTheme({
 //           lng: 24.942355155944824,
 //         },
 //         zoom: 16,
-//         draggable: true,
 //       },
 //     ],
 //     maplayer: "avoindata:Ortoilmakuva_2019_20cm",
+//     moving: true,
+//     timed: false,
 //   },
 //   {
 //     date: "2026-02-22",
@@ -140,7 +138,6 @@ const darkTheme = createTheme({
 //           lng: 24.93802070617676,
 //         },
 //         zoom: 16,
-//         draggable: false,
 //       },
 //       {
 //         id: 1,
@@ -149,7 +146,6 @@ const darkTheme = createTheme({
 //           lng: 24.93973731994629,
 //         },
 //         zoom: 16,
-//         draggable: false,
 //       },
 //       {
 //         id: 2,
@@ -158,7 +154,6 @@ const darkTheme = createTheme({
 //           lng: 24.94458675384522,
 //         },
 //         zoom: 16,
-//         draggable: false,
 //       },
 //       {
 //         id: 3,
@@ -167,7 +162,6 @@ const darkTheme = createTheme({
 //           lng: 24.945359230041507,
 //         },
 //         zoom: 16,
-//         draggable: false,
 //       },
 //       {
 //         id: 4,
@@ -176,10 +170,11 @@ const darkTheme = createTheme({
 //           lng: 24.942355155944824,
 //         },
 //         zoom: 16,
-//         draggable: true,
 //       },
 //     ],
 //     maplayer: "avoindata:Ortoilmakuva_2019_20cm",
+//     moving: true,
+//     timed: false,
 //   },
 //   {
 //     date: "2026-02-05",
@@ -191,7 +186,6 @@ const darkTheme = createTheme({
 //           lng: 22.25903034210205,
 //         },
 //         zoom: 15,
-//         draggable: false,
 //       },
 //       {
 //         id: 1,
@@ -200,7 +194,6 @@ const darkTheme = createTheme({
 //           lng: 22.272462844848633,
 //         },
 //         zoom: 15,
-//         draggable: false,
 //       },
 //       {
 //         id: 2,
@@ -209,7 +202,6 @@ const darkTheme = createTheme({
 //           lng: 22.275724411010746,
 //         },
 //         zoom: 15,
-//         draggable: false,
 //       },
 //       {
 //         id: 3,
@@ -218,7 +210,6 @@ const darkTheme = createTheme({
 //           lng: 22.290616035461426,
 //         },
 //         zoom: 15,
-//         draggable: false,
 //       },
 //       {
 //         id: 4,
@@ -227,10 +218,11 @@ const darkTheme = createTheme({
 //           lng: 22.243494987487793,
 //         },
 //         zoom: 15,
-//         draggable: true,
 //       },
 //     ],
 //     maplayer: "Turku ilmakuva 1998",
+//     moving: true,
+//     timed: 15,
 //   },
 // ];
 
@@ -417,7 +409,12 @@ function DailyChallengeContent({
 
   // Exit early if no daily challenge for the selected date
   if (dailyChallenge === undefined)
-    return <h5>Daily challenge for {selectedDate.format("YYYY-MM-DD")}</h5>;
+    return (
+      <>
+        <h5>Daily challenge for {selectedDate.format("YYYY-MM-DD")}</h5>
+        <i>No challenge available</i>
+      </>
+    );
 
   // Define options for map view and markers
   const mapOptions: L.MapOptions = {
@@ -433,9 +430,15 @@ function DailyChallengeContent({
     setChallenge(dailyChallenge);
     setGameSettings({
       ortolayer: dailyChallenge.maplayer,
-      dragging: true,
-      timed: false,
+      dragging: dailyChallenge.moving, // These are only to test the conversion of previous challenges to the new format.
+      timed: dailyChallenge.timed, // The previous challenges did not have moving or timed properties.
     });
+    console.log(
+      "moving:",
+      dailyChallenge.moving,
+      "timed:",
+      dailyChallenge.timed,
+    );
     navigate("/game");
   };
 
@@ -443,6 +446,10 @@ function DailyChallengeContent({
   const beforeToday = selectedDate.isBefore(today, "day");
   const afterToday = !beforeToday;
   const isToday = today.isSame(selectedDate, "day");
+  const city = cityForMapLayer(dailyChallenge.maplayer);
+  const decade = decadeForMapLayer(dailyChallenge.maplayer);
+  const moving = dailyChallenge.moving;
+  const timed = dailyChallenge.timed;
 
   return (
     <>
@@ -453,11 +460,35 @@ function DailyChallengeContent({
       <table>
         <tbody>
           <tr>
-            <td>
-              <b>Maplayer:</b>
+            <td className="header">
+              <b>City:</b>
             </td>
             <td>
-              <i>{dailyChallenge.maplayer}</i>
+              <i>{city}</i>
+            </td>
+          </tr>
+          <tr>
+            <td className="header">
+              <b>Decade:</b>
+            </td>
+            <td>
+              <i>{decade}</i>
+            </td>
+          </tr>
+          <tr>
+            <td className="header">
+              <b>Moving:</b>
+            </td>
+            <td>
+              <i>{moving ? "Allowed" : "Disabled"}</i>
+            </td>
+          </tr>
+          <tr>
+            <td className="header">
+              <b>Timer:</b>
+            </td>
+            <td>
+              <i>{timed ? "15 seconds per round" : "No"}</i>
             </td>
           </tr>
         </tbody>
