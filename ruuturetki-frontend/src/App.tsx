@@ -66,6 +66,7 @@ function StartMenu({
         console.log("Cannot ping backend!", error);
       }
     }
+    pingBackend();
     const fetch_id = setInterval(pingBackend, 840000);
     return () => clearInterval(fetch_id);
   }, []);
