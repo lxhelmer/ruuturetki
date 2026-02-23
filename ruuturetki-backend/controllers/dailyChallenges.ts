@@ -7,7 +7,7 @@ const newDailyChallengeSchema = z.object({
   date: z.string(),
   maplayer: z.string(),
   moving: z.boolean(),
-  timed: z.boolean(),
+  timed: z.union([z.boolean(), z.number()]),
   dailyChallenge: z.array(
     z.object({
       id: z.number(),
