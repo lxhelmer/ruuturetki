@@ -7,7 +7,7 @@ const newDailyChallengeSchema = z.object({
   date: z.string(),
   maplayer: z.string(),
   moving: z.boolean(),
-  timed: z.union([z.boolean(), z.number()]),
+  timed: z.union([z.number(), z.null()]),
   dailyChallenge: z.array(
     z.object({
       id: z.number(),
@@ -40,8 +40,10 @@ dailyChallengesRouter.post("/", (request, response) => {
     const newDailyChallenge = newDailyChallengeSchema.parse(request.body);
     const dailyChallenge = new DailyChallenge({
       date: newDailyChallenge.date,
-      dailyChallenge: newDailyChallenge.dailyChallenge,
       maplayer: newDailyChallenge.maplayer,
+      moving: newDailyChallenge.moving,
+      timed: newDailyChallenge.timed,
+      dailyChallenge: newDailyChallenge.dailyChallenge,
     });
     void dailyChallenge.save().then((saved) => {
       response.status(201).json(saved);

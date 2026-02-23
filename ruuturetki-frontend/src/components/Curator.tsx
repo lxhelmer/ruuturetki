@@ -332,7 +332,7 @@ function CuratorEndModal({
     const form = event.currentTarget;
     const date = form.date.value;
     const moving = form.moving.value === "enabled";
-    const timed = form.timer.value === "15s" ? 15 : false;
+    const timed = form.timer.value === "15s" ? 15 : null;
 
     // Exit early if date not selected
     if (date === "") {

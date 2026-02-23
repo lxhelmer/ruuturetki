@@ -22,9 +22,11 @@ export interface LUser {
 
 export interface GameSettings {
   dragging: boolean; // Is moving allowed
-  timed: false | number; // Number is the round time in seconds
+  timed: Timed;
   ortolayer: MapLayerName;
 }
+
+export type Timed = number | null; // Number is the round time in seconds, null means no timer
 
 export type MapLayerName = MapLayerNameHelsinki | MapLayerNameTurku;
 
@@ -67,7 +69,7 @@ export interface DailyChallenge {
   date: string;
   maplayer: MapLayerName;
   moving: boolean;
-  timed: false | number;
+  timed: Timed;
   dailyChallenge: {
     id: number;
     zoom: number;
