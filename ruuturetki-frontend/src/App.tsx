@@ -78,7 +78,7 @@ function StartMenu({
       setGameSettings({
         ortolayer: "avoindata:Ortoilmakuva_1943",
         dragging: true,
-        timed: false,
+        timed: null,
       });
       setChallenge(undefined);
     }
@@ -152,7 +152,7 @@ function App() {
   // Default game settings
   const [gameSettings, setGameSettings] = useState<GameSettings>({
     dragging: true,
-    timed: false,
+    timed: null,
     ortolayer: "avoindata:Ortoilmakuva_1943",
   });
   const [challenge, setChallenge] = useState<DailyChallenge | undefined>(

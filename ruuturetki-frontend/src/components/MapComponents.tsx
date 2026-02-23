@@ -6,18 +6,18 @@ import { useEffect, useState } from "react";
 import DevStats from "./DevStats.tsx";
 import RoundEndModal from "./modals/RoundEndModal.tsx";
 import { useNavigate } from "react-router-dom";
-import { GameSettings, GameState } from "../types/types.ts";
+import { GameSettings, GameState, Timed } from "../types/types.ts";
 import { getDistance } from "geolib";
 
 function Timer({
   timer,
   setTimer,
 }: {
-  timer: false | number;
-  setTimer: React.Dispatch<React.SetStateAction<number | false>>;
+  timer: Timed;
+  setTimer: React.Dispatch<React.SetStateAction<Timed>>;
 }) {
   // Render timer component only if timed mode is selected.
-  if (timer === false) {
+  if (timer === null) {
     return null;
   }
   // Minus 1 from the timer every 1000 ms
@@ -39,7 +39,7 @@ function SelectButton({
   timed,
 }: {
   handleEndRound: () => void;
-  timed: false | number;
+  timed: Timed;
 }) {
   // Do not render select button if timed mode is selected.
   if (timed) {

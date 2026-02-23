@@ -58,7 +58,7 @@ function PlayModal({
                   console.log("Timed mode?", !gameSettings.timed);
                   setGameSettings((prev) => ({
                     ...prev,
-                    timed: prev.timed ? false : 15, // Switch between options false and 10
+                    timed: prev.timed ? null : 15, // Switch between options null and 10
                   }));
                 }}
               />
