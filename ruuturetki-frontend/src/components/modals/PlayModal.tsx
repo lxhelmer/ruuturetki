@@ -1,31 +1,38 @@
 import { Modal } from "react-bootstrap";
 import { Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { GameSettings } from "../../types/types";
+import { GameSettings, MapLayerName } from "../../types/types";
+import { useState } from "react";
+import {
+  decadeForMapLayer,
+  mapLayersForCity,
+} from "../../utils/mapLayerHelpers";
 
 function PlayModal({
   show,
   handleClosePlay,
   setGameSettings,
   gameSettings,
-  ortolayersHelsinki,
-  ortolayersTurku,
 }: {
   show: boolean;
   handleClosePlay: () => void;
   setGameSettings: React.Dispatch<React.SetStateAction<GameSettings>>;
   gameSettings: GameSettings;
-  ortolayersHelsinki: GameSettings["ortolayer"][];
-  ortolayersTurku: GameSettings["ortolayer"][];
 }) {
   const navigate = useNavigate();
+  const [city, setCity] = useState("Helsinki");
+
+  const startGame = (mapName: MapLayerName) => {
+    setGameSettings((prev) => ({ ...prev, ortolayer: mapName }));
+    navigate("/game");
+  };
 
   return (
     <>
       <Modal
+        dialogClassName="play-modal-dialog"
         show={show}
         onHide={handleClosePlay}
-        size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
@@ -33,10 +40,9 @@ function PlayModal({
           <Modal.Title>Time to get mapping!</Modal.Title>
         </Modal.Header>
         <Modal.Body id="play-modal-body">
-          <label htmlFor="game-settings" className="play-modal-label">
-            Game settings
-          </label>
-          <div id="game-settings">
+          {/* Game settings */}
+          <h5 className="play-modal">Game settings</h5>
+          <div className="play-modal-content">
             <Form>
               <Form.Check
                 inline
@@ -64,49 +70,34 @@ function PlayModal({
               />
             </Form>
           </div>
-          <label htmlFor="helsinki" className="play-modal-label">
-            Helsinki
-          </label>
-          <div id="helsinki">
-            {/* Helsinki ortolayer buttons */}
-            {ortolayersHelsinki.map((layerName) => (
+          {/* City selection */}
+          <h5 className="play-modal">City</h5>
+          <div className="play-modal-content">
+            <Form.Select
+              className="city-selection"
+              defaultValue={city}
+              onChange={(event) => {
+                setCity(event.currentTarget.value);
+              }}
+            >
+              <option value="Helsinki">Helsinki</option>
+              <option value="Turku">Turku</option>
+            </Form.Select>
+          </div>
+          {/* Decades */}
+          <h5 className="play-modal">Decade</h5>
+          <div className="play-modal-content">
+            {mapLayersForCity(city).map((mapName) => (
               <Button
                 className="y-button"
                 variant="secondary"
-                key={layerName}
+                key={mapName}
                 onClick={() => {
-                  setGameSettings({
-                    ...gameSettings,
-                    ortolayer: layerName,
-                  });
-                  navigate("/game");
+                  startGame(mapName);
                 }}
               >
                 {/* Displayed button name for example "1940's" or "2010's" */}
-                {layerName.match(/[0-9][0-9][0-9]/) + "0's"}
-              </Button>
-            ))}
-          </div>
-          <label htmlFor="turku" className="play-modal-label">
-            Turku
-          </label>
-          <div id="turku">
-            {/* Turku ortolayer buttons */}
-            {ortolayersTurku.map((layerName) => (
-              <Button
-                className="y-button"
-                variant="secondary"
-                key={layerName}
-                onClick={() => {
-                  setGameSettings({
-                    ...gameSettings,
-                    ortolayer: layerName,
-                  });
-                  navigate("/game");
-                }}
-              >
-                {/* Displayed button name for example "1950's" or "2020's" */}
-                {layerName.match(/[0-9][0-9][0-9]/) + "0's"}
+                {decadeForMapLayer(mapName)}
               </Button>
             ))}
           </div>

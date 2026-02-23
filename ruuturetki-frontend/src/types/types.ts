@@ -1,4 +1,9 @@
-export type FormEvent = React.FormEvent<HTMLFormElement>;
+export type FormEvent = React.SubmitEvent<HTMLFormElement>;
+
+export type SelectEvent = React.ChangeEvent<
+  HTMLSelectElement,
+  HTMLSelectElement
+>;
 
 export interface IGame {
   rounds: number;
@@ -34,17 +39,17 @@ export type MapLayerNameHelsinki =
   | "avoindata:Ortoilmakuva_1943"
   | "avoindata:Ortoilmakuva_1969"
   | "avoindata:Ortoilmakuva_1997"
-  | "avoindata:Ortoilmakuva_2024_5cm"
-  | "avoindata:Ortoilmakuva_2019_20cm";
+  | "avoindata:Ortoilmakuva_2019_20cm"
+  | "avoindata:Ortoilmakuva_2024_5cm";
 
 export type MapLayerNameTurku =
   | "Turku ilmakuva 1939"
+  | "Turun Osoitekartta 1945"
   | "Turku ilmakuva 1958"
   | "Turku ilmakuva 1973"
   | "Turku ilmakuva 1998"
   | "Turku ilmakuva 2010"
-  | "Ilmakuva 2022 True ortho"
-  | "Turun Osoitekartta 1945";
+  | "Ilmakuva 2022 True ortho";
 
 export interface GameState {
   roundId: number;

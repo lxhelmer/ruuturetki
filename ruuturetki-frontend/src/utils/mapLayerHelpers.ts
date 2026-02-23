@@ -1,22 +1,43 @@
-import { MapLayerName } from "../types/types";
+import {
+  MapLayerName,
+  MapLayerNameHelsinki,
+  MapLayerNameTurku,
+} from "../types/types";
 import { TileLayerProps, WMSTileLayerProps } from "react-leaflet";
 
-const helsinkiMapLayers: Set<MapLayerName> = new Set([
-  "avoindata:Ortoilmakuva_1943",
-  "avoindata:Ortoilmakuva_1969",
-  "avoindata:Ortoilmakuva_1997",
-  "avoindata:Ortoilmakuva_2024_5cm",
-  "avoindata:Ortoilmakuva_2019_20cm",
-]);
-const turkuMapLayers: Set<MapLayerName> = new Set([
-  "Turku ilmakuva 1939",
-  "Turku ilmakuva 1958",
-  "Turku ilmakuva 1973",
-  "Turku ilmakuva 1998",
-  "Turku ilmakuva 2010",
-  "Ilmakuva 2022 True ortho",
-  "Turun Osoitekartta 1945",
-]);
+const helsinkiMapLayers: Set<MapLayerName> = new Set(
+  mapLayersForCity("Helsinki"),
+);
+const turkuMapLayers: Set<MapLayerName> = new Set(mapLayersForCity("Turku"));
+
+/**
+ * Returns maplayers for the provided city name.
+ */
+export function mapLayersForCity(city: string) {
+  if (city === "Helsinki") {
+    const mapLayers: MapLayerNameHelsinki[] = [
+      "avoindata:Ortoilmakuva_1943",
+      "avoindata:Ortoilmakuva_1969",
+      "avoindata:Ortoilmakuva_1997",
+      "avoindata:Ortoilmakuva_2019_20cm",
+      "avoindata:Ortoilmakuva_2024_5cm",
+    ];
+    return mapLayers;
+  } else if (city === "Turku") {
+    const maplayers: MapLayerNameTurku[] = [
+      "Turku ilmakuva 1939",
+      "Turun Osoitekartta 1945",
+      "Turku ilmakuva 1958",
+      "Turku ilmakuva 1973",
+      "Turku ilmakuva 1998",
+      "Turku ilmakuva 2010",
+      "Ilmakuva 2022 True ortho",
+    ];
+    return maplayers;
+  } else {
+    throw new Error("Cannot find maplayers for the city!");
+  }
+}
 
 /**
  * Returns WMSOptions for the provided map layer name.
@@ -71,8 +92,9 @@ export function tileLayerOptions(): TileLayerProps {
   };
 }
 
+/**
+ * Returns decade of the provided map layer. For example: 1990's, 2000's, 1930's.
+ */
 export function decadeForMapLayer(mapLayerName: MapLayerName) {
-  // Examples: 1990's, 2020's, 1940's
-  const str = mapLayerName.match(/[0-9][0-9][0-9]/) + "0's";
-  return str;
+  return mapLayerName.match(/[0-9][0-9][0-9]/) + "0's";
 }
