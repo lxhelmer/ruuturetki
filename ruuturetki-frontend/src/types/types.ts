@@ -66,10 +66,11 @@ export interface CuratorRound {
 export interface DailyChallenge {
   date: string;
   maplayer: MapLayerName;
+  moving: boolean;
+  timed: false | number;
   dailyChallenge: {
     id: number;
     zoom: number;
-    draggable: boolean;
     latlng: { lat: number; lng: number };
   }[];
 }

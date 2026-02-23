@@ -118,9 +118,9 @@ input.form-check-input:hover {
   margin: 0.5rem;
 }
 
-#curator-form > #date {
-  width: 30%;
-}
+/* #curator-form #date {
+  width: fit-content;
+} */
 
 #curator-form > #map {
   height: 40vh;
@@ -130,6 +130,16 @@ input.form-check-input:hover {
   display: flex;
   gap: 1rem;
   justify-content: end;
+}
+
+div.curator-settings {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;  
+}
+div.curator-settings > {
+  width: fit-content;
 }
 
 #dev-stat {
@@ -219,6 +229,9 @@ div.daily-challenge-content {
   flex: 1;
   display: flex;
   flex-direction: column;
+}
+td.header {
+  width: 6rem;
 }
 #calendar-map {
   height: 100%;

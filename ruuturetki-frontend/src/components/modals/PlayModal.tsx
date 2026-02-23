@@ -44,10 +44,10 @@ function PlayModal({
                 type="switch"
                 onClick={() => {
                   console.log("Moving allowed?", !gameSettings.dragging);
-                  setGameSettings({
-                    ...gameSettings,
+                  setGameSettings((prev) => ({
+                    ...prev,
                     dragging: !gameSettings.dragging,
-                  });
+                  }));
                 }}
               />
               <Form.Check
@@ -56,10 +56,10 @@ function PlayModal({
                 type="switch"
                 onClick={() => {
                   console.log("Timed mode?", !gameSettings.timed);
-                  setGameSettings({
-                    ...gameSettings,
-                    timed: gameSettings.timed ? false : 15, // Switch between options false and 10
-                  });
+                  setGameSettings((prev) => ({
+                    ...prev,
+                    timed: prev.timed ? false : 15, // Switch between options false and 10
+                  }));
                 }}
               />
             </Form>
