@@ -6,7 +6,7 @@ interface DailyChallenge {
   date: string;
   maplayer: string;
   moving: boolean;
-  timed: boolean;
+  timed: number | null;
   dailyChallenge: {
     id: number;
     zoom: number;
@@ -18,7 +18,7 @@ const dailyChallengeSchema = new mongoose.Schema<DailyChallenge>({
   date: String,
   maplayer: String,
   moving: Boolean,
-  timed: Boolean,
+  timed: { type: Number, default: null },
   dailyChallenge: [
     {
       id: Number,
