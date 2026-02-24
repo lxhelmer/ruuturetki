@@ -1,7 +1,7 @@
 import { Modal } from "react-bootstrap";
 import { Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { GameSettings, MapLayerName } from "../../types/types";
+import { DailyChallenge, GameSettings, MapLayerName } from "../../types/types";
 import { useState } from "react";
 import {
   decadeForMapLayer,
@@ -13,17 +13,22 @@ function PlayModal({
   handleClosePlay,
   setGameSettings,
   gameSettings,
+  setChallenge,
 }: {
   show: boolean;
   handleClosePlay: () => void;
   setGameSettings: React.Dispatch<React.SetStateAction<GameSettings>>;
   gameSettings: GameSettings;
+  setChallenge: React.Dispatch<
+    React.SetStateAction<DailyChallenge | undefined>
+  >;
 }) {
   const navigate = useNavigate();
   const [city, setCity] = useState("Helsinki");
 
   const startGame = (mapName: MapLayerName) => {
     setGameSettings((prev) => ({ ...prev, ortolayer: mapName }));
+    setChallenge(undefined);
     navigate("/game");
   };
 
