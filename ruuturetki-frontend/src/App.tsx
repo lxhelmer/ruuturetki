@@ -25,10 +25,12 @@ import dayjs from "dayjs";
 function StartMenu({
   setGameSettings,
   gameSettings,
+  challenge,
   setChallenge,
 }: {
   setGameSettings: React.Dispatch<React.SetStateAction<GameSettings>>;
   gameSettings: GameSettings;
+  challenge: DailyChallenge | undefined;
   setChallenge: React.Dispatch<
     React.SetStateAction<DailyChallenge | undefined>
   >;
@@ -156,7 +158,7 @@ function StartMenu({
         <Button variant="dark" size="lg" onClick={() => handleShowPlay()}>
           play
         </Button>
-        {dailyChallenges.length !== 0 && (
+        {challenge && (
           <Button variant="dark" size="lg" onClick={() => handleDailyClick()}>
             daily challenge
           </Button>
@@ -206,6 +208,7 @@ function App() {
               <StartMenu
                 setGameSettings={setGameSettings}
                 gameSettings={gameSettings}
+                challenge={challenge}
                 setChallenge={setChallenge}
               />
             }
