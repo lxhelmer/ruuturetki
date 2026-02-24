@@ -1,5 +1,4 @@
 import { Button, Modal } from "react-bootstrap";
-import calendarservice from "../../services/dailyChallenge";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
@@ -7,7 +6,7 @@ import updateLocale from "dayjs/plugin/updateLocale";
 import { ThemeProvider, createTheme, styled } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { PickersDay, StaticDatePicker } from "@mui/x-date-pickers";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { PickerValue } from "@mui/x-date-pickers/internals";
 import { DailyChallenge, GameSettings } from "../../types/types";
 import { MapContainer, TileLayer } from "react-leaflet";
@@ -235,7 +234,6 @@ export default function Calendar({
   setChallenge,
   setGameSettings,
   dailyChallenges,
-  setDailyChallenges,
 }: {
   show: boolean;
   handleCloseCalendar: () => void;
@@ -244,17 +242,10 @@ export default function Calendar({
   >;
   setGameSettings: React.Dispatch<React.SetStateAction<GameSettings>>;
   dailyChallenges: DailyChallenge[];
-  setDailyChallenges: React.Dispatch<React.SetStateAction<DailyChallenge[]>>;
 }) {
   // Initialize state variables
   const today = dayjs();
   const [selectedDate, setSelectedDate] = useState(today);
-
-  // Load daily challenges
-  useEffect(() => {
-    fetchDailies();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   // Convert dailychallenge dates to a set for faster lookup
   const dateSet = useMemo(() => {
@@ -269,19 +260,6 @@ export default function Calendar({
   }, [dailyChallenges]);
 
   /**
-   * Loads daily challenges from the database and saves them to the state variable.
-   */
-  async function fetchDailies() {
-    try {
-      const response: DailyChallenge[] = await calendarservice.getAll();
-      console.log("Dailies fetched, response:", response);
-      setDailyChallenges(response);
-    } catch (error) {
-      console.log("Cannot fetch dailies:", error);
-    }
-  }
-
-  /**
    * Handles clicking different dates on the calendar by saving
    * the date to the component's state.
    * */
@@ -289,17 +267,6 @@ export default function Calendar({
     date === null
       ? console.log("Invalid date selected!")
       : setSelectedDate(date);
-
-  /**
-   * Loads daily challenges from the backend.
-   *  */
-  const loadCalendar = async () => {
-    try {
-      fetchDailies();
-    } catch {
-      console.log("could not fetch games");
-    }
-  };
 
   // Next two functions run for every visible day in the calendar.
   // The functions highlight days that have a daily challenge and do
@@ -348,9 +315,6 @@ export default function Calendar({
       >
         <Modal.Header closeButton>
           <Modal.Title>Daily Calendar</Modal.Title>
-          <Button className="reload" variant="secondary" onClick={loadCalendar}>
-            reload daily challenges
-          </Button>
         </Modal.Header>
         <Modal.Body>
           <div className="calendar-modal-body">
