@@ -82,6 +82,7 @@ function PlayModal({
             >
               <option value="Helsinki">Helsinki</option>
               <option value="Turku">Turku</option>
+              <option value="Tampere">Tampere</option>
             </Form.Select>
           </div>
           {/* Decades */}
