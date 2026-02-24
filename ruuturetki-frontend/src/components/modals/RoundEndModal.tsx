@@ -12,22 +12,6 @@ import { GameState } from "../../types/types.ts";
 import L from "leaflet";
 import { tileLayerOptions } from "../../utils/mapLayerHelpers.ts";
 
-function ModalButton({
-  roundId,
-  handleCloseREM,
-}: {
-  roundId: number;
-  handleCloseREM: () => void;
-}) {
-  return (
-    <>
-      <Button variant="secondary" onClick={handleCloseREM}>
-        {roundId < 4 ? "Next" : "End"}
-      </Button>
-    </>
-  );
-}
-
 function FitBounds({
   bounds,
   delay,
@@ -102,6 +86,11 @@ function RoundEndModal({
   if (!show) {
     return null;
   }
+
+  const roundNumber = gameState.roundId + 1;
+  const roundScore = gameState.score[gameState.roundId];
+  const totalScore = gameState.score.reduce((a, c) => a + c, 0);
+
   return (
     <>
       <Modal
@@ -113,23 +102,39 @@ function RoundEndModal({
         backdrop="static"
       >
         <Modal.Header closeButton>
-          <Modal.Title>Round {gameState.roundId + 1}/5 score:</Modal.Title>
+          <Modal.Title>Round {roundNumber}/5 score:</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div id="modal-content">
-            <h2>{gameState.score[gameState.roundId]} points for the round!</h2>
+            <h2>{roundScore} points for the round!</h2>
+            {roundScore !== 0 && (
+              <meter
+                value={roundScore}
+                max={10000}
+                low={4000}
+                high={8000}
+                optimum={9000}
+              />
+            )}
             <ModalMap gameState={gameState} />
             <h2 id="modal-score">
-              {gameState.score.reduce((a, c) => a + c, 0)} /{" "}
-              {gameState.roundId + 1}0 000 total points
+              {totalScore} / {roundNumber}0 000 total points
             </h2>
+            {totalScore !== 0 && (
+              <meter
+                value={totalScore}
+                max={10000 * roundNumber}
+                low={4000 * roundNumber}
+                high={8000 * roundNumber}
+                optimum={9000 * roundNumber}
+              />
+            )}
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <ModalButton
-            roundId={gameState.roundId}
-            handleCloseREM={handleCloseREM}
-          />
+          <Button variant="secondary" onClick={handleCloseREM}>
+            {roundNumber < 5 ? "Next" : "End"}
+          </Button>
         </Modal.Footer>
       </Modal>
     </>
