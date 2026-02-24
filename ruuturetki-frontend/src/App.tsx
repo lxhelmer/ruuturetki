@@ -55,6 +55,7 @@ function StartMenu({
     }
     const fetch_id = setInterval(pingBackend, 840000);
     return () => clearInterval(fetch_id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -78,6 +79,15 @@ function StartMenu({
       const response: DailyChallenge[] = await calendarservice.getAll();
       console.log("Dailies fetched, response:", response);
       setDailyChallenges(response);
+      const dailyChallenge = response.find(
+        (daily) => daily.date === dayjs().format("YYYY-MM-DD"),
+      );
+      if (dailyChallenge) {
+        console.log("Daily challenge found for today! Showing daily button.");
+        setChallenge(dailyChallenge);
+      } else {
+        console.log("Cannot find daily challenge for today!");
+      }
     } catch (error) {
       console.log("Cannot fetch dailies:", error);
     }
@@ -93,24 +103,20 @@ function StartMenu({
   const handleShowCalendar = () => setCalendarModal(true);
 
   const handleDailyClick = () => {
-    try {
-      const dailyChallenge = dailyChallenges.find(
-        (daily) => daily.date === dayjs().format("YYYY-MM-DD"),
-      );
-      if (!dailyChallenge) {
-        alert("Cannot find daily challenge for today!");
-      } else {
-        setGameSettings({
-          ortolayer: dailyChallenge.maplayer,
-          dragging: dailyChallenge.moving,
-          timed: dailyChallenge.timed,
-        });
-        setChallenge(dailyChallenge);
-        navigate("/game");
-      }
-    } catch {
+    // Daily button should only be visible when there is a daily challenge for today
+    // Double check
+    if (!challenge) {
       alert("Cannot find daily challenge for today!");
+      return; // Exit without starting game
     }
+
+    // Prepare gamesettings for the challenge and start game
+    setGameSettings({
+      ortolayer: challenge.maplayer,
+      dragging: challenge.moving,
+      timed: challenge.timed,
+    });
+    navigate("/game");
   };
 
   // Settings for the background map in the main menu
