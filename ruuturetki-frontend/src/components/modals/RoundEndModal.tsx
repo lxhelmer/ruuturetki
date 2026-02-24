@@ -52,7 +52,7 @@ function FitBounds({
   // Fit the map to bounds after the delay
   setTimeout(() => {
     try {
-      map.fitBounds(bounds);
+      map.fitBounds(bounds, { padding: [50, 50] });
     } catch (error) {
       console.log("Unable to fit roundEndModal map to bounds!", error);
     }

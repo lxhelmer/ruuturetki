@@ -1,4 +1,9 @@
-export type FormEvent = React.FormEvent<HTMLFormElement>;
+export type FormEvent = React.SubmitEvent<HTMLFormElement>;
+
+export type SelectEvent = React.ChangeEvent<
+  HTMLSelectElement,
+  HTMLSelectElement
+>;
 
 export interface IGame {
   rounds: number;
@@ -28,23 +33,40 @@ export interface GameSettings {
 
 export type Timed = number | null; // Number is the round time in seconds, null means no timer
 
-export type MapLayerName = MapLayerNameHelsinki | MapLayerNameTurku;
+export type MapLayerName =
+  | MapLayerNameHelsinki
+  | MapLayerNameTurku
+  | MapLayerNameTampere;
 
 export type MapLayerNameHelsinki =
   | "avoindata:Ortoilmakuva_1943"
   | "avoindata:Ortoilmakuva_1969"
   | "avoindata:Ortoilmakuva_1997"
-  | "avoindata:Ortoilmakuva_2024_5cm"
-  | "avoindata:Ortoilmakuva_2019_20cm";
+  | "avoindata:Ortoilmakuva_2019_20cm"
+  | "avoindata:Ortoilmakuva_2024_5cm";
 
 export type MapLayerNameTurku =
   | "Turku ilmakuva 1939"
+  | "Turun Osoitekartta 1945"
   | "Turku ilmakuva 1958"
   | "Turku ilmakuva 1973"
   | "Turku ilmakuva 1998"
   | "Turku ilmakuva 2010"
-  | "Ilmakuva 2022 True ortho"
-  | "Turun Osoitekartta 1945";
+  | "Ilmakuva 2022 True ortho";
+
+export type MapLayerNameTampere =
+  | "georaster:1946m_kanta_tre_EPSG_3067"
+  | "georaster:1956m_kanta_tre_EPSG_3067"
+  | "georaster:1966m_kanta_tre_EPSG_3067"
+  | "georaster:1974m_kanta_tre_EPSG_3067"
+  | "georaster:1987m_kanta_tre_EPSG_3067"
+  | "georaster:1995v_kanta_tre_ETRS_3067"
+  | "georaster:2011v_tre_EPSG_3067"
+  | "georaster:2018v_Pictometry_kanta_tre"
+  | "georaster:2020_tampere_epsg_3067"
+  | "georaster:tampere_2022_3067_r0125"
+  | "georaster:tampere_2022_CRS84_r0125"
+  | "georaster:tampere_2025_3878";
 
 export interface GameState {
   roundId: number;

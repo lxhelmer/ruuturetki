@@ -136,7 +136,7 @@ div.curator-settings {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;  
+  gap: 1rem;
 }
 div.curator-settings > {
   width: fit-content;
@@ -190,16 +190,14 @@ div.curator-settings > {
 }
 
 /* Play modal */
-#play-modal-body label {
-  display: flex;
-  justify-content: center;
+div.play-modal-dialog {
+  min-width: 65vw;
 }
-label.play-modal-label {
+h5.play-modal {
   margin: auto;
+  text-align: center;
 }
-#game-settings,
-#helsinki,
-#turku {
+div.play-modal-content {
   max-width: fit-content;
   margin: 0 auto 2rem auto;
   display: flex;

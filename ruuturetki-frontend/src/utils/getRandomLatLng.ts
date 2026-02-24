@@ -1,55 +1,85 @@
-import L from "leaflet";
-import { MapLayerName } from "../types/types";
 import { cityForMapLayer } from "./mapLayerHelpers";
+import { MapLayerName } from "../types/types";
+import { latLng, LatLngLiteral } from "leaflet";
+import { isPointInPolygon } from "geolib";
 
-export default function getRandomLatLng(MapLayerName: MapLayerName) {
-  const city = cityForMapLayer(MapLayerName);
-  let southBoundLat = 0;
-  let northBoundLat = 0;
-  let eastBoundLon = 0;
-  let westBoundLon = 0;
-  if (city === "Turku") {
-    // Turku bounding box
-    const box = {
-      SW: { lat: 60.428, lng: 22.228 },
-      NE: { lat: 60.468, lng: 22.289 },
-    };
-    const randomLat = Math.random() * (box.NE.lat - box.SW.lat) + box.SW.lat;
-    const randomLon = Math.random() * (box.NE.lng - box.SW.lng) + box.SW.lng;
-    return L.latLng(randomLat, randomLon);
-  } else /* city === "Helsinki" */ {
-    // To prevent black screen specially in 2020's
-    // Helsinki is divided into two adjacent bounding boxes.
-    // First (left, west) box dimensions: SW=(60.1417, 24.8541); NE(60.2524, 25.0124)
-    // Second (right, east) box dimensions: SW=(60.1614, 25.0124); NE(60.2377, 25.2048)
-    const firstBox = {
-      SW: { lat: 60.1417, lng: 24.8541 },
-      NE: { lat: 60.2524, lng: 25.0124 },
-    };
-    const secondBox = {
-      SW: { lat: 60.1614, lng: 25.0124 },
-      NE: { lat: 60.2377, lng: 25.2048 },
+/**
+ * Returns a random location inside the city of the provided map layer name.
+ */
+export default function getRandomLatLng(mapLayerName: MapLayerName) {
+  const city = cityForMapLayer(mapLayerName);
+  const polygon = getPolygonForCity(city);
+  const point = getRandomPointInPolygon(polygon);
+  return point;
+}
+
+/**
+ * Returns a hand made polygon of the provided city.
+ */
+function getPolygonForCity(city: string) {
+  if (city === "Helsinki") {
+    return [
+      { lat: 60.1373, lng: 24.8552 },
+      { lat: 60.1346, lng: 25.0144 },
+      { lat: 60.1612, lng: 25.0165 },
+      { lat: 60.1619, lng: 25.182 },
+      { lat: 60.2384, lng: 25.193 },
+      { lat: 60.2298, lng: 25.1195 },
+      { lat: 60.2557, lng: 25.0708 },
+      { lat: 60.2731, lng: 25.0625 },
+      { lat: 60.2649, lng: 24.965 },
+      { lat: 60.2438, lng: 24.8476 },
+    ];
+  } else if (city === "Turku") {
+    return [
+      { lat: 60.4392, lng: 22.3465 },
+      { lat: 60.3945, lng: 22.2143 },
+      { lat: 60.4297, lng: 22.1333 },
+      { lat: 60.4551, lng: 22.2019 },
+      { lat: 60.5023, lng: 22.271 },
+      { lat: 60.4905, lng: 22.3434 },
+      { lat: 60.4673, lng: 22.3104 },
+    ];
+  } else if (city === "Tampere") {
+    return [
+      { lat: 61.5017, lng: 23.5766 },
+      { lat: 61.4891, lng: 23.7139 },
+      { lat: 61.4386, lng: 23.7541 },
+      { lat: 61.4425, lng: 23.8986 },
+      { lat: 61.5023, lng: 23.9436 },
+      { lat: 61.5136, lng: 23.8224 },
+      { lat: 61.5132, lng: 23.7212 },
+      { lat: 61.5357, lng: 23.6758 },
+      { lat: 61.5276, lng: 23.5735 },
+    ];
+  } else {
+    throw new Error("Cannot define polygon for the city!");
+  }
+}
+
+/**
+ * Returns a random geographic point inside a polygon.
+ */
+function getRandomPointInPolygon(polygon: LatLngLiteral[]) {
+  // Compute bounding box
+  const lats = polygon.map((p) => p.lat);
+  const lngs = polygon.map((p) => p.lng);
+
+  const minLat = Math.min(...lats);
+  const maxLat = Math.max(...lats);
+  const minLng = Math.min(...lngs);
+  const maxLng = Math.max(...lngs);
+
+  // Pick a random location inside the bounding box until it is inside the original polygon
+  while (true) {
+    const point = {
+      lat: Math.random() * (maxLat - minLat) + minLat,
+      lng: Math.random() * (maxLng - minLng) + minLng,
     };
 
-    // First random longitude is selected. Then latitude is selected from the first
-    // or the second bounding box depending on which one includes the longitude.
-    westBoundLon = firstBox.SW.lng;
-    eastBoundLon = secondBox.NE.lng;
-    const randomLon =
-      Math.random() * (eastBoundLon - westBoundLon) + westBoundLon;
-    // Check which box includes longitude. Then adjust south and north bounds
-    // to match that box.
-    if (randomLon < 25.0124) {
-      // Random lng belongs to the first box, set bounds to the first box bounds
-      southBoundLat = firstBox.SW.lat;
-      northBoundLat = firstBox.NE.lat;
-    } else {
-      // Random lng belongs to the second box, set bounds to the second box bounds
-      southBoundLat = secondBox.SW.lat;
-      northBoundLat = secondBox.NE.lat;
+    // Exit the loop and return the point when it is inside the original polygon
+    if (isPointInPolygon(point, polygon)) {
+      return latLng(point);
     }
-    const randomLat =
-      Math.random() * (northBoundLat - southBoundLat) + southBoundLat;
-    return L.latLng(randomLat, randomLon);
   }
 }

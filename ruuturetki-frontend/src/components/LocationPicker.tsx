@@ -1,15 +1,17 @@
-import L from "leaflet";
 import { useMapEvents, useMap, Marker } from "react-leaflet";
 import { useEffect, useState } from "react";
 import markerIcon from "./MarkerIcon.tsx";
-import { GameState } from "../types/types.ts";
+import { GameState, MapLayerName } from "../types/types.ts";
+import { cityForMapLayer, getCityCenter } from "../utils/mapLayerHelpers.ts";
 
 function LocationPicker({
   gameState,
   setGameState,
+  mapLayerName,
 }: {
   gameState: GameState;
   setGameState: React.Dispatch<React.SetStateAction<GameState>>;
+  mapLayerName: MapLayerName;
 }) {
   // Marker for the guessed location
   const [marker, setMarker] = useState<null | L.LatLng>(null);
@@ -20,7 +22,9 @@ function LocationPicker({
   // Center the selection map when a round starts
   const mapInstance = useMap();
   useEffect(() => {
-    mapInstance.setView(L.latLng(60.18, 24.95), 11);
+    const center = getCityCenter(cityForMapLayer(mapLayerName));
+    const zoom = 11;
+    mapInstance.setView(center, zoom);
     setMarker(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startPosition]);

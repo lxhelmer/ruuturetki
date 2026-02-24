@@ -15,8 +15,6 @@ import {
   DailyChallenge,
   GameSettings,
   MapLayerName,
-  MapLayerNameHelsinki,
-  MapLayerNameTurku,
 } from "./types/types";
 import PlayModal from "./components/modals/PlayModal";
 import Practice from "./components/Practice";
@@ -31,16 +29,12 @@ function StartMenu({
   setGameSettings,
   gameSettings,
   setChallenge,
-  ortolayersHelsinki,
-  ortolayersTurku,
 }: {
   setGameSettings: React.Dispatch<React.SetStateAction<GameSettings>>;
   gameSettings: GameSettings;
   setChallenge: React.Dispatch<
     React.SetStateAction<DailyChallenge | undefined>
   >;
-  ortolayersHelsinki: GameSettings["ortolayer"][];
-  ortolayersTurku: GameSettings["ortolayer"][];
 }) {
   const [showPlayModal, setPlayModal] = useState(false);
   const [showHelpModal, setHelpModal] = useState(false);
@@ -105,8 +99,6 @@ function StartMenu({
         handleClosePlay={handleClosePlay}
         setGameSettings={setGameSettings}
         gameSettings={gameSettings}
-        ortolayersHelsinki={ortolayersHelsinki}
-        ortolayersTurku={ortolayersTurku}
       />
       {showHelpModal && (
         <HelpModal show={showHelpModal} handleCloseHelp={handleCloseHelp} />
@@ -159,21 +151,6 @@ function App() {
     undefined,
   );
 
-  const ortolayersHelsinki: MapLayerNameHelsinki[] = [
-    "avoindata:Ortoilmakuva_1943",
-    "avoindata:Ortoilmakuva_1969",
-    "avoindata:Ortoilmakuva_1997",
-    "avoindata:Ortoilmakuva_2024_5cm",
-  ];
-  const ortolayersTurku: MapLayerNameTurku[] = [
-    "Turku ilmakuva 1939",
-    "Turku ilmakuva 1958",
-    "Turku ilmakuva 1973",
-    "Turku ilmakuva 1998",
-    "Turku ilmakuva 2010",
-    "Ilmakuva 2022 True ortho",
-  ];
-
   return (
     <>
       <Router>
@@ -182,15 +159,7 @@ function App() {
             path="/game"
             element={<Game gameSettings={gameSettings} challenge={challenge} />}
           />
-          <Route
-            path="/practice"
-            element={
-              <Practice
-                ortolayersHelsinki={ortolayersHelsinki}
-                ortolayersTurku={ortolayersTurku}
-              />
-            }
-          />
+          <Route path="/practice" element={<Practice />} />
           <Route
             path="/"
             element={
@@ -198,8 +167,6 @@ function App() {
                 setGameSettings={setGameSettings}
                 gameSettings={gameSettings}
                 setChallenge={setChallenge}
-                ortolayersHelsinki={ortolayersHelsinki}
-                ortolayersTurku={ortolayersTurku}
               />
             }
           />

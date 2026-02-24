@@ -28,8 +28,8 @@ function Game({
       getRandomLatLng(gameSettings.ortolayer),
     );
     zooms = [...Array(5)].map(() =>
-      cityForMapLayer(gameSettings.ortolayer) === "Helsinki" ? 17 : 18,
-    ); // Zoom 17 for Helsinki, 18 for Turku
+      cityForMapLayer(gameSettings.ortolayer) === "Turku" ? 18 : 17,
+    ); // Zoom 18 for Turku, 17 for Helsinki and Tampere
   }
   // console.log(locations, zooms);
 
