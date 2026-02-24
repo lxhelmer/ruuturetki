@@ -146,17 +146,17 @@ function MapComponents({
 
   const handleStartRound = () => {
     // Center the viewMap to the new starting location and update gameState
+    map.setView(
+      gameState.locations[gameState.roundId + 1],
+      gameState.zooms[gameState.roundId + 1],
+      { animate: false },
+    );
     setGameState((prev) => ({
       ...prev,
       roundId: prev.roundId + 1,
       distanceMoved: 0,
       picked: false,
     }));
-    map.setView(
-      gameState.locations[gameState.roundId + 1],
-      gameState.zooms[gameState.roundId + 1],
-      { animate: false },
-    );
   };
 
   const handleEndRound = () => {

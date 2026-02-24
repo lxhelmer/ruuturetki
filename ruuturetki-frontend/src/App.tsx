@@ -39,6 +39,49 @@ function StartMenu({
   const [dailyChallenges, setDailyChallenges] = useState<DailyChallenge[]>([]);
   const navigate = useNavigate();
 
+  // Keep backend alive by pinging it every 14 minutes
+  useEffect(() => {
+    // Load daily challenges
+    fetchDailies();
+    async function pingBackend() {
+      try {
+        const ping = await calendarservice.getById("123456789");
+        console.log("Backend ping:", ping);
+      } catch (error) {
+        console.log("Cannot ping backend!", error);
+      }
+    }
+    const fetch_id = setInterval(pingBackend, 840000);
+    return () => clearInterval(fetch_id);
+  }, []);
+
+  useEffect(() => {
+    // Reset default game settings when play modal is opened.
+    if (showPlayModal) {
+      console.log("Play modal opened. Resetting game settings.");
+      setGameSettings({
+        ortolayer: "avoindata:Ortoilmakuva_1943",
+        dragging: true,
+        timed: null,
+      });
+      setChallenge(undefined);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showPlayModal]);
+
+  /**
+   * Loads daily challenges from the database.
+   */
+  async function fetchDailies() {
+    try {
+      const response: DailyChallenge[] = await calendarservice.getAll();
+      console.log("Dailies fetched, response:", response);
+      setDailyChallenges(response);
+    } catch (error) {
+      console.log("Cannot fetch dailies:", error);
+    }
+  }
+
   const handleClosePlay = () => setPlayModal(false);
   const handleShowPlay = () => setPlayModal(true);
 
@@ -67,35 +110,6 @@ function StartMenu({
       alert("Cannot find daily challenge for today!");
     }
   };
-
-  // Keep backend alive by pinging it every 14 minutes
-  useEffect(() => {
-    async function pingBackend() {
-      try {
-        const ping = await calendarservice.getById("123456789");
-        console.log("Backend ping:", ping);
-      } catch (error) {
-        console.log("Cannot ping backend!", error);
-      }
-    }
-    pingBackend();
-    const fetch_id = setInterval(pingBackend, 840000);
-    return () => clearInterval(fetch_id);
-  }, []);
-
-  useEffect(() => {
-    // Reset default game settings when play modal is opened.
-    if (showPlayModal) {
-      console.log("Play modal opened. Resetting game settings.");
-      setGameSettings({
-        ortolayer: "avoindata:Ortoilmakuva_1943",
-        dragging: true,
-        timed: null,
-      });
-      setChallenge(undefined);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showPlayModal]);
 
   // Settings for the background map in the main menu
   const ortoLayer: MapLayerName = "avoindata:Ortoilmakuva_2024_5cm";
@@ -129,7 +143,6 @@ function StartMenu({
           setChallenge={setChallenge}
           setGameSettings={setGameSettings}
           dailyChallenges={dailyChallenges}
-          setDailyChallenges={setDailyChallenges}
         />
       )}
       <MapContainer id="map" {...mapOptions}>
