@@ -11,11 +11,7 @@ import { Button } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import "./App.css";
 import Game from "./components/Game";
-import {
-  DailyChallenge,
-  GameSettings,
-  MapLayerName,
-} from "./types/types";
+import { DailyChallenge, GameSettings, MapLayerName } from "./types/types";
 import PlayModal from "./components/modals/PlayModal";
 import Practice from "./components/Practice";
 import L from "leaflet";
@@ -24,6 +20,7 @@ import HelpModal from "./components/modals/HelpModal";
 import Calendar from "./components/modals/Calendar";
 import { wmsOptionsForMapLayer } from "./utils/mapLayerHelpers";
 import calendarservice from "./services/dailyChallenge";
+import dayjs from "dayjs";
 
 function StartMenu({
   setGameSettings,
@@ -39,6 +36,7 @@ function StartMenu({
   const [showPlayModal, setPlayModal] = useState(false);
   const [showHelpModal, setHelpModal] = useState(false);
   const [showCalendarModal, setCalendarModal] = useState(false);
+  const [dailyChallenges, setDailyChallenges] = useState<DailyChallenge[]>([]);
   const navigate = useNavigate();
 
   const handleClosePlay = () => setPlayModal(false);
@@ -49,6 +47,26 @@ function StartMenu({
 
   const handleCloseCalendar = () => setCalendarModal(false);
   const handleShowCalendar = () => setCalendarModal(true);
+
+  const handleDailyClick = () => {
+    try {
+      const dailyChallenge = dailyChallenges.find(
+        (daily) => daily.date === dayjs().format("YYYY-MM-DD"),
+      );
+      if (!dailyChallenge) {
+        alert("Cannot find daily challenge for today!");
+      } else {
+        setGameSettings({
+          ortolayer: dailyChallenge.maplayer,
+          dragging: dailyChallenge.moving,
+          timed: dailyChallenge.timed,
+        });
+        navigate("/game");
+      }
+    } catch {
+      alert("Cannot find daily challenge for today!");
+    }
+  };
 
   // Keep backend alive by pinging it every 14 minutes
   useEffect(() => {
@@ -103,12 +121,15 @@ function StartMenu({
       {showHelpModal && (
         <HelpModal show={showHelpModal} handleCloseHelp={handleCloseHelp} />
       )}
+
       {showCalendarModal && (
         <Calendar
           show={showCalendarModal}
           handleCloseCalendar={handleCloseCalendar}
           setChallenge={setChallenge}
           setGameSettings={setGameSettings}
+          dailyChallenges={dailyChallenges}
+          setDailyChallenges={setDailyChallenges}
         />
       )}
       <MapContainer id="map" {...mapOptions}>
@@ -121,6 +142,11 @@ function StartMenu({
         <Button variant="dark" size="lg" onClick={() => handleShowPlay()}>
           play
         </Button>
+        {dailyChallenges.length !== 0 && (
+          <Button variant="dark" size="lg" onClick={() => handleDailyClick()}>
+            daily challenge
+          </Button>
+        )}
         <Button variant="dark" size="lg" onClick={() => navigate("/practice")}>
           practice
         </Button>

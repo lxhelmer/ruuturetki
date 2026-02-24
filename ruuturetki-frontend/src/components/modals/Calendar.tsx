@@ -234,6 +234,8 @@ export default function Calendar({
   handleCloseCalendar,
   setChallenge,
   setGameSettings,
+  dailyChallenges,
+  setDailyChallenges,
 }: {
   show: boolean;
   handleCloseCalendar: () => void;
@@ -241,15 +243,17 @@ export default function Calendar({
     React.SetStateAction<DailyChallenge | undefined>
   >;
   setGameSettings: React.Dispatch<React.SetStateAction<GameSettings>>;
+  dailyChallenges: DailyChallenge[];
+  setDailyChallenges: React.Dispatch<React.SetStateAction<DailyChallenge[]>>;
 }) {
   // Initialize state variables
   const today = dayjs();
   const [selectedDate, setSelectedDate] = useState(today);
-  const [dailyChallenges, setDailyChallenges] = useState<DailyChallenge[]>([]);
 
   // Load daily challenges
   useEffect(() => {
     fetchDailies();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Convert dailychallenge dates to a set for faster lookup
