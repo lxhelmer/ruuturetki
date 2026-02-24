@@ -64,7 +64,6 @@ function StartMenu({
         dragging: true,
         timed: null,
       });
-      setChallenge(undefined);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showPlayModal]);
@@ -104,6 +103,7 @@ function StartMenu({
           dragging: dailyChallenge.moving,
           timed: dailyChallenge.timed,
         });
+        setChallenge(dailyChallenge);
         navigate("/game");
       }
     } catch {
@@ -131,6 +131,7 @@ function StartMenu({
         handleClosePlay={handleClosePlay}
         setGameSettings={setGameSettings}
         gameSettings={gameSettings}
+        setChallenge={setChallenge}
       />
       {showHelpModal && (
         <HelpModal show={showHelpModal} handleCloseHelp={handleCloseHelp} />
