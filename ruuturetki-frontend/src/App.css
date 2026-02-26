@@ -192,7 +192,7 @@ div.play-modal-content {
   display: flex;
   gap: 10px;
   padding: 10px;
-  overflow: scroll;
+  overflow: auto;
 }
 /*  */
 
@@ -238,6 +238,33 @@ meter {
   width: 100%;
   aspect-ratio: 1;
   z-index: 500;
+}
+/*  */
+
+/* Game summary */
+@keyframes fadeIn {
+  from { opacity: 0; } 
+  to { opacity: 1; }   
+}
+.fade-in  {
+  opacity: 0;
+  animation: fadeIn 1s ease-in-out forwards;
+}
+.summary-points {
+  animation-delay: 1.5s;
+  padding-bottom: 2rem;
+}
+.summary-rounds {
+  animation-delay: 3s;
+  display: flex;
+  justify-content: center;
+}
+td.summary-round-id{
+  width: 5rem;
+  padding: 0.5rem 0;
+}
+.game-summary-content h4{
+  text-align: center;
 }
 /*  */
 
