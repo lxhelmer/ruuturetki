@@ -11,6 +11,8 @@ import markerIcon from "../MarkerIcon.tsx";
 import { GameState } from "../../types/types.ts";
 import L from "leaflet";
 import { tileLayerOptions } from "../../utils/mapLayerHelpers.ts";
+import { useState } from "react";
+import GameSummary from "../GameSummary.tsx";
 
 function FitBounds({
   bounds,
@@ -48,7 +50,7 @@ function FitBounds({
   );
 }
 
-const ModalMap = ({ gameState }: { gameState: GameState }) => {
+function ModalMap({ gameState }: { gameState: GameState }) {
   const correctLocation: L.LatLng = gameState.locations[gameState.roundId];
   const guessedLocation: L.LatLng = gameState.guesses[gameState.roundId];
   const bounds = L.latLngBounds([correctLocation, guessedLocation]);
@@ -72,7 +74,7 @@ const ModalMap = ({ gameState }: { gameState: GameState }) => {
       />
     </MapContainer>
   );
-};
+}
 
 function RoundEndModal({
   gameState,
@@ -83,13 +85,52 @@ function RoundEndModal({
   show: boolean;
   handleCloseREM: () => void;
 }) {
-  if (!show) {
-    return null;
-  }
+  const [summaryShown, setSummaryShown] = useState(false);
 
   const roundNumber = gameState.roundId + 1;
   const roundScore = gameState.score[gameState.roundId];
   const totalScore = gameState.score.reduce((a, c) => a + c, 0);
+  const modalTitle = summaryShown
+    ? "Game Summary"
+    : `Round ${roundNumber / 5} score`;
+
+  const handleClick = () => {
+    // Show game summary on the last round and close REM on other rounds
+    if (summaryShown || roundNumber < 5) {
+      handleCloseREM();
+    } else {
+      setSummaryShown(true);
+    }
+  };
+
+  // Round summary is shown after all rounds
+  const roundSummary = (
+    <>
+      <h2>{roundScore} points for the round!</h2>
+      {roundScore !== 0 && (
+        <meter
+          value={roundScore}
+          max={10000}
+          low={4000}
+          high={8000}
+          optimum={9000}
+        />
+      )}
+      <ModalMap gameState={gameState} />
+      <h2 id="modal-score">
+        {totalScore} / {roundNumber}0 000 total points
+      </h2>
+      {totalScore !== 0 && (
+        <meter
+          value={totalScore}
+          max={10000 * roundNumber}
+          low={4000 * roundNumber}
+          high={8000 * roundNumber}
+          optimum={9000 * roundNumber}
+        />
+      )}
+    </>
+  );
 
   return (
     <>
@@ -102,38 +143,27 @@ function RoundEndModal({
         backdrop="static"
       >
         <Modal.Header closeButton>
-          <Modal.Title>Round {roundNumber}/5 score:</Modal.Title>
+          <Modal.Title>{modalTitle}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div id="modal-content">
-            <h2>{roundScore} points for the round!</h2>
-            {roundScore !== 0 && (
-              <meter
-                value={roundScore}
-                max={10000}
-                low={4000}
-                high={8000}
-                optimum={9000}
-              />
-            )}
-            <ModalMap gameState={gameState} />
-            <h2 id="modal-score">
-              {totalScore} / {roundNumber}0 000 total points
-            </h2>
-            {totalScore !== 0 && (
-              <meter
-                value={totalScore}
-                max={10000 * roundNumber}
-                low={4000 * roundNumber}
-                high={8000 * roundNumber}
-                optimum={9000 * roundNumber}
-              />
+            {/* Round summary is the default content to show and game 
+            summary is onyl shown after clicking next */}
+            {summaryShown ? (
+              <GameSummary gameState={gameState} />
+            ) : (
+              roundSummary
             )}
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseREM}>
-            {roundNumber < 5 ? "Next" : "End"}
+          <Button variant="secondary" onClick={handleClick}>
+            {/* Text of the button */}
+            {roundNumber < 5
+              ? "Next"
+              : summaryShown
+                ? "End"
+                : "Show game summary"}
           </Button>
         </Modal.Footer>
       </Modal>

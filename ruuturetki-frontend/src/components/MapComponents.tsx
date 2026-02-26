@@ -209,7 +209,7 @@ function MapComponents({
         },
       );
       // Making a guess inside a threshold distance gives a perfect pick score
-      const threshold = 10;
+      const threshold = 30;
       pickScore = pickScore < threshold ? 0 : pickScore;
 
       // Score calculation formula
@@ -258,11 +258,13 @@ function MapComponents({
         {gameState.roundId < 5 ? gameState.roundId + 1 : 5}/5
       </Button>
       <Timer timer={timer} setTimer={setTimer} />
-      <RoundEndModal
-        gameState={gameState}
-        show={showREM}
-        handleCloseREM={handleCloseREM}
-      />
+      {showREM && (
+        <RoundEndModal
+          gameState={gameState}
+          show={showREM}
+          handleCloseREM={handleCloseREM}
+        />
+      )}
       <div id="controls">
         <ResButton handleResetMap={handleResetMap} />
         <SelectButton
