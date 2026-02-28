@@ -92,7 +92,7 @@ function RoundEndModal({
   const totalScore = gameState.score.reduce((a, c) => a + c, 0);
   const modalTitle = summaryShown
     ? "Game Summary"
-    : `Round ${roundNumber / 5} score`;
+    : `Round ${roundNumber} out of 5 score`;
 
   const handleClick = () => {
     // Show game summary on the last round and close REM on other rounds
