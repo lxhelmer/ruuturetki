@@ -11,20 +11,34 @@ import markerIcon from "./MarkerIcon";
 export default function MapMarkers({
   locations,
   delay = 1500,
+  tooltipTexts,
 }: {
-  locations: L.LatLngExpression[];
+  locations: (L.LatLngExpression | undefined)[];
   delay?: number;
+  tooltipTexts?: string[];
 }) {
   const map = useMap();
-  setTimeout(() => {
-    map.fitBounds(L.latLngBounds(locations), { padding: [50, 50] });
-  }, delay);
+
+  // Delete possible undefined guessed location from the list
+  const latlngs = locations.filter((element) => element !== undefined);
+
+  // Fit map view to bounds if more than 1 location
+  if (latlngs.length > 1) {
+    setTimeout(() => {
+      map.fitBounds(L.latLngBounds(latlngs), { padding: [50, 50] });
+    }, delay);
+  }
 
   return (
     <>
-      {locations.map((position, index) => (
+      {latlngs.map((position, index) => (
         <Marker position={position} key={index} icon={markerIcon}>
-          <Tooltip permanent>{index + 1}</Tooltip>
+          <Tooltip permanent>
+            {
+              // Show provided tooltips or generate numbering
+              tooltipTexts ? tooltipTexts[index] : index + 1
+            }
+          </Tooltip>
         </Marker>
       ))}
     </>
