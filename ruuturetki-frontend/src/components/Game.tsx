@@ -43,6 +43,7 @@ function Game({
     picked: false,
     skipped: 0,
     user: null,
+    isChallenge: challenge ? true : false,
   };
 
   const [gameState, setGameState] = useState(startState);
