@@ -13,7 +13,7 @@ export default async function fetchDailyScores(
     const dailyScores = await dailyScoreService.getByDate(
       date.format("YYYY-MM-DD"),
     );
-    setScores((prev) => prev.concat(dailyScores));
+    setScores(dailyScores);
   } catch (error) {
     console.log(error);
   }
