@@ -6,17 +6,20 @@ import updateLocale from "dayjs/plugin/updateLocale";
 import { ThemeProvider, createTheme, styled } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { PickersDay, StaticDatePicker } from "@mui/x-date-pickers";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { PickerValue } from "@mui/x-date-pickers/internals";
-import { DailyChallenge, GameSettings } from "../../types/types";
+import { DailyChallenge, DailyScore, GameSettings } from "../../types/types";
 import { MapContainer, TileLayer } from "react-leaflet";
 import MapMarkers from "../MapMarkers";
 import { useNavigate } from "react-router-dom";
 import {
   cityForMapLayer,
   decadeForMapLayer,
+  getCityCenter,
   tileLayerOptions,
 } from "../../utils/mapLayerHelpers";
+import DailyScoresTable from "../DailyScoresTable";
+import fetchDailyScores from "../../utils/fetchDailyScores";
 
 // Set monday as the first day of the week
 dayjs.extend(updateLocale);
@@ -365,6 +368,13 @@ function DailyChallengeContent({
   setGameSettings: React.Dispatch<React.SetStateAction<GameSettings>>;
 }) {
   const navigate = useNavigate();
+  const [scores, setScores] = useState<DailyScore[]>([]);
+
+  useEffect(() => {
+    // Get scores for the daily challenge
+    fetchDailyScores(selectedDate, setScores);
+  }, [selectedDate]);
+
   // Find a daily challenge corresponding to the selected date
   let dailyChallenge: DailyChallenge | undefined;
   try {
@@ -374,7 +384,6 @@ function DailyChallengeContent({
   } catch (error) {
     console.log("Cannot find daily challenge:", error);
   }
-
   // Exit early if no daily challenge for the selected date
   if (dailyChallenge === undefined)
     return (
@@ -385,8 +394,9 @@ function DailyChallengeContent({
     );
 
   // Define options for map view and markers
+  const center = getCityCenter(cityForMapLayer(dailyChallenge.maplayer));
   const mapOptions: L.MapOptions = {
-    center: [60.170678, 24.941543],
+    center: center,
     zoom: 13,
   };
   const roundLocations = dailyChallenge.dailyChallenge.map(
@@ -398,15 +408,9 @@ function DailyChallengeContent({
     setChallenge(dailyChallenge);
     setGameSettings({
       ortolayer: dailyChallenge.maplayer,
-      dragging: dailyChallenge.moving, // These are only to test the conversion of previous challenges to the new format.
-      timed: dailyChallenge.timed, // The previous challenges did not have moving or timed properties.
+      dragging: dailyChallenge.moving,
+      timed: dailyChallenge.timed,
     });
-    console.log(
-      "moving:",
-      dailyChallenge.moving,
-      "timed:",
-      dailyChallenge.timed,
-    );
     navigate("/game");
   };
 
@@ -482,6 +486,7 @@ function DailyChallengeContent({
           {selectedDate.add(1, "day").format("YYYY-MM-DD")}.
         </p>
       )}
+      {scores.length !== 0 && <DailyScoresTable dailyScores={scores} />}
     </>
   );
 }
