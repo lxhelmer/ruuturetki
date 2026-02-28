@@ -78,6 +78,7 @@ export interface GameState {
   picked: boolean;
   skipped: number;
   user: LUser | null;
+  isChallenge: boolean;
 }
 
 export interface CuratorRound {
@@ -97,4 +98,10 @@ export interface DailyChallenge {
     zoom: number;
     latlng: { lat: number; lng: number };
   }[];
+}
+
+export interface DailyScore {
+  date: string;
+  playerName: string;
+  score: number;
 }
