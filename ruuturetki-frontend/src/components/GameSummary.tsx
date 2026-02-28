@@ -3,6 +3,8 @@ import { DailyScore, FormEvent, GameState } from "../types/types";
 import dailyScoreService from "../services/dailyScore";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
+import DailyScoresTable from "./DailyScoresTable";
+import fetchDailyScores from "../utils/fetchDailyScores";
 
 // const scoreExample: DailyScore[] = [
 //   { date: "2026-02-02", playerName: "test1", score: 35020 },
@@ -60,18 +62,16 @@ export default function GameSummary({ gameState }: { gameState: GameState }) {
 }
 
 function Scoreboard({ totalScore }: { totalScore: number }) {
-  const today = dayjs().format("YYYY-MM-DD");
+  const today = dayjs();
   const [scores, setScores] = useState<DailyScore[]>([]);
   const [isSent, setIsSent] = useState(false); // Boolean for disabling form after submit
+
+  // Get scores for the scoreboard
   useEffect(() => {
-    fetchScores();
+    fetchDailyScores(today, setScores);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function fetchScores() {
-    const challengeScores = await dailyScoreService.getByDate(today);
-    setScores((prev) => prev.concat(challengeScores));
-  }
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     const form = event.currentTarget;
@@ -79,7 +79,7 @@ function Scoreboard({ totalScore }: { totalScore: number }) {
 
     // Send score to database
     const dailyScore: DailyScore = {
-      date: today,
+      date: today.format("YYYY-MM-DD"),
       playerName: nickname === "" ? "Anonymous player" : nickname,
       score: totalScore,
     };
@@ -88,7 +88,7 @@ function Scoreboard({ totalScore }: { totalScore: number }) {
 
     // Reload scores after 1 second
     setTimeout(() => {
-      fetchScores();
+      fetchDailyScores(today, setScores);
     }, 1000);
 
     // Disable form
@@ -100,28 +100,7 @@ function Scoreboard({ totalScore }: { totalScore: number }) {
       <h4>
         <b>Scoreboard</b>
       </h4>
-      <table>
-        <thead>
-          <tr>
-            <td>
-              <b>Nickname</b>
-            </td>
-            <td>
-              <b>Score</b>
-            </td>
-          </tr>
-        </thead>
-        <tbody>
-          {scores
-            .sort((a, b) => b.score - a.score)
-            .map((dailyScore) => (
-              <tr>
-                <td className="scoreboard">{dailyScore.playerName}</td>
-                <td>{dailyScore.score}</td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
+      <DailyScoresTable dailyScores={scores} />
       {/* Show submit score form until it is sent */}
       {!isSent ? (
         <div className="scoreboard-form fade-in">
