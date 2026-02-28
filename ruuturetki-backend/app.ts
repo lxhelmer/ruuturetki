@@ -6,6 +6,7 @@ import gamesRouter from "./controllers/games.js";
 import usersRouter from "./controllers/users.js";
 import loginRouter from "./controllers/login.js";
 import dailyChallengesRouter from "./controllers/dailyChallenges.js";
+import dailyScoresRouter from "./controllers/dailyScores.js";
 
 const app = express();
 
@@ -24,5 +25,6 @@ app.use("/api/games", gamesRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/login", loginRouter);
 app.use("/api/dailychallenges", dailyChallengesRouter);
+app.use("/api/dailyscores", dailyScoresRouter);
 
 export default app;
