@@ -184,11 +184,10 @@ function MapComponents({
         );
         // Score is set to 0 in the timed mode
         const score = 0;
-        const emptyGuess = L.latLng(0, 0);
         // Set round end calculations to the gameState
         setGameState((prev) => ({
           ...prev,
-          guesses: prev.guesses.concat(emptyGuess),
+          guesses: prev.guesses.concat(undefined),
           score: prev.score.concat(score),
         }));
         // Continue to Round End Module
@@ -196,16 +195,24 @@ function MapComponents({
       }
     } else {
       /* Both modes and a location guessed*/
+      const guessedLocation = gameState.guesses[gameState.roundId];
+      const correctLocation = gameState.locations[gameState.roundId];
+
+      // Narrow type
+      if (guessedLocation === undefined) {
+        throw new Error("Guessed location was undefined!");
+      }
+
       // Calculate the score of the guess
       const distanceMoved = gameState.distanceMoved;
       let pickScore = getDistance(
         {
-          latitude: gameState.locations[gameState.roundId].lat,
-          longitude: gameState.locations[gameState.roundId].lng,
+          latitude: correctLocation.lat,
+          longitude: correctLocation.lng,
         },
         {
-          latitude: gameState.guesses[gameState.roundId].lat,
-          longitude: gameState.guesses[gameState.roundId].lng,
+          latitude: guessedLocation.lat,
+          longitude: guessedLocation.lng,
         },
       );
       // Making a guess inside a threshold distance gives a perfect pick score

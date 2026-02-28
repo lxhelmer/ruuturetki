@@ -71,7 +71,7 @@ export type MapLayerNameTampere =
 export interface GameState {
   roundId: number;
   locations: L.LatLng[];
-  guesses: L.LatLng[];
+  guesses: (L.LatLng | undefined)[];
   zooms: number[];
   score: number[];
   distanceMoved: number;

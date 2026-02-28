@@ -7,21 +7,22 @@ function DevStats({ gameState }: { gameState: GameState }) {
   }
   // Get the state of the game
   const startPosition = gameState.locations[gameState.roundId];
+  const guessedLocation = gameState.guesses[gameState.roundId];
   const distanceMoved = gameState.distanceMoved;
-  let pickScore = 0;
-  try {
+  let pickScore: number | undefined = undefined;
+
+  // Narrow type
+  if (guessedLocation !== undefined) {
     pickScore = getDistance(
       {
-        latitude: gameState.locations[gameState.roundId].lat,
-        longitude: gameState.locations[gameState.roundId].lng,
+        latitude: startPosition.lat,
+        longitude: startPosition.lng,
       },
       {
-        latitude: gameState.guesses[gameState.roundId].lat,
-        longitude: gameState.guesses[gameState.roundId].lng,
-      }
+        latitude: guessedLocation.lat,
+        longitude: guessedLocation.lng,
+      },
     );
-  } catch {
-    // Location not yet guessed, pickscore is 0
   }
 
   return (
@@ -36,7 +37,7 @@ function DevStats({ gameState }: { gameState: GameState }) {
         {`round: ${gameState.roundId + 1}
           round scores: ${gameState.score.reduce(
             (a, c) => a + `[${c}],`,
-            ""
+            "",
           )}      
           picked: ${gameState.picked}`}
       </h1>
