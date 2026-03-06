@@ -39,15 +39,55 @@ body {
   left: 0;
 }
 
+/* Map controls */
+#indicators {
+  position: absolute;
+  z-index: 500;
+  width: 100%;
+  padding: 0.5rem;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+
+  #round-indicator {
+    font-size: 3rem;
+    place-self: start;
+    /* background: #6034ed; */
+  }
+  #timer-indicator {
+    font-size: 2rem;
+    height: fit-content;
+    min-width: 4rem;
+    /* background: #6034ed; */
+  }
+}
 #controls {
   position: absolute;
-  width: 100%;
-  bottom: 1rem;
   z-index: 500;
-  display: flex;
-  justify-content: center;
+  width: 100%;
+  padding: 0.5rem;
+  display: grid;
+  bottom: 1rem;
+  grid-template-columns: 1fr auto auto auto 1fr;
   gap: 0.5rem;
+
+  #Select {
+    grid-column: 2;
+    background: #00bf7d;
+  }
+  #Reset {
+    background: #f57802;
+  }
+  #Skip {
+    background: #c44801;
+  }
+  #Exit {
+    grid-column: 5;
+    place-self: end;
+    /* background: #6034ed; */
+  }
 }
+/* https://venngage.com/tools/accessible-color-palette-generator */
+/*  */
 
 /* Practice controls */
 #ortolayer-selection:hover {
@@ -154,21 +194,19 @@ div.curator-settings > {
 
 #selector-map {
   position: absolute;
-  padding: 10px;
-  left: 10px;
+  left: 0.5rem;
+  bottom: 0.5rem;
   width: 250px;
   height: 250px;
-  bottom: 10px;
   z-index: 600;
 }
 
 #selector-map:hover {
   position: absolute;
-  padding: 10px;
-  left: 10px;
+  left: 0.5rem;
+  bottom: 0.5rem;
   width: 600px;
   height: 500px;
-  bottom: 10px;
   z-index: 600;
 }
 
@@ -312,22 +350,6 @@ td.scoreboard {
   top: 0;
   right: 0;
   padding: 10px;
-}
-
-#round-indicator {
-  position: absolute;
-  z-index: 500;
-  font-size: 50px;
-  top: 10px;
-  left: 30px;
-}
-
-#timer-indicator {
-  position: absolute;
-  z-index: 500;
-  font-size: 20px;
-  top: 2%;
-  left: 50%;
 }
 
 .y-button {

@@ -6,77 +6,10 @@ import { useEffect, useState } from "react";
 import DevStats from "./DevStats.tsx";
 import RoundEndModal from "./modals/RoundEndModal.tsx";
 import { useNavigate } from "react-router-dom";
-import { GameSettings, GameState, Timed } from "../types/types.ts";
+import { GameSettings, GameState } from "../types/types.ts";
 import { getDistance } from "geolib";
-
-function Timer({
-  timer,
-  setTimer,
-}: {
-  timer: Timed;
-  setTimer: React.Dispatch<React.SetStateAction<Timed>>;
-}) {
-  // Render timer component only if timed mode is selected.
-  if (timer === null) {
-    return null;
-  }
-  // Minus 1 from the timer every 1000 ms
-  if (timer !== 0) {
-    setTimeout(() => {
-      setTimer(timer - 1);
-    }, 1000);
-  }
-  // Return timer indicator
-  return (
-    <Button variant="dark" id="timer-indicator" disabled>
-      {timer.toString()}
-    </Button>
-  );
-}
-
-function SelectButton({
-  handleEndRound,
-  timed,
-}: {
-  handleEndRound: () => void;
-  timed: Timed;
-}) {
-  // Do not render select button if timed mode is selected.
-  if (timed) {
-    return null;
-  }
-  return (
-    <>
-      <Button
-        id="select-button"
-        variant="dark"
-        onClick={() => handleEndRound()}
-      >
-        Select
-      </Button>
-    </>
-  );
-}
-
-function SkipButton({ handleSkipMap }: { handleSkipMap: () => void }) {
-  return (
-    <>
-      <Button id="select-button" variant="dark" onClick={() => handleSkipMap()}>
-        Skip
-      </Button>
-    </>
-  );
-}
-
-function ResButton({ handleResetMap }: { handleResetMap: () => void }) {
-  return (
-    <>
-      <Button id="reset-button" variant="dark" onClick={() => handleResetMap()}>
-        Reset map
-      </Button>
-    </>
-  );
-}
+import SpacebarHandler from "./SpaceBarHandler.tsx";
+import Timer from "./Timer.tsx";
 
 function MapComponents({
   gameState,
@@ -160,7 +93,9 @@ function MapComponents({
   };
 
   const handleEndRound = () => {
-    // console.log('handleEndRound() called. GameState:', gameState)
+    // Exit early if between rounds
+    if (showREM) return;
+
     // Go through all different scenarios:
     // 1. Normal mode location not guessed
     // 2. Timed mode location not guessed
@@ -197,14 +132,14 @@ function MapComponents({
       /* Both modes and a location guessed*/
       const guessedLocation = gameState.guesses[gameState.roundId];
       const correctLocation = gameState.locations[gameState.roundId];
+      const distanceMoved = gameState.distanceMoved;
 
       // Narrow type
       if (guessedLocation === undefined) {
         throw new Error("Guessed location was undefined!");
       }
 
-      // Calculate the score of the guess
-      const distanceMoved = gameState.distanceMoved;
+      // Pick score is the distance between the guess and the correct location in meters
       let pickScore = getDistance(
         {
           latitude: correctLocation.lat,
@@ -259,12 +194,33 @@ function MapComponents({
     map.setView(gameState.locations[gameState.roundId]);
   };
 
+  const buttons = [
+    { name: "Select", handler: handleEndRound },
+    { name: "Reset", handler: handleResetMap },
+    { name: "Skip", handler: handleSkipMap },
+    { name: "Exit", handler: () => navigate("/") },
+  ];
+
   return (
     <>
-      <Button variant="dark" disabled id="round-indicator">
-        {gameState.roundId < 5 ? gameState.roundId + 1 : 5}/5
-      </Button>
-      <Timer timer={timer} setTimer={setTimer} />
+      {/* Round number and timer */}
+      <div id="indicators">
+        <Button id="round-indicator" variant="dark" disabled>
+          {gameState.roundId + 1}/5
+        </Button>
+        {timer && <Timer timer={timer} setTimer={setTimer} />}
+      </div>
+
+      {/* Control buttons */}
+      <div id="controls">
+        {buttons.map((button) => (
+          <Button id={button.name} variant="dark" onClick={button.handler}>
+            {button.name}
+          </Button>
+        ))}
+      </div>
+
+      {/* Round end modal */}
       {showREM && (
         <RoundEndModal
           gameState={gameState}
@@ -272,18 +228,9 @@ function MapComponents({
           handleCloseREM={handleCloseREM}
         />
       )}
-      <div id="controls">
-        <ResButton handleResetMap={handleResetMap} />
-        <SelectButton
-          handleEndRound={handleEndRound}
-          timed={gameSettings.timed}
-        />
-        <SkipButton handleSkipMap={handleSkipMap} />
-        <Button id="home-button" variant="dark" onClick={() => navigate("/")}>
-          Exit
-        </Button>
-      </div>
+
       <DevStats gameState={gameState} />
+      <SpacebarHandler handlerFunction={handleEndRound} />
     </>
   );
 }
