@@ -9,7 +9,7 @@ import {
 } from "react-leaflet";
 import L from "leaflet";
 import { useEffect, useRef, useState } from "react";
-import markerIcon from "./MarkerIcon";
+import { markerIconBlue } from "./MarkerIcon";
 import {
   CuratorRound,
   DailyChallenge,
@@ -291,7 +291,7 @@ function CuratorMarker({
   return (
     <Marker
       position={position}
-      icon={markerIcon}
+      icon={markerIconBlue}
       draggable={draggable}
       eventHandlers={{ dragend: handleDrag }}
     >
