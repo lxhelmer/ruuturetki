@@ -90,6 +90,9 @@ body {
 /*  */
 
 /* Practice controls */
+#ortolayer-selection {
+  grid-column: 3;
+}
 #ortolayer-selection:hover {
   background: #212529;
   cursor: default;

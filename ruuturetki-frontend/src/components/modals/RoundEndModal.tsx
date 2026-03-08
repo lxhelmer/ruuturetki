@@ -1,12 +1,13 @@
 import { Modal } from "react-bootstrap";
 import { Button } from "react-bootstrap";
-import { MapContainer, TileLayer } from "react-leaflet";
+import { MapContainer, Polyline, TileLayer, Tooltip } from "react-leaflet";
 import { GameState } from "../../types/types.ts";
 import L from "leaflet";
 import { tileLayerOptions } from "../../utils/mapLayerHelpers.ts";
 import { useState } from "react";
 import GameSummary from "../GameSummary.tsx";
 import MapMarkers from "../MapMarkers.tsx";
+import { getDistance } from "geolib";
 
 function RoundEndModal({
   gameState,
@@ -28,6 +29,9 @@ function RoundEndModal({
     zoom: 13,
   };
   const guessedLocation = gameState.guesses[gameState.roundId];
+  const guessDistance = guessedLocation
+    ? getDistance(correctLocation, guessedLocation)
+    : null;
   const modalTitle = summaryShown
     ? "Game Summary"
     : `Round ${roundNumber} out of 5 score`;
@@ -60,6 +64,15 @@ function RoundEndModal({
           locations={[correctLocation, guessedLocation]}
           tooltipTexts={["The correct location", "Your guess"]}
         />
+        {guessedLocation && (
+          <Polyline
+            positions={[correctLocation, guessedLocation]}
+            dashArray="12"
+            color="black"
+          >
+            <Tooltip permanent>{guessDistance} m</Tooltip>
+          </Polyline>
+        )}
       </MapContainer>
       <h2 id="modal-score">
         {totalScore} / {roundNumber}0 000 total points

@@ -1,6 +1,6 @@
 import { useMapEvents, useMap, Marker } from "react-leaflet";
 import { useEffect, useState } from "react";
-import markerIcon from "./MarkerIcon.tsx";
+import { markerIconOrange } from "./MarkerIcon.tsx";
 import { GameState, MapLayerName } from "../types/types.ts";
 import { cityForMapLayer, getCityCenter } from "../utils/mapLayerHelpers.ts";
 
@@ -57,7 +57,9 @@ function LocationPicker({
     },
   });
 
-  return marker ? <Marker position={marker} icon={markerIcon} /> : null;
+  return marker ? (
+    <Marker position={marker} icon={markerIconOrange} draggable />
+  ) : null;
 }
 
 export default LocationPicker;
