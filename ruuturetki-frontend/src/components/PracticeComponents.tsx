@@ -96,7 +96,7 @@ function PracticeComponents({
           </Form>
         </Button>
         <Button
-          id="home-button"
+          id="Exit"
           variant="dark"
           onClick={() => navigate("/")}
           ref={refExit}
