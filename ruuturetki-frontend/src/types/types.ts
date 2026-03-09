@@ -105,3 +105,7 @@ export interface DailyScore {
   playerName: string;
   score: number;
 }
+
+export interface LimitedWMSOptions extends L.WMSOptions {
+  url: string;
+}
