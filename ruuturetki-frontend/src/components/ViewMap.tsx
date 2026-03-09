@@ -1,23 +1,10 @@
-import { MapContainer, WMSTileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, Marker, Popup } from "react-leaflet";
 import MapComponents from "./MapComponents.tsx";
 import { useState, useEffect } from "react";
 import { GameSettings, GameState } from "../types/types.ts";
 import { markerIconBlue } from "./MarkerIcon.tsx";
 import { wmsOptionsForMapLayer } from "../utils/mapLayerHelpers.ts";
-
-function OrtoLayer({
-  gameSettings,
-  startPosition,
-  renderKey,
-}: {
-  gameSettings: GameSettings;
-  startPosition: L.LatLng;
-  renderKey: number;
-}) {
-  const bounds = startPosition.toBounds(4000);
-  const wmsOptions = wmsOptionsForMapLayer(gameSettings.ortolayer);
-  return <WMSTileLayer key={renderKey} {...wmsOptions} bounds={bounds} />;
-}
+import { LimitedWMSTileLayer } from "./LimitedWMSTilelayer.tsx";
 
 function ViewMap({
   gameState,
@@ -45,6 +32,9 @@ function ViewMap({
     dragging: gameSettings.dragging,
   };
 
+  // Get the wms options corresponding to the ortolayer name
+  const wmsOptions = wmsOptionsForMapLayer(gameSettings.ortolayer);
+
   // key trick for forcing rerender on the WMS layer
   const [renderKey, setKey] = useState(1);
   useEffect(() => {
@@ -54,11 +44,7 @@ function ViewMap({
   return (
     <>
       <MapContainer id="map" {...mapOptions} key={renderKey}>
-        <OrtoLayer
-          gameSettings={gameSettings}
-          startPosition={startPosition}
-          renderKey={renderKey}
-        />
+        <LimitedWMSTileLayer key={renderKey} {...wmsOptions} />
         <Marker position={startPosition} icon={markerIconBlue}>
           <Popup>Try to match this position!</Popup>
         </Marker>
