@@ -14,7 +14,7 @@ This is a map game I made as the submission for University of Helsinki's Full St
 - After each round the location of the guess relative to the answer is shown.
 - Guess is done by selecting a position on a picker map.
 - There are five rounds per game and the user has the ability to skip a round forfiting any potential points from that round.
-- Maximum score for the round is 10 000 with maximum game score 50 000.
+- Maximum score for a round is 10 000 and a maximum game score is 50 000.
 
 ![img](https://github.com/lxhelmer/ruuturetki/blob/main/ruuturetki-frontend/images/game_screen_info.png)
 
@@ -27,7 +27,7 @@ As the application is hosted on the free tier of Render.com both 'ends take a se
 
 - Frontend runs in a container with environment variables passed on Render as secret file
 - The frontend uses multiple leaflet map instances.
-- Orthoimaginery is loaded online from the cities wms-servers. More information of this service at [Helsingin ortoilmakuvat](https://hri.fi/data/fi/dataset/helsingin-ortoilmakuvat), [Turun seudun ilmakuva](https://www.avoindata.fi/data/fi/dataset/turun-seudun-ilmakuva) ja [Tampereen ilmakuvat](https://data.tampere.fi/data/en_GB/dataset?vocab_keywords_fi=Ilmakuvat).
+- Orthoimaginery is loaded online from the cities wms-servers. More information of this service at [Helsingin ortoilmakuvat](https://hri.fi/data/fi/dataset/helsingin-ortoilmakuvat), [Turun seudun ilmakuva](https://www.avoindata.fi/data/fi/dataset/turun-seudun-ilmakuva) and [Tampereen ilmakuvat](https://data.tampere.fi/data/en_GB/dataset?vocab_keywords_fi=Ilmakuvat).
 - The fronend communicates via token authenticated axios requests with the backend.
 - In production the backend is pinged periodically to keep it up while playing.
 
@@ -43,3 +43,4 @@ As the application is hosted on the free tier of Render.com both 'ends take a se
 - General improvement of the codebase. Better implementation of the routers e.g. handlind the checking of authentication in separate middleware.
 - Bring back testing, during the development of backend vitest was used to make sure that the backend functioned correctly, but these tests later became deprecated because of transpiling conflicts
 - I would like to wrap the whole app in container implementation so that it would be easy to migrate anywhere.
+
