@@ -2,37 +2,34 @@
 
 ![img](https://github.com/lxhelmer/ruuturetki/blob/main/docs/Banner.png)
 
-App up for now at render:  https://ruuturetki.fi https://ruuturetki.onrender.com
-
+App up for now at render: https://ruuturetki.fi
 
 This is a map game I made as the submission for University of Helsinki's Full Stack Open Course project.
 
 ## User facing functionality
--  The game implements game where the player tries to guess the location of orthophotograph presented. The positions are random within the scope of the borders of the map.
--  The user has the ability to move around slightly, but no zoom or any kind of maplegend on the orthophoto.
--  The score is calculated based on the movement during guess and the final guess distance.
--  After each round the location of the guess relative to the answer is shown.
--  Guess is done by selecting a position on a secondary map.
--  There are five rounds per game and the user has the ability to skip a round forfiting any potential points from that round.
--  Maximum score for the round is 9998 with maximal game score 4990 but these limits are presented in the game as 10000 and 50 000.
--  Game can be played in either guest mode or with a usera ccount.
--  New account can be registered in the interface.
--  When playing with useraccount games with non-zero final score are stored to the scoreboard.
--  There are two kinds of users, reqular and admin. Admin has the added ability of removing score entries from the scoreboard and access to development statistics during gameplay
--  There is no way to add admin user account in the frontend as security measure. The change needs to be done in the database.
+
+- The player tries to guess the location of the aerial image presented. The positions are random within the scope of the borders of the map.
+- The user has the ability to move around slightly, but there is no zoom or map legend.
+- The score is calculated based on the distance moved from the starting position and the distance between the guess and the correct location.
+- After each round the location of the guess relative to the answer is shown.
+- Guess is done by selecting a position on a picker map.
+- There are five rounds per game and the user has the ability to skip a round forfiting any potential points from that round.
+- Maximum score for the round is 10 000 with maximum game score 50 000.
+
+![img](https://github.com/lxhelmer/ruuturetki/blob/main/ruuturetki-frontend/images/game_screen_info.png)
 
 ## Details of technical implementation
 
-The app consists of ```vite - react - ts``` frontend and ts-node backend.
-As the application is hosted on the free tier of Render.com both 'ends take a secod to ramp up. The user is notified of this in the login and register modals, but at first even the start page will be unreachable.
+The app consists of `vite - react - ts` frontend and ts-node backend.
+As the application is hosted on the free tier of Render.com both 'ends take a secod to ramp up.
 
 ### Frontend
--  Frontend runs in a container with environment variables passed on Render as secret file
--  The frontend uses multiple leaflet map instances.
--  Orthoimaginery is loaded online from City of Helsinkis wms-server. More information of this service at [helsingin-ortoilmakuvat](https://hri.fi/data/fi/dataset/helsingin-ortoilmakuvat)
--  The fronend communicates via token authenticated axios requests with the backend.
--  As interesting implementation details, the scoreboard is implemented as mui-datagrid which handles the sorting and rendering of data quite nicely but was finnicy to get working properly.
--  In production the backend is pinged periodically to keep it up while playing.
+
+- Frontend runs in a container with environment variables passed on Render as secret file
+- The frontend uses multiple leaflet map instances.
+- Orthoimaginery is loaded online from the cities wms-servers. More information of this service at [Helsingin ortoilmakuvat](https://hri.fi/data/fi/dataset/helsingin-ortoilmakuvat), [Turun seudun ilmakuva](https://www.avoindata.fi/data/fi/dataset/turun-seudun-ilmakuva) ja [Tampereen ilmakuvat](https://data.tampere.fi/data/en_GB/dataset?vocab_keywords_fi=Ilmakuvat).
+- The fronend communicates via token authenticated axios requests with the backend.
+- In production the backend is pinged periodically to keep it up while playing.
 
 ### Backend
 
@@ -42,10 +39,7 @@ As the application is hosted on the free tier of Render.com both 'ends take a se
 
 ## Futher development
 
-- Different gamemodes with older ortholayers and prepicked positions. 'Daily' mode and a admin picker tool for such would be nice.
+- Different gamemodes with older ortholayers and prepicked positions.
 - General improvement of the codebase. Better implementation of the routers e.g. handlind the checking of authentication in separate middleware.
 - Bring back testing, during the development of backend vitest was used to make sure that the backend functioned correctly, but these tests later became deprecated because of transpiling conflicts
 - I would like to wrap the whole app in container implementation so that it would be easy to migrate anywhere.
-
-
-
