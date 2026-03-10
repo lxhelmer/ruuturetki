@@ -9,12 +9,12 @@ if (BACKEND_URI) {
 
 const getAll = async () => {
   const response = await axios.get(baseUrl);
-  return response.data;
+  return response.data as DailyChallenge[];
 };
 
 const getById = async (id: string) => {
   const response = await axios.get(`${baseUrl}/${id}`);
-  return response.data;
+  return response.data as DailyChallenge;
 };
 
 const create = async (newDailyChallenge: DailyChallenge) => {

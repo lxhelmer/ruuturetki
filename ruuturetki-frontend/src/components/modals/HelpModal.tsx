@@ -1,7 +1,8 @@
 import { Modal } from "react-bootstrap";
 import imgOverview from "../../../images/game_screen_info.png";
-import imgTimer from "../../../images/timed_mode_timer.png";
+import imgTimer from "../../../images/timed-mode-timer.png";
 import imgREM from "../../../images/round-end-view.png";
+import imgPicker from "../../../images/pickermap.png";
 
 function HelpModal({
   show,
@@ -69,6 +70,11 @@ function HelpModal({
               appear. You can change your guess by clicking a new location on
               the picker map. The marker will move to the clicked location.
             </p>
+            <img
+              src={imgPicker}
+              alt="Screenshot of the picker map"
+              title="Screenshot of the picker map"
+            />
             <h5>Control buttons</h5>
             <table className="control-button-explanations">
               <tbody>
@@ -89,10 +95,6 @@ function HelpModal({
                     Continues to the next round without showing the round score.
                     The score for a skipped round will be 0.
                   </td>
-                </tr>
-                <tr>
-                  <td>Exit</td>
-                  <td>Ends the game and returns to main menu.</td>
                 </tr>
               </tbody>
             </table>
