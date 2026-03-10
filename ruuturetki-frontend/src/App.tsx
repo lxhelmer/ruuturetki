@@ -49,10 +49,10 @@ function StartMenu({
     fetchDailies();
     async function pingBackend() {
       try {
-        const ping = await calendarservice.getById("123456789");
+        const ping = await calendarservice.getById("6999c1c44807b7036995be0d");
         console.log("Backend ping:", ping);
       } catch (error) {
-        console.log("Cannot ping backend!", error);
+        console.log("Backend ping error:", error);
       }
     }
     const fetch_id = setInterval(pingBackend, 840000);
@@ -78,7 +78,7 @@ function StartMenu({
    */
   async function fetchDailies() {
     try {
-      const response: DailyChallenge[] = await calendarservice.getAll();
+      const response = await calendarservice.getAll();
       console.log("Dailies fetched, response:", response);
       setDailyChallenges(response);
       const dailyChallenge = response.find(
