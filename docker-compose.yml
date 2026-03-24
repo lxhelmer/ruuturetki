@@ -1,21 +1,19 @@
 services:
-  app:
+  front:
     image: ruuturetki-front
     build:
       context: ./ruuturetki-frontend
       dockerfile: Dockerfile
       args:
-        - VITE_BACKEND_URI=http://server:3001
-    volumes:
-      - ./ruuturetki-frontend/:/usr/src/app
+        - VITE_BACKEND_URI=http://localhost:3001
     container_name: ruuturetki-front
     ports:
-      - 3000:3000 # this is needed
-  server:
+      - 3000:3000 
+  back:
     image: ruuturetki-back
     build:
       context: ./ruuturetki-backend
       dockerfile: Dockerfile
-    volumes:
-      - ./ruuturetki-backend/:/usr/src/app
+    ports:
+      - 3001:3001
 
